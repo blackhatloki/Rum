@@ -1,0 +1,6 @@
+#!/bin/bash 
+for i in `cat list6` ; do 
+touch llthosts.$i 
+echo "0 ${i}a " >> llthosts.$i
+echo "1 ${i}b " >> llthosts.$i
+done

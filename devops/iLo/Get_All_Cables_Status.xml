@@ -1,0 +1,33 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to return the status  -->
+<!--               of all cables (30-pin, 16-pin, 4-pin...) that may -->
+<!--               be connected to a Remote Insight Lights-Out       -->
+<!--               Edition (RILOE II) board.                         -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        Use CPQLOCFG.EXE ver 2.10 or greater with this script    -->
+<!--        This script requires RILOE II fw ver 1.10 or higher.     -->
+<!--        The GET_ALL_CABLES_STATUS command is not available in    -->
+<!--        RILOE II firmware prior to version 1.10.                 -->
+
+<!--        See the RILOE II User Guide for more information on      -->
+<!--        scripting and the syntax of the RIBCL XML.               -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - None                                         -->
+<!--              iLO - None                                         -->
+<!--         RILOE II - Version 1.10 or later.                       -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <SERVER_INFO MODE="read">
+    <GET_ALL_CABLES_STATUS/>
+  </SERVER_INFO>
+  </LOGIN>
+</RIBCL>
+

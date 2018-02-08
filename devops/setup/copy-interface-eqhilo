@@ -1,0 +1,11 @@
+#!/bin/bash
+for i in `cat list5` ; do
+# echo $i
+for j in eqfnlo1 eqfnlo2 eqfnhi1 eqfnhi2 ; do 
+# echo $j
+echo ifcfg-$j.$i 
+scp ifcfg-$j.$i $i:/etc/sysconfig/network/ifcfg-$j
+# echo "$IP $i $j " 
+# sed -e "s/STUB/$IP/g" ifcfg-trade-template > ifcfg-$j.$i
+done
+done

@@ -1,0 +1,8 @@
+#!/bin/bash
+for i in `cat vlan307-list` ; do
+echo $i
+IP=`cat vlan307 | grep $i | egrep -v "ilo|vip|eqfn" | awk  -F"," ' { print $2 } '`
+echo $IP
+sed -e "s/STUB/$IP/g" ifcfg-vlan307-template > ifcfg-vlan307.$i
+
+done

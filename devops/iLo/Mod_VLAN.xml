@@ -1,0 +1,51 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2005 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script that configures the   -->
+<!--               iLO Shared Network Port with a user defined VLAN  -->
+<!--               ID.			                             -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - Version 1.10 or later.                       -->
+<!--              iLO - Version 1.80 or later.                       -->
+<!--         RILOE II - None.                                        -->
+  
+<RIBCL version="2.21">
+ <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <RIB_INFO MODE="WRITE" >
+   <MOD_NETWORK_SETTINGS>
+    <SHARED_NETWORK_PORT VALUE="Yes"/>
+    <!--        Firmware support infomation for next 2 tags:         -->
+    <!--            iLO 2 - Version 1.10 or later.                   -->
+    <!--              iLO - None.                                    -->
+    <!--         RILOE II - None.                                    -->
+    <VLAN_ENABLED VALUE="Yes"/>
+    <VLAN_ID VALUE="1"/>
+
+    <!--        Firmware support infomation for next 2 tags:         -->
+    <!--            iLO 2 - None                                     -->
+    <!--              iLO - Version 1.80 or later.                   -->
+    <!--         RILOE II - None.                                    -->
+    <!--
+    <SHARED_NETWORK_PORT_VLAN VALUE="Yes"/>
+    <SHARED_NETWORK_PORT_VLAN_ID VALUE="1"/>
+    -->
+
+   </MOD_NETWORK_SETTINGS>
+  </RIB_INFO>
+ </LOGIN>
+</RIBCL>

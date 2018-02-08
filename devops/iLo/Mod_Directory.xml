@@ -1,0 +1,48 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to modify the current -->
+<!--               diretory configuration on following devices:      -->
+<!--                 Integrated Lights-Out 2 (iLO 2)                 -->
+<!--                 Integrated Lights-Out (iLO)                     -->
+<!--                 Remote Insight Lights-Out Edition II (RILOE II) -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - All versions.                                -->
+<!--              iLO - All versions.                                -->
+<!--         RILOE II - All versions.                                -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+    <DIR_INFO MODE="write">
+    <MOD_DIR_CONFIG>
+       <DIR_AUTHENTICATION_ENABLED value="Yes"/>
+       <DIR_LOCAL_USER_ACCT value="Yes"/>
+       <DIR_SERVER_ADDRESS value="16.141.100.44"/>
+       <DIR_SERVER_PORT value="636"/>
+       <DIR_OBJECT_DN value="CN=server1_rib, OU=RIB, DC=HPRIB, DC=LABS"/>
+       <DIR_OBJECT_PASSWORD value="password"/>
+       <DIR_USER_CONTEXT_1 value="CN=Users, DC=HPRIB, DC=LABS"/>
+<!--NOTE: Set the value to "NO" to enable the HP Extended Schema     -->
+<!--      and Value "YES" to enable Default Directory Login.         -->
+<!--      To set Group Accounts and privileges for Default Schema    -->
+<!--      run Mod_Schemaless_Directory.xml.                          -->
+       <DIR_ENABLE_GRP_ACCT value = "yes"/>
+    </MOD_DIR_CONFIG>
+    </DIR_INFO>
+  </LOGIN>
+</RIBCL>

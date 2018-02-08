@@ -1,0 +1,7 @@
+#!/bin/bash
+for i in `cat trade-list` ; do
+echo $i
+IP=`cat trade | grep $i | egrep -v "ilo|vip|eqfn" | awk ' -F"," { print $2 } '`
+sed -e "s/STUB/$IP/g" ifcfg-trade-bond1-template > ifcfg-bond1.$i
+
+done

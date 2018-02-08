@@ -1,0 +1,6 @@
+#!/bin/bash
+for i in `cat list5` ; do
+echo $i
+CID=`ypcat -k cluster_id | grep $i | awk ' { print $2 } ' | sed -e 's/ //g'`
+sed -e "s/HOST/$i/g" -e "s/CID/$CID/g"  llttab-template > llttab.$i
+done

@@ -1,0 +1,34 @@
+#!/bin/bash 
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin
+PATH=$PATH
+
+HOSTNAME=`hostname`
+find  /etc/udev/rules.d/30-net_persistent_names.rules \
+      /etc/sysconfig/network/ifcfg-* \
+      /etc/sysconfig/network/routes \
+      /etc/security/limits.conf \
+      /etc/hosts \
+      /etc/nscd.conf \
+      /etc/nsswitch.conf \
+      /etc/networks \
+      /etc/HOSTNAME  \
+      /etc/passwd \
+      /etc/shadow \
+      /etc/sysctl.conf \
+      /etc/resolv.conf \
+      /etc/xinetd.conf \
+      /etc/exports \
+      /etc/services \
+      /etc/syslog.conf \
+      /usr/local/host/.ssh/* \
+      /etc/defaultdomain \
+      /var/spool/cron/tabs \
+      /etc/yp.conf \
+      /etc/shells \
+      /etc/VRTSvcs/conf/config/* \
+      /etc/llttab \
+      /etc/gabtab \
+      /app \
+      /usr/local/host/* \
+      /etc/llthosts  | cpio -ovc > /var/tmp/`hostname`.cpio

@@ -1,0 +1,31 @@
+#!/usr/bin/expect
+
+set timeout 8
+set passall "ribAdm1n ribAdm1n ribAdm1n" 
+
+set loggedin 1;
+set ssh_cmd "ssh -o StrictHostKeyChecking=no Administrator@${argv}"
+set prompt "> ";
+eval spawn $ssh_cmd
+set pwcnt 0;
+set spid $spawn_id
+
+expect -i $spid ".*d:" {
+        set pass [lindex $passall $pwcnt]
+        send "$pass\r";
+        send_user "\nin password 1 $pass $pwcnt\n";
+        incr pwcnt;
+        exp_continue
+} "> " {
+        send "\n"
+        set loggedin 0;
+}
+
+expect "> "
+send "add user \"tteague4\" \"tteague4\""
+send \015
+send \015
+expect "> "
+send "exit"
+send \015
+exit

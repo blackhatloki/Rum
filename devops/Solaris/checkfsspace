@@ -1,0 +1,62 @@
+#!/bin/sh
+
+# script name: checkfsspace
+# description: check available space of ufs and zfs 
+#
+# See companion tech tip on BigAdmin:
+#    http://www.sun.com/bigadmin/content/submitted/automate_fs_check.jsp
+#
+
+# who receives warning message
+RECEIVER=tony.teague@gs.com
+
+# warning threshold
+USED_SPACE_PERCENT_WARN=80
+
+# file for warning messages
+LOG=fsspace_msg
+
+PATH=/usr/bin:/usr/sbin; export PATH
+
+# main()
+
+echo "" > $LOG 
+
+# check ufs 
+df -h -F ufs | grep -v Filesystem | while read line
+do
+    USED_SPACE_PERCENT=`echo "$line" | nawk -F'[	% ]+' '{print $5}'`
+    if [ $USED_SPACE_PERCENT -gt $USED_SPACE_PERCENT_WARN ]; then
+        FS=`echo "$line" | nawk -F'[	% ]+' '{print $1}'`
+        echo "UFS $FS has used $USED_SPACE_PERCENT% of its space." >> $LOG
+    fi
+done
+
+# check zfs
+if [ `df -F zfs | wc -l` -gt 0 ]; then
+    /usr/sbin/zpool list -H | while read line
+    do
+        USED_SPACE_PERCENT=`echo "$line" | nawk -F'[	% ]+' '{print $5}'`
+        if [ $USED_SPACE_PERCENT -gt $USED_SPACE_PERCENT_WARN ]; then
+            POOL=`echo "$line" | nawk -F'[	% ]+' '{print $1}'`
+            echo "ZFS pool $POOL has used $USED_SPACE_PERCENT% of its space." >> $LOG
+        fi
+    done
+fi
+
+if [ `cat $LOG | wc -c` -gt 1 ]; then
+    mailx -s "`hostname` Space Warning" $RECEIVER < $LOG
+fi
+
+##############################################################################
+### This script is submitted to BigAdmin by a user of the BigAdmin community.
+### Sun Microsystems, Inc. is not responsible for the
+### contents or the code enclosed. 
+###
+###
+### Copyright 2008 Sun Microsystems, Inc. ALL RIGHTS RESERVED
+### Use of this software is authorized pursuant to the
+### terms of the license found at
+### http://www.sun.com/bigadmin/common/berkeley_license.html
+##############################################################################
+

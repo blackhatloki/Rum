@@ -1,0 +1,65 @@
+Switch: 0x0002c9020040fe80 ibswspine16/splibb:
+Switch: 0x0002c90200422938 ibswspine12:
+Switch: 0x0002c902004239c8 ibswspine13:
+Switch: 0x0002c9020040d668 ibswspine17:
+Switch: 0xf4521403009571c0 ibswspine9/spmercerib4:
+Switch: 0xf452140300f61d20 ibswspine8/spmercerib3:
+Switch: 0x0002c903006be3f0 ibswedge14:
+Switch: 0x0002c903006bfa70 ibswedge15:
+Switch: 0x0002c903006bfb70 ibswedge16:
+Switch: 0x0002c903006bfaf0 ibswedge21:
+Switch: 0x0002c903006bfe70 ibswedge17:
+Switch: 0x0002c903006bf970 ibswedge23:
+Switch: 0x0002c903006be670 ibswedge22:
+Switch: 0x0002c903007b6a30 ibswedge20:
+Switch: 0x0002c903006be7f0 ibswedge19:
+Switch: 0x0002c903006be6f0 ibswedge18:
+Switch: 0x0002c9020041e098 ibswedge4:
+Switch: 0x0002c90200422498 ibswedge6:
+Switch: 0x0002c9020041e0c0 ibswedge8:
+Switch: 0x0002c9020040c868 ibswedge5:
+Switch: 0x0002c90200422258 ibswedge7:
+Switch: 0x0002c9020041e108 ibswedge9:
+Switch: 0x0002c902004a7998 ibswspine6:
+Switch: 0x0002c9020040ff28 ibswspine11:
+Switch: 0x0002c90200423950 ibswspine14:
+Switch: 0x0002c902004b5d00 ibswspine7/spmercerib1:
+Switch: 0x0002c90200489d18 ibswspine5/spmercerib0:
+Switch: 0x0002c9020048d9b8 ibswspine1:
+Switch: 0x0002c9020048d240 ibswspine4:
+Switch: 0x0002c9020048d8e8 ibswspine3:
+Switch: 0x0002c90200423a60 ibswspine15:
+Switch: 0x0002c9020048d940 ibswspine2:
+Switch: 0x0002c9020048d260 ibswspine0:
+Switch: 0x0002c902004100f0 ibswspine10/spboweryib:
+Switch: 0xf452140300868de0 ibswspine18/spmercerib2:
+Switch: 0xf452140300680080 ibswedge3:
+Switch: 0xf45214030067f800 ibswedge2:
+Switch: 0xf452140300680180 ibswedge1:
+Switch: 0xf452140300680100 ibswedge0:
+Switch: 0xe41d2d03002d8310 ib-c27 (24-004 U01):
+Switch: 0xe41d2d03002d8610 ib-c26 (24-004 U11):
+Switch: 0x7cfe900300a35250 ib-1-7 (24-007 U22):
+Switch: 0x7cfe900300a99e50 ib-1-3 (24-003 U19):
+Switch: 0x7cfe900300b67310 ib-1-2 (24-003 U08):
+Switch: 0x7cfe90030098a040 ib-1-5 (24-001 U19):
+Switch: 0x7cfe90030098a0e0 ib-1-4 (24-001 U08):
+Switch: 0x7cfe90030098a0a0 ib-1-6 (WW-001 U08):
+Switch: 0xf4521403009564e0 ibswcore1:
+Switch: 0xf45214030095b2c0 ibswcore0:
+Switch: 0x7cfe900300b673d0 ib-1-0 (24-017A U38):
+Switch: 0x7cfe90030098a0c0 ib-2-3 (24-009 U41):
+Switch: 0x7cfe900300b6d8a0 ib-2-2 (24-009 U39):
+Switch: 0x7cfe900300b6d4c0 ib-2-1 (24-009 U37):
+Switch: 0x7cfe900300b6d6e0 ib-2-0 (24-009 U35):
+Switch: 0x7cfe900300b67330 ib-2-7 (24-008 U41):
+Switch: 0x7cfe90030098a100 ib-2-6 (24-008 U39):
+Switch: 0x7cfe90030098a020 ib-2-5 (24-008 U37):
+Switch: 0x7cfe900300a99d70 ib-2-4 (24-008 U35):
+Switch: 0x7cfe900300b67550 ib-3-5 (24-017 U37):
+Switch: 0x7cfe900300b6d6c0 ib-3-3 (24-017 U39):
+Switch: 0x7cfe9003001ac2b0 ib-3-1 (24-017 U41):
+Switch: 0x7cfe900300ab8db0 ib-3-4 (24-017A U40):
+Switch: 0x7cfe900300b673b0 ib-3-2 (24-017A U42):
+Switch: 0x7cfe900300bf8910 ib-3-0 (24-017A U44):
+Switch: 0x7cfe900300b6d4a0 ib-1-1 (24-017 U35):

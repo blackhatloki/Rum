@@ -1,0 +1,23 @@
+---
+- hosts: all 
+  tasks:
+  - name: Install net-snmp 
+    yum:
+      name: net-snmp 
+      state: present
+  - name: Install nett-snmp-utils
+    yum:
+      name:  net-snmp-utils
+      state: present
+  - name: perl-Net-SNMP
+    yum: pkg={{ item }} state=installed
+    with_items:
+    - perl-Crypt-DES
+    - perl-Digest-HMAC
+    - perl-Digest-SHA1
+    - perl-Socket6
+    - perl-Net-SNMP
+  - name :  copy_snmpd
+    copy : 'src=snmpd.conf  dest=/etc/snmp/snmpd.conf  owner=root group=root mode=600'
+  - command: /bin/systemctl enable snmpd
+  - command: /bin/systemctl restart snmpd

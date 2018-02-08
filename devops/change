@@ -1,0 +1,21 @@
+#!/bin/bash  
+# c32
+./cmc-setcmcIP.sh cmcmercer14.es.its.nyu.edu 192.168.0.4 255.255.252.0 192.168.0.1            
+# c33
+./cmc-setcmcIP.sh cmcmercer15.es.its.nyu.edu 192.168.0.5 255.255.252.0 192.168.0.1    
+# c34
+./cmc-setcmcIP.sh cmcmercer16.es.its.nyu.edu 192.168.0.6 255.255.252.0 192.168.0.1 
+# c35 
+./cmc-setcmcIP.sh cmcmercer17.es.its.nyu.edu 192.168.0.7 255.255.252.0 192.168.0.1       
+# c36 
+./cmc-setcmcIP.sh cmcmercer18.es.its.nyu.edu 192.168.0.8 255.255.252.0 192.168.0.1 
+# 37 
+./cmc-setcmcIP.sh cmcmercer19.es.its.nyu.edu 192.168.0.9 255.255.252.0 192.168.0.1 
+# c38 
+./cmc-setcmcIP.sh cmcmercer20.es.its.nyu.edu 192.168.0.10 255.255.252.0 192.168.0.1
+# c39 
+./cmc-setcmcIP.sh cmcmercer21.es.its.nyu.edu 192.168.0.32 255.255.252.0 192.168.0.1
+# c40 
+./cmc-setcmcIP.sh cmcmercer22.es.its.nyu.edu 192.168.0.33 255.255.252.0 192.168.0.1	
+# c41
+./cmc-setcmcIP.sh cmcmercer23.es.its.nyu.edu 192.168.0.34 255.255.252.0 192.168.0.1

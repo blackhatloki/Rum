@@ -1,0 +1,409 @@
+#!/bin/ksh 
+# 
+# Reason for existing is to take a snapshot of Solaris and RedHat Linux configuration files. 
+# -- Ghost of Christmas Past from a Christmas Carol. 
+# 
+# save_conf script over support Solaris 8 9 10 and Linux Redhat 
+# Dumps system configs into /var/tmp/save_conf_backup
+# 
+# History Log 
+#        Version .1 
+#           This version .1 has basic support for RedHat Linux and Solaris 8/9/10. 
+#           It currently mising RedHat Linux LVM support.  -- GOCP 
+#                  
+# 
+# 
+
+
+PATH=/usr/bin:/usr/sbin:/sbin:/bin:/usr/opt/SUNWmd/sbin:/usr/platform/`uname -i`/sbin/
+PATH=${PATH}:/usr/ccs/bin:/opt/systools/bin:/local/opt/gs-utils
+export PATH
+
+
+timestamp=` date '+%m%d20%y.%H%M%S'`
+
+function os_type
+{
+hostname=`/bin/hostname` 
+OS=`uname -s`
+prefix=/var/tmp/save_conf_backup/$OS/ 
+prefixVx=${prefix}/Vx
+prefixLVM==${prefix}/LVM 
+
+create_directories
+case $OS in
+     SunOS)
+           save_solaris
+           ;;
+     Linux)
+           save_linux
+           ;;
+     *)
+           echo "Undefined OS!! Cannot dump system configs"
+           exit 1
+           ;;
+esac
+} 
+
+function save_solaris 
+{ 
+#
+# Solaris conf files list 
+#
+SOLARIS_LIST="/etc/passwd \
+        /etc/shadow \
+        /etc/group  \
+        /etc/services \
+        /etc/project \
+        /etc/protocols \
+        /etc/system \
+        /etc/hosts  \
+        /etc/hosts.equiv  \
+        /etc/vfstab  \
+        /etc/hostname.* \
+        /etc/aliases \
+        /etc/driver_aliases \
+        /etc/driver_classes \
+        /etc/path_to_inst \
+        /etc/auto_* \
+        /etc/auto.* \
+        /etc/pam.conf* \
+        /etc/resolv.conf \
+        /etc/nsswitch.conf \
+        /etc/ftp* \
+        /etc/nodename \
+        /etc/release \
+        /etc/dumpadm.conf \
+        /etc/sysidcfg \
+        /etc/shells \
+        /etc/syslog.conf \
+        /etc/defaultrouter \
+        /etc/defaultdomain \
+        /etc/nodename \
+        /etc/issue \
+        /etc/motd \
+        /etc/inittab \
+        /etc/sendmail.cf \
+        /etc/profile \
+        /etc/inetd.conf \
+        /etc/user_attr \
+        /etc/printcap \
+        /etc/printers.conf \
+        /etc/hosts.allow \
+        /etc/hosts.deny \
+        /etc/sudoers \
+        /etc/ethers \
+        /etc/bootparams \
+        /etc/default/* \
+        /etc/dfs/*  \
+        /etc/security/* \
+        /etc/ssh/*  \
+        /etc/mail/* \
+        /etc/net/*  \
+        /etc/inet/*  \
+        /kernel/drv/* \
+        /etc/ipf/*  \
+        /etc/skel/* \
+        /var/spool/cron/crontabs/* \
+        /etc/init.d/*  \
+        /etc/rc2.d/*   \
+        /etc/rc3.d/*   \
+        /etc/lvm/*     \
+        /etc/postfix/*     \
+	/usr/opt/SUNWmd/* \
+        /etc/lp/*     \
+        /var/yp/binding/* " 
+
+	uname -a    > $prefix$hostname/CMD_uname_a.log 
+	df -lk      > $prefix$hostname/CMD_df_lk.log 
+	df -k       > $prefix$hostname/CMD_dk_k.log 
+	domainname  > $prefix$hostname/CMD_domainname.log
+	ifconfig -a > $prefix$hostname/CMD_ifconfig_a.log 
+	netstat -nr > $prefix$hostname/CMD_netstat_nr.log 
+	netstat -a  > $prefix$hostname/CMD_netstat_a.log 
+	netstat -i  > $prefix$hostname/CMD_netstat_i.log 
+	ps -efl     > $prefix$hostname/CMD_ps_elf.log 
+	eeprom      > $prefix$hostname/CMD_eeprom.log 
+	prtconf -vp > $prefix$hostname/CMD_prconf_vp.log 
+	prtdiag     > $prefix$hostname/CMD_prtdiag.log 
+	prtdiag -v  > $prefix$hostname/CMD_prtdiag_v.log 
+	echo | format > $prefix$hostname/CMD_disks.log 
+	inq -nodots  >  $prefix$hostname/CMD_inq.log 
+	inq -nodots -et $prefix$hostname/CMD_inq_et.log 
+	inq -nodots -clariion  > $prefix$hostname/CMD_inq_clariion.log 
+	inq -nodots -showvol   > $prefix$hostname/CMD_inq_showvol
+	inq -hba     >  $prefix$hostname/CMD_inq_hba.log 
+	powermt display > $prefix$hostname/CMD_powermt_display.log 
+	powermt display dev=all  > $prefix$hostname/CMD_powermt_display_dev_all.log
+	pkginfo      > $prefix$hostname/CMD_pkginfo.log 
+	showrev      > $prefix$hostname/CMD_showrev.log 
+	showrev -p   > $prefix$hostname/CMD_showrev_p.log 
+        patchadd -p   > $prefix$hostname/CMD_patchadd_p.log 
+	sysdef       > $prefix$hostname/CMD_sysdef.log 
+	ipcs         > $prefix$hostname/CMD_ipcs.log 
+	/usr/ucb/ps -auxxxwwwwwww > $prefix$hostname/CMD_usr_ucb_ps_auxwww.log 
+	showmount -a > $prefix$hostname/CMD_showmount_a.log 
+	showmount -e > $prefix$hostname/CMD_showmount_e.log 
+	share        > $prefix$hostname/CMD_share.log 
+	mount        > $prefix$hostname/CMD_mount.log 
+	lsof         > $prefix$hostname/CMD_lsof.log 
+	lsof -i      > $prefix$hostname/CMD_lsof_i.log 
+	prtconf -vp | grep boot >  $prefix$hostname/CMD_prconf_vp_grep_bootdevices.log 
+	metadb      >  $prefix$hostname/CMD_metadb.log 
+	metastat -p >  $prefix$hostname/CMD_metastat_a.log 
+	metastat    >  $prefix$hostname/CMD_metastat.log
+	pagesize    > $prefix$hostname/CMD_pagesize.log 
+	swap -l     > $prefix$hostname/CMD_swap_l.log 
+	modinfo     > $prefix$hostname/CMD_modinfo.log 
+	isainfo -v  > $prefix$hostname/CMD_isainfo_v.log
+	sysdef -i | grep -i shm > $prefix$hostname/CMD_sysdef_i.log 
+	dmesg       > $prefix$hostname/CMD_dmesg.log 
+	rpcinfo -p localhost   > $prefix$hostname/CMD_rpcinfo_p_localhosts.log 
+	lpstat -t    > $prefix$hostname/CMD_lpstat_t.log 
+	lpstat -d   > $prefix$hostname/CMD_lpstat_d.log 
+        who -r      >  $prefix$hostname/CMD_who_r.log
+        ./checkcable > $prefix$hostname/CMD_checkcable.log 
+
+        for j in `ifconfig -a | egrep "hme|bge|ce|qfe|qe|le|eri" | awk -F" " ' { print $1 } ' | sed -e 's/://g' ` ; do
+            kstat -p `echo $j | perl -e ' while(<>) { chop($_); print($_) } ' ` | grep  $j | egrep "link|speed"  > $prefix$hostname/CMD_kstat__$j.log 
+        done
+
+	# Solaris 10 
+        case `uname -r` in 
+              5.10) 
+                   svcs -a  > $prefix$hostname/CMD_svcs_a.log
+                   inetadm  > $prefix$hostname/CMD_inetadm.log 
+                   routeadm > $prefix$hostname/CMD_routeadm.log
+                   ;;
+        esac 
+
+	for cf in $SOLARIS_LIST ; do 
+	    cp -rp $cf $prefix$hostname$cf && echo "Backing up $cf -> $prefix$hostname$cf"
+	done 
+
+        # Veritas VM LVM Backup 
+	if [ -f /etc/vx/volboot ]; then
+		 mkdir -p ${prefixVx}
+        	 vxdisk -o alldgs list > ${prefixVx}/$HOSTNAME.vxdisk.alldgs.list
+        	 vxdisk list >  ${prefixVx}/$HOSTNAME.vxdisk.list
+        	 vxdg list >  ${prefixVx}/$HOSTNAME.vxdg.list
+        	 for dg in `/usr/sbin/vxdg list | grep -v NAME | awk '{ print $1 }'`
+       		 do
+               		  /usr/sbin/vxprint -g $dg -vpshm > ${prefixVx}/$HOSTNAME/vx.tab.$dg.$today
+       		 done
+	fi
+	
+	if [ -f /etc/VRTSvcs/conf/config/main.cf ]; then
+       		 haconf -dump -makero
+        	 hacf -verify /etc/VRTSvcs/conf/config
+       		 hastatus -sum > /var/tmp/${prefixVx}/`hostname`.hastatus.sum
+        	 cp /etc/VRTSvcs/conf/config/main.cf /var/tmp/${prefixVx}/`hostname`.main.cf
+        	 cp /etc/VRTSvcs/conf/config/types.cf /var/tmp/${prefixVx}/`hostname`.types.cf
+       		 cp /etc/VRTSvcs/conf/config/main.cmd /var/tmp/${prefixVx}/`hostname`.main.cmd
+       		 cp /etc/llthosts /var/tmp/${prefixVx}/`hostname`.llthosts
+       		 cp /etc/llttab /var/tmp/${prefixVx}/`hostname`.llttab
+                 cp /etc/gabtab /var/tmp/${prefixVx}/`hostname`.gabtab
+	fi
+	tar cvf $prefix$hostname.tar $prefix$hostname
+        gzip $prefix$hostname.tar 
+# start of program 
+}        
+
+function save_linux
+{   
+       LINUX_LIST="/etc/passwd \
+     		 /etc/shadow \
+       	 	 /etc/group  \
+                 /etc/services \
+       	 	 /etc/protocols \
+        	 /etc/system \
+        	 /etc/issue \
+        	 /etc/issue.net \
+		 /etc/modules.conf  \
+        	 /etc/motd \
+        	 /etc/ntp.conf \
+                 /etc/hosts  \
+       		 /etc/host.conf \
+        	 /etc/yp.conf \
+        	 /etc/HOSTNAME  \
+        	 /etc/sudoers \
+        	 /etc/exports  \
+        	 /etc/fstab  \
+       		 /etc/aliases \
+       		 /etc/securetty \
+        	 /etc/*.conf \
+        	 /etc/auto_* \
+        	 /etc/auto.* \
+                 /etc/resolv.conf \
+        	 /etc/nsswitch.conf \
+        	 /etc/ftp* \
+       		 /etc/vsftp* \
+        	 /etc/nodename \
+        	 /etc/shells \
+       	 	 /etc/syslog.conf \
+        	 /etc/defaultrouter \
+        	 /etc/defaultdomain \
+       		 /etc/nodename \
+        	 /etc/inittab \
+                 /etc/sendmail.cf \
+        	 /etc/profile \
+       		 /etc/bashrc  \
+        	 /etc/csh.cshrc \
+       		 /etc/csh.login \
+        	 /etc/inetd.conf \
+                 /etc/xinetd.conf \
+       	         /etc/printcap \
+                 /etc/hosts.allow \
+        	 /etc/hosts.deny \
+        	 /etc/rc.local \
+      	         /etc/ssh/*  \
+       		 /etc/mail/* \
+         	 /etc/cups/* \
+        	 /etc/init.d/*  \
+        	 /etc/rc.d/*   \
+        	 /etc/rc2.d/*   \
+        	 /etc/rc3.d/*   \
+        	 /etc/sysconfig/network \
+        	 /etc/sysconfig/network-scripts/* \
+                 /etc/sysconfig/keyboard \
+		 /etc/sysconfig/rawdevices \
+		 /etc/sysconfig/ntpd \
+		 /etc/sysconfig/syslog \
+                 /etc/sysconfig/clock \
+	         /etc/sysconfig/sysstat \
+		 /etc/sysconfig/sendmail \
+		 /etc/udev/* \
+        	 /etc/security/* \
+        	 /etc/xinetd.d/*   \
+        	 /etc/profile.d/*  \
+        	 /etc/postfix/*     \
+        	 /etc/cron.d/*  \
+        	 /etc/cron.daily/*  \
+        	 /etc/cron.hourly/*  \
+        	 /etc/cron.monthly/*  \
+        	 /etc/cron.weekly/*  \
+                 /var/yp/binding/* " 
+       
+	uname -a    > $prefix$hostname/CMD_uname_a.log 
+	df -lk      > $prefix$hostname/CMD_df_lk.log 
+	df -k       > $prefix$hostname/CMD_dk_k.log 
+	domainname  > $prefix$hostname/CMD_domainname.log
+	ifconfig -a > $prefix$hostname/CMD_ifconfig_a.log 
+	netstat -nr > $prefix$hostname/CMD_netstat_nr.log 
+	netstat -a  > $prefix$hostname/CMD_netstat_a.log 
+	netstat -i  > $prefix$hostname/CMD_netstat_i.log 
+	ps -efl     > $prefix$hostname/CMD_ps_elf.log 
+	inq -nodots  >  $prefix$hostname/CMD_inq.log 
+	inq -nodots -et >  $prefix$hostname/CMD_inq_et.log 
+	inq -nodots -clariion  > $prefix$hostname/CMD_inq_clariion.log 
+	inq -nodots -showvol   > $prefix$hostname/CMD_inq_showvol
+	inq -hba     >  $prefix$hostname/CMD_inq_hba.log 
+	powermt display > $prefix$hostname/CMD_powermt_display.log 
+	powermt display dev=all  > $prefix$hostname/CMD_powermt_display_dev_all.log
+	ipcs         > $prefix$hostname/CMD_ipcs.log 
+	ps -auxxxwwwwwww > $prefix$hostname/CMD_usr_ucb_ps_auxwww.log 
+	showmount -a > $prefix$hostname/CMD_showmount_a.log 
+	showmount -e > $prefix$hostname/CMD_showmount_e.log 
+	mount        > $prefix$hostname/CMD_mount.log 
+	lsof         > $prefix$hostname/CMD_lsof.log 
+	lsof -i      > $prefix$hostname/CMD_lsof_i.log 
+	dmesg       > $prefix$hostname/CMD_dmesg.log 
+	rpcinfo -p localhost   > $prefix$hostname/CMD_rpcinfo_p_localhosts.log 
+	# Linux 
+	lspci      > $prefix$hostname/CMD_lspci.log 
+	lsucb      > $prefix$hostname/CMD_lsusb.log
+	dmidecode  > $prefix$hostname/CMD_dmidecode.log 
+	rpm -qa    > $prefix$hostname/CMD_rpm_a_q.log 
+	sysctl -a  > $prefix$hostname/CMD_sysctl_a.log 
+	free       > $prefix$hostname/CMD_free.log 
+	fdisk -l   > $prefix$hostname/CMD_fdisk_l.log 
+	chkconfig --list > $prefix$hostname/CMD_chkconfig_list.log 
+	service --status-all >  $prefix$hostname/CMD_service_status_all.log 
+	lsmod     >  $prefix$hostname/CMD_lsmod.log 
+	ip a s    >  $prefix$hostname/CMD_ip_a_s.log 
+	cat /proc/cpuinfo > $prefix$hostname/CMD_proc_cpuinfo.log 
+	cat /proc/meminfo > $prefix$hostname/CMD_proc_meminfo.log 
+	cat /proc/scsi/lpfc/* > $prefix$hostname/CMD_lpfc_dump.log 
+	cat /proc/sys/kernel/shmmax > $prefix$hostname/CMD_proc_sys_kernel_shmmax.log 
+        hplog -v   > $prefix$hostname/CMD_hplog_v.log 
+        hplog -t   > $prefix$hostname/CMD_hplog_t.log 
+        hplog -p   > $prefix$hostname/CMD_hplog_p.log 
+        hplog -i   > $prefix$hostname/CMD_hplog_i.log 
+
+        for j in `ifconfig -a | grep eth | awk -F" " ' { print $1 } ' ` ; do
+              ethtool $j -a  > $prefix$hostname/CMD_ethtool_a_$j.log 
+              ethtool $j     > $prefix$hostname/CMD_ethtool_$j.log 
+              ethtool $j  -g > $prefix$hostname/CMD_ethtool_g_$j.log 
+              ethtool $j  -i > $prefix$hostname/CMD_ethtool_i_$j.log 
+        done
+
+	for i in `ls /proc/scsi/lpfc/* ` ; do 
+       		cat $i  > $prefix$hostname/CMD_lpfc.`basename $i`.log 
+	done 
+
+	for cf in $LINUX_LIST ; do 
+	    cp -rp $cf $prefix$hostname$cf && echo "Backing up $cf -> $prefix$hostname$cf" 
+	done 
+
+        # Veritas VM LVM Backup 
+	if [ -f /etc/vx/volboot ]; then
+		 mkdir -p ${prefixVx}
+        	 vxdisk -o alldgs list > ${prefixVx}/$HOSTNAME.vxdisk.alldgs.list
+        	 vxdisk list >  ${prefixVx}/$HOSTNAME.vxdisk.list
+        	 vxdg list >  ${prefixVx}/$HOSTNAME.vxdg.list
+        	 for dg in `/usr/sbin/vxdg list | grep -v NAME | awk '{ print $1 }'`
+       		 do
+               		  /usr/sbin/vxprint -g $dg -vpshm > ${prefixVx}/$HOSTNAME/vx.tab.$dg.$today
+       		 done
+	fi
+	
+	if [ -f /etc/VRTSvcs/conf/config/main.cf ]; then
+       		 haconf -dump -makero
+        	 hacf -verify /etc/VRTSvcs/conf/config
+       		 hastatus -sum > /var/tmp/${prefixVx}/`hostname`.hastatus.sum
+        	 cp /etc/VRTSvcs/conf/config/main.cf /var/tmp/${prefixVx}/`hostname`.main.cf
+        	 cp /etc/VRTSvcs/conf/config/types.cf /var/tmp/${prefixVx}/`hostname`.types.cf
+       		 cp /etc/VRTSvcs/conf/config/main.cmd /var/tmp/${prefixVx}/`hostname`.main.cmd
+       		 cp /etc/llthosts /var/tmp/${prefixVx}/`hostname`.llthosts
+       		 cp /etc/llttab /var/tmp/${prefixVx}/`hostname`.llttab
+                 cp /etc/gabtab /var/tmp/${prefixVx}/`hostname`.gabtab
+	fi
+	tar cvf $prefix$hostname.tar $prefix$hostname
+        gzip $prefix$hostname.tar 
+
+}         
+
+function create_directories
+{ 
+	mkdir -p $prefix$hostname/etc
+	mkdir -p $prefix$hostname/etc/mail 
+	mkdir -p $prefix$hostname/etc/init.d 
+	mkdir -p $prefix$hostname/etc/cups
+	mkdir -p $prefix$hostname/etc/sysconfig
+	mkdir -p $prefix$hostname/etc/sysconfig/network-scripts
+	mkdir -p $prefix$hostname/etc/cron.d
+	mkdir -p $prefix$hostname/etc/cron.daily
+	mkdir -p $prefix$hostname/etc/cron.monthly
+	mkdir -p $prefix$hostname/etc/cron.weekly
+	mkdir -p $prefix$hostname/etc/profile.d
+	mkdir -p $prefix$hostname/etc/rc2.d
+	mkdir -p $prefix$hostname/etc/rc3.d
+	mkdir -p $prefix$hostname/etc/ssh 
+	mkdir -p $prefix$hostname/etc/security
+	mkdir -p $prefix$hostname/etc/inet 
+	mkdir -p $prefix$hostname/kernel/drv
+	mkdir -p $prefix$hostname/etc/net
+	mkdir -p $prefix$hostname/etc/lvm
+	mkdir -p $prefix$hostname/etc/skel
+	mkdir -p $prefix$hostname/etc/default
+	mkdir -p $prefix$hostname/etc/dfs
+	mkdir -p $prefix$hostname/etc/ipf
+	mkdir -p $prefix$hostname/etc/lp 
+	mkdir -p $prefix$hostname/etc/postfix
+	mkdir -p $prefix$hostname/var/spool/cron/crontabs
+	mkdir -p $prefix$hostname/var/yp/binding
+} 
+
+# start of program 
+os_type
+# end of program 

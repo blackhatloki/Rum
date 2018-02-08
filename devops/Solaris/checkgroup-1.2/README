@@ -1,0 +1,26 @@
+       checkgroup: Lists groups for each user ...
+
+checkgroup is a quick-n-dirty tool that parses the UNIX group file and
+outputs which groups each user belongs to. This was written because we
+had people in more than 16 groups and this chokes NIS ... so (radical idea! ;-),
+we wanted to keep an eye on this before it became an issue. You can sort the
+output by user or usage ... and optionally only show those folks who 
+belong to more than ## groups. It also does these checks:
+
+- Check the password file for any duplicate usernames and UIDs.
+- Flag any users listed in the group file that are NOT listed
+  in the password file.
+- Flag any groups that have no usernames and are not referenced 
+  in the password file
+
+You'll need to edit the checknetgroup Perl script to reflect the location
+of Perl on your machine. You may also want to tweek a few things that are
+noted at the top of the file. 
+
+
+Pls send me any suggestions and/or comments.
+
+Alek Komarnitsky, alek@komar.org  (http://www.komar.org/)
+
+
+

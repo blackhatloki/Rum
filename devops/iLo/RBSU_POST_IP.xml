@@ -1,0 +1,42 @@
+
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2004 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description: This is a sample RIBCL script to configure iLO or  -->
+<!--              iLO 2 RBSU to display the IP address during POST.  -->
+<!--              If RBSU_POST_IP is "Y" then the iLO IP address is  -->
+<!--              displayed during POST following the iLO or iLO 2   -->
+<!--              firmware version number.                           -->
+
+<!--              Want      Substitute                               -->
+<!--              Show IP   <RBSU_POST_IP VALUE="Y"/>                -->
+<!--              Hide IP   <RBSU_POST_IP VALUE="N"/>                -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        and other values inside the quotation marks with values  -->
+<!--        that are appropriate for your environment.               -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - All versions.                                -->
+<!--              iLO - All versions.                                -->
+<!--         RILOE II - None.                                        -->
+
+<RIBCL version="2.21">
+ <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <RIB_INFO MODE="write" >
+   <MOD_GLOBAL_SETTINGS>
+    <RBSU_POST_IP VALUE="Y"/>
+   </MOD_GLOBAL_SETTINGS>
+  </RIB_INFO>
+ </LOGIN>
+</RIBCL>

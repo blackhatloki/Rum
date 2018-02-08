@@ -1,0 +1,147 @@
+#!/bin/sh -- # -*- perl -*-
+eval 'exec /usr/bin/perl $0 ${1+"$@"} ;'
+ if 0;
+
+
+use Socket;
+
+#
+# Stephen Youell 9/9/99
+#
+# Options: -d <interface>
+#
+# Script to decode CDP packets
+#
+# Shows	what switch, card and port a machine is	on
+#
+# Relies on snoop, a SunOS version of which can	be got
+# playground.sun.com
+#
+
+#  /opt/systools/bin/snoop -x 0 -d hme1  ether 01:00:0c:cc:cc:cc
+
+$args=join(' ',@ARGV);
+@packet_raw=`/opt/systools/bin/snoop -x 0 -c 1 $args ether 01:00:0c:cc:cc:cc`;
+
+foreach	$line (@packet_raw) {
+    if($line=~/\d: ([\dabcdef ]+)  /) {
+	$packet_line="$1";
+	$packet_line=~s/ //g;
+	for($i=0;$i<length($packet_line);$i+=2)	{
+	    $bytestr=substr($packet_line,$i,2);
+	    push(@packet,hex($bytestr));
+	}
+    }
+
+}
+
+# Is it	a CDP packet?
+
+$type=double_byte(0x14);
+if($type!=0x2000) {
+    print "Not a CDP packet\n";
+    exit(1);
+}
+
+$cdp_ver=$packet[0x16];
+print "\n   CDP	Version: ".$cdp_ver."\n";
+
+$pindex=0x1a;
+
+while($pindex<@packet) {
+
+    $id=double_byte($pindex);
+
+    if($id==0) {
+	# Management address?
+	$pindex+=5;
+    }
+    elsif($id==1) {
+	# Chassis ID
+	packet_decode('	   Chassis ID');
+    }
+    elsif($id==2) {
+	# Unknown
+	$pindex+=4;
+    }
+    elsif($id==3) {
+	# Port
+	packet_decode('		 Port');
+    }
+    elsif($id==4) {
+	# Unknown
+	$size=double_byte($pindex+2);
+	$pindex+=$size;
+    }
+    elsif($id==5) {
+	# IOS Version
+	packet_decode('	  IOS Version');
+    }
+    elsif($id==6) {
+	# Platform
+	packet_decode('	     Platform');
+    }
+    elsif($id==0x01cc) {
+	# Management IP	Address
+	packet_decode('	Management IP');
+    }
+    else {
+	# Not expected
+	printf STDERR "Unexpected data in packet, ID 0x%x\n";
+	exit(1);
+    }
+}
+
+print "\n";
+
+exit(0);
+
+
+sub packet_decode {
+
+    my $i;
+    my $size;
+    my $data;
+    my $label;
+
+    $label=shift(@_);
+
+    $size=double_byte($pindex+2);
+    if(substr($label,-2) eq 'IP') {
+	$size+=4;
+    }
+    $data='';
+    for($i=4;$i<$size;$i++) {
+	$data.=pack('c',$packet[$pindex+$i]);
+    }
+    $pindex+=$size;
+    if(substr($label,-2) eq 'IP') {
+	print $label.':	';
+	print ord(substr($data,0,1)).'.';
+	print ord(substr($data,1,1)).'.';
+	print ord(substr($data,2,1)).'.';
+	print ord(substr($data,3,1));
+	$sw_name=gethostbyaddr($data,AF_INET);
+	print "	($sw_name)\n";
+    }
+    else {
+	$pad=' ' x (length($label)+2);
+	$data=~s/\012/\012$pad/g;
+	print "$label: $data\n";
+    }
+
+}
+
+
+sub double_byte	{
+
+    my $i;
+
+    $i=shift(@_);
+
+    return $packet[$i]*0x100+$packet[$i+1];
+
+}
+
+
+

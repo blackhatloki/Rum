@@ -1,0 +1,6 @@
+<RIBCL version="2.0">
+<LOGIN USER_LOGIN="Administrator" PASSWORD="ribAdm1n">
+<SERVER_INFO MODE="READ" >
+<GET_SERVER_NAME />
+</SERVER_INFO>
+</LOGIN>

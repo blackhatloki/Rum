@@ -1,0 +1,7 @@
+nagios:x:14114:14114:Nagios:/home/nagios:/bin/bash
+nagios:!!:14114:0:99999:7:::
+nagios:x:14114:
+989
+nrpe:x:989:989:Nrpe :/home/nrpe:/bin/bash
+nrpe:!!:989:0:99999:7:::
+nrpe:x:989:

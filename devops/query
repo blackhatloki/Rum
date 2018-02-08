@@ -1,0 +1,12 @@
+112	 pdsh compute-1-[2-5] "uname -a"
+113	 pdsh -w compute-1-[2-5] "uname -a"
+114	 pdsh -w compute-1-[2-5] "omreport chassis fans"
+115	 pdsh -w compute-1-[2-5] "omreport chassis pwrsupplies"
+116	 pdsh -w compute-1-[2-5] "omreport chassis nics"
+117	 pdsh -w compute-1-[2-5] "omreport storage pdisk controller=0"
+118	 pdsh -w compute-1-[2-5] "omreport storage pdisk controller=0" | grep Status
+
+
+pdsh -w compute-1-7 "omreport storage pdisk controller=0 |  egrep -i \"^ID|Status|Name|State\""
+
+pdsh -w compute-[1-3]-[1-9] -w compute-[1-3]-1[0-6] "omreport storage pdisk controller=0 |  egrep -i \"^ID|Status|Name|State\""

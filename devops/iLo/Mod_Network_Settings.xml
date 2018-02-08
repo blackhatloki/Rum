@@ -1,0 +1,92 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to configure the      -->
+<!--               network settings for following devices:           -->
+<!--                 Integrated Lights-Out 2 (iLO 2)                 -->
+<!--                 Integrated Lights-Out (iLO)                     -->
+<!--                 Remote Insight Lights-Out Edition II (RILOE II) -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        and other values inside the quotation marks with values  -->
+<!--        that are appropriate for your environment.               -->
+
+<!--        Double check all values before executing this script.    -->
+<!--        Incorrect or mismatched network settings may cause you   -->
+<!--        to lose the ability to connect to your Lights-Out device.-->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - All versions.                                -->
+<!--              iLO - All versions.                                -->
+<!--         RILOE II - All versions.                                -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <RIB_INFO MODE="write">
+    <MOD_NETWORK_SETTINGS>
+      <!--        Firmware support infomation for next 4 tags :      -->
+      <!--            iLO 2 - All versions.                          -->
+      <!--              iLO - All versions.                          -->
+      <!--         RILOE II - None.                                  -->
+      <ENABLE_NIC value="Yes"/>
+      <REG_DDNS_SERVER value="Yes"/>
+      <PING_GATEWAY value="No"/>
+      <DHCP_DOMAIN_NAME value="Yes"/>
+      <!--        Firmware support infomation for next 22 tags :     -->
+      <!--            iLO 2 - All versions.                          -->
+      <!--              iLO - All versions.                          -->
+      <!--         RILOE II - All versions.                          -->
+      <SPEED_AUTOSELECT value="YES"/>
+      <NIC_SPEED value="100"/>
+      <FULL_DUPLEX value="Yes"/>
+      <DHCP_ENABLE value="No"/>
+      <IP_ADDRESS value="172.20.60.152"/>
+      <SUBNET_MASK value="255.255.255.0"/>
+      <GATEWAY_IP_ADDRESS value="172.20.60.1"/>
+      <DNS_NAME value="demoilo"/>
+      <DOMAIN_NAME value="internal.com"/>
+      <DHCP_GATEWAY value="Yes"/>
+      <DHCP_DNS_SERVER value="Yes"/>
+      <DHCP_WINS_SERVER value="Yes"/>
+      <DHCP_STATIC_ROUTE value="Yes"/>
+      <REG_WINS_SERVER value="Yes"/>
+      <PRIM_DNS_SERVER value="0.0.0.0"/>
+      <SEC_DNS_SERVER value="0.0.0.0"/>
+      <TER_DNS_SERVER value="0.0.0.0"/>
+      <PRIM_WINS_SERVER value="0.0.0.0"/>
+      <SEC_WINS_SERVER value="0.0.0.0"/>
+      <STATIC_ROUTE_1 DEST="0.0.0.0" GATEWAY="0.0.0.0"/>
+      <STATIC_ROUTE_2 DEST="0.0.0.0" GATEWAY="0.0.0.0"/>
+      <STATIC_ROUTE_3 DEST="0.0.0.0" GATEWAY="0.0.0.0"/>
+      <!-- This tag can be used on an iLO blade server to force iLO  -->
+      <!-- to attempt to get an IP address from the signal backplane -->
+      <!-- in a server enclosure.  The IP address must be set prior  -->
+      <!-- with Mod_Enc_Bay_IP_Settings.xml                          -->
+      <!--        Firmware support infomation for next tag:          -->
+      <!--            iLO 2 - All versions.                          -->
+      <!--              iLO - All versions.                          -->
+      <!--         RILOE II - None.                                  -->
+      <!--
+      <ENCLOSURE_IP_ENABLE VALUE="Yes"/>
+      -->
+      <!--        Firmware support infomation for next tag:          -->
+      <!--            iLO 2 - None.                                  -->
+      <!--              iLO - None.                                  -->
+      <!--         RILOE II - All versions.                          -->
+      <!--
+      <WEB_AGENT_IP_ADDRESS value="192.168.0.1"/>
+      -->
+    </MOD_NETWORK_SETTINGS>
+  </RIB_INFO>
+  </LOGIN>
+</RIBCL>

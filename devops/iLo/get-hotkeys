@@ -1,0 +1,5 @@
+#!/bin/bash 
+
+
+
+./locfg.pl -s 137.34.192.138 -f Get_Rib-Hotkey_Config.xml

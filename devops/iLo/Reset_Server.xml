@@ -1,0 +1,46 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to power cycle (off   -->
+<!--               and then back on) the host server in which the    -->
+<!--               following device is operating:                   -->
+<!--                 Integrated Lights-Out 2 (iLO 2)                 -->
+<!--                 Integrated Lights-Out (iLO)                     -->
+<!--                 Remote Insight Lights-Out Edition II (RILOE II) -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        This script will NOT attempt to gracefully shutdown the  -->
+<!--        host operating system before it powers off the server.   -->
+
+<!--        If graceful shutdown is needed (if your OS supports it), -->
+<!--        then use the Set_Host_Power_Off.xml script to attempt a  -->
+<!--        graceful shutdown of the OS (if your OS supports it)     -->
+<!--        before powering off the server and then use the          -->
+<!--        Set_Host_Power_On.xml script to turn the server back on. -->
+
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - All versions.                                -->
+<!--              iLO - All versions.                                -->
+<!--         RILOE II - All versions.                                -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <SERVER_INFO MODE="write">
+    <RESET_SERVER/>
+  </SERVER_INFO>
+  </LOGIN>
+</RIBCL>

@@ -1,0 +1,32 @@
+down vote
+The loopback adapter is always up.
+
+ifconfig lo0 alias 172.16.123.1 will add an alias IP 172.16.123.1 to the loopback adapter
+
+ifconfig lo0 -alias 172.16.123.1 will remove it
+https://stackoverflow.com/questions/87442/virtual-network-interface-in-mac-os-x
+
+How to Create an IP Alias on the Mac via Command Line
+Type the following at the command line prompt, this will alias the new IP of 192.168.0.101 to your existing subnet mask, on the en0 network interface:
+
+sudo ifconfig en0 alias 192.168.0.101 255.255.255.0
+
+The syntax therefore for creating an IP alias is as follows:
+
+sudo ifconfig INTERFACE alias new.ip.address subnet.mask.address
+
+You will need to use sudo which requires the root/admin password.
+
+How to Remove the IP Alias
+If you want to get rid of the alias, just type:
+
+sudo ifconfig en0 -alias 192.168.0.101
+
+
+http://osxdaily.com/2009/08/05/how-to-create-an-ip-alias-in-mac-os-x-using-ifconfig/
+
+
+https://stackoverflow.com/questions/31517368/using-pfctl-on-mac-os-10-11-el-capitan-to-forward-ports
+
+mac lock 
+/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend

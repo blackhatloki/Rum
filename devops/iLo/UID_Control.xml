@@ -1,0 +1,46 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to toggle the UID     -->
+<!--               on the host server in which one of the following  -->
+<!--               deivces is executing.                             -->
+<!--                 Integrated Lights-Out 2 (iLO 2)                 -->
+<!--                 Integrated Lights-Out (iLO)                     -->
+<!--                 Remote Insight Lights-Out Edition II (RILOE II) -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        The Unit ID light will be flashing if the server is      -->
+<!--        engaged in an activity that can not or should not be     -->
+<!--        interrupted (such as updating iLO firmware or an active  -->
+<!--        Remote Console session).  This script will not change    -->
+<!--        the status of a flashing Unit ID light until the activity-->
+<!--        causing the flashing status is completed.                -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - All versions.                                -->
+<!--              iLO - All versions.                                -->
+<!--         RILOE II - None.                                        -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <SERVER_INFO MODE="write">
+    <!-- Modify the UID attribute to toggle UID on the host server -->
+    <!-- UID="No"   (Turns host server UID off) -->
+    <!-- UID="Yes"  (Turns host server UID on) -->
+    <UID_CONTROL UID="Yes"/>
+  </SERVER_INFO>
+  </LOGIN>
+</RIBCL>

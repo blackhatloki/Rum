@@ -1,0 +1,54 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to modify the current -->
+<!--               schemaless diretory configuration on following    -->
+<!--               device:                                           -->
+<!--                 Integrated Lights-Out 2 (iLO 2)                 -->
+<!--                 Integrated Lights-Out (iLO)                     -->
+<!--                 Remote Insight Lights-Out Edition II (RILOE II) -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!-- NOTE:  Run Mod_directory.xml to enable Directory login,         -->
+<!--        And to set the directory server address.                 -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - Version 1.10 or later.                       -->
+<!--              iLO - Version 1.80 or later.                       -->
+<!--         RILOE II - Version 1.20 or later.                       -->
+
+<RIBCL VERSION="2.0">
+ <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+   <DIR_INFO MODE = "write">
+     <MOD_DIR_CONFIG>
+	<DIR_ENABLE_GRP_ACCT value = "yes"/>
+	<DIR_GRPACCT1_NAME value = "test1"/>
+	<DIR_GRPACCT1_PRIV value = "1"/>
+	<DIR_GRPACCT2_NAME value = "test2"/>
+	<DIR_GRPACCT2_PRIV value = "2"/>
+	<DIR_GRPACCT3_NAME value = "test3"/>
+	<DIR_GRPACCT3_PRIV value = "3"/>
+	<DIR_GRPACCT4_NAME value = "test4"/>
+	<DIR_GRPACCT4_PRIV value = "4"/>
+	<DIR_GRPACCT5_NAME value = "test5"/>
+	<DIR_GRPACCT5_PRIV value = "5"/>
+	<DIR_GRPACCT6_NAME value = "test6"/>
+	<DIR_GRPACCT6_PRIV value = "1,2,3,4,5"/>
+     </MOD_DIR_CONFIG>
+   </DIR_INFO>
+ </LOGIN>
+</RIBCL>
+

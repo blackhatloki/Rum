@@ -1,0 +1,42 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2005 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to set the Power      -->
+<!--               Regulator feature on the host server in           -->
+<!--               Integrated Lights-Out (iLO)                       -->
+
+<!--               The values are                                    -->
+<!--                     1 = OS Control Mode (Disabled Mode for iLO) -->
+<!--                     2 = HP Static Low Power Mode                -->
+<!--                     3 = HP Dynamic Power Savings Mode           -->
+<!--                     4 = HP Static High Performance Mode         -->
+<!--               Note: Value 4 is availble only for iLO 2 firmware -->
+<!--                     version 1.20 and later.                     -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - Version 1.10 or later.                       -->
+<!--              iLO - Version 1.80 or later.                       -->
+<!--         RILOE II - None.                                        -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <SERVER_INFO MODE="write">
+    <!-- Modify the HOST_POWER_SAVER attribute to modify power saver on the host server -->
+    <SET_HOST_POWER_SAVER HOST_POWER_SAVER="3"/>
+  </SERVER_INFO>
+  </LOGIN>
+</RIBCL>

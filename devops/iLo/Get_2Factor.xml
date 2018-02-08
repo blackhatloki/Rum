@@ -1,0 +1,37 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003,2004 Hewlett-Packard Development           -->
+<!--   Company, L.P.                                                 -->
+
+<!-- Description:  This is a sample XML script to show two-factor    -->
+<!--               authentication settings                           -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        You might need to tailor this script for the firmware    -->
+<!--        running on your Lights-Out device according to the       -->
+<!--        information in "Firmware support infomation" comment(s). -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script    -->
+
+<!--        This script was written for iLO 2 firmware version 1.10. -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - Version 1.10 or later.                       -->
+<!--              iLO - Version 1.80 or later.                       -->
+<!--         RILOE II - Version 1.20 or later.                       -->
+
+<RIBCL VERSION="2.0">
+ <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <RIB_INFO MODE="read">
+    <GET_TWOFACTOR_SETTINGS/>
+  </RIB_INFO>
+ </LOGIN>
+</RIBCL>

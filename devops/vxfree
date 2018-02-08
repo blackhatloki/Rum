@@ -1,0 +1,145 @@
+#!/usr/bin/perl -w
+#
+# $ID='$Id: vxfree,v 1.3 2000/04/09 22:00:40 sbergeon Exp sbergeon $';
+#
+# Requires Veritas Volume Manager
+#
+# Use the vxdg command three times to generate a listing of
+# total available space per disk group.
+#
+# Also display total Private Region length and
+# private region space free.
+#
+# sample output:
+#
+# Disk Group Disks      MB Total       MB Free  Used Privln FreePr   Obj
+# rootdg         6     24,546.80      8,339.41   66%   1563   1526  3052
+# RSM           12     99,043.98     17,034.32   82%   1563   1492  2984
+# rsm214c0      28    119,093.07     33,128.78   72%   1563   1387  2774
+# testdg        87    733,944.90     20,621.72   97%   1563     48    96
+# testdg37      28    972,402.42     31,094.84   96%   2101    639  1278
+# -------------------------------------------------------------------------
+# Total        161  1,949,031.15    110,219.08
+#
+
+use strict;
+
+if ( $> != 0 ) {
+	( my $prog = $0 ) =~ s,.*/,,;
+	print "\n$prog: Must have root permissions\n\n";
+	exit;
+}
+
+# remove taint from ENV{'PATH'} variable
+$ENV{'PATH'} = '/bin:/usr/bin';
+delete @ENV{'IFS', 'CDPATH', 'ENV', 'BASH_ENV'};
+
+# system commands
+my $vxdg = '/usr/sbin/vxdg';
+if ( ! -x $vxdg ) { die "$vxdg not found\n"; }
+my $vxprint = '/usr/sbin/vxprint';
+if ( ! -x $vxprint ) { die "$vxprint not found\n"; }
+
+# array of disk groups
+my @Dgnames = ();
+
+# grand total numbers
+my $Totaldgfree = 0;
+my $Totaldgavail = 0;
+my $Totaldskcount = 0;
+
+# first get list of Disk Groups
+open IN,"$vxdg list |" or die "open of $vxdg: $!\n";
+while (<IN>) {
+	next if /^NAME/;
+	my ($dgnm,$rest) = split(/\s+/,$_);
+	push(@Dgnames,$dgnm);
+}
+close(IN);
+
+printf "\n%-10s %5s %13s %13s %5s %6s %6s %5s\n","Disk Group","Disks","MB Total", "MB Free","Used","Privln","FreePr","Obj";
+
+foreach my $dg (@Dgnames) {
+	my $dgfree = 0;
+	my $dgavail = 0;
+	my $dskcount = 0;
+	printf "%-10s ",$dg;
+
+	# get total space for disk group
+	open IN,"-|" or
+		exec "$vxprint","-g","$dg","-dq";
+	while (<IN>) {
+		chomp;
+		my(@ln) = split(/\s+/,$_);
+		$dgavail += $ln[4];
+		$dskcount++;
+	}
+	close(IN);
+	printf "%5d %13s ",$dskcount,sec_mbyte($dgavail);
+	$Totaldskcount += $dskcount;
+	$Totaldgavail += $dgavail;
+
+	# Get free space for each disk group
+	open IN,"-|" or 
+		exec "$vxdg","-g","$dg","free";
+	while (<IN>) {
+		next if /^DISK/;
+		chomp;
+		my ($nm,$dev,$tag,$offset,$len,$fl) =
+			split(/\s+/,$_);
+		$dgfree += $len;
+	}
+	close(IN);
+	printf "%13s ",sec_mbyte($dgfree);
+	$Totaldgfree += $dgfree;
+
+	# calculate percentage used
+	my $used = (( $dgavail - $dgfree ) / $dgavail) * 100;
+	if ( $used < 0 ) {
+		printf "%5s","Error ";
+	} else {
+		printf "%4d%% ",$used;
+	}
+
+	# get information on the private region
+	open IN,"-|" or
+		exec "$vxdg","list","$dg";
+	while (<IN>) {
+		next unless /permlen=/;
+		chomp;
+		my $free = '';
+		(my $len = $_) =~ s/.* permlen=(\d+) free=(\d+).*/$1,$2/;
+		($len,$free) = split(/,/,$len);
+		printf "%6d %6d %5d",$len,$free,$free*2;
+		last;
+	}
+	close(IN);
+	print "\n";
+}
+print "-" x 70,"\n";
+printf "%-10s %5s %13s %13s\n","Total",$Totaldskcount,sec_mbyte($Totaldgavail),sec_mbyte($Totaldgfree);
+print "\n";
+
+exit;
+############################################################
+
+# from Perl Cookbook, p. 64
+sub commify {
+	my $text = reverse $_[0];
+	$text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+	return scalar reverse $text;
+}
+
+sub sec_mbyte {
+	my $K = 1024;
+	my $sectors = shift;
+	if ( $sectors > 0 ) {
+		$sectors *= 512; # total bytes
+		$sectors /= ($K * $K); # total Mega bytes
+		$sectors = commify(sprintf "%.2f",$sectors);
+	} else {
+		$sectors = "?";
+	}
+	return $sectors;
+}
+

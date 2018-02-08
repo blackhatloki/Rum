@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+  - name : copy main.cf
+    copy : 'src=postfix/main.cf dest=/etc/postfix/main.cf  owner=root group=root mode=744'
+  - name : Copy master.cf
+    copy : 'src=postfix/master.cf dest=/etc/postfix/master.cf  owner=root group=root mode=744'
+  - command: systemctl restart postfix

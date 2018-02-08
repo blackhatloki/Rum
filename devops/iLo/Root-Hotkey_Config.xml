@@ -1,0 +1,42 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to configure a set of -->
+<!--               Remote Console hotkeys for following devices:     -->
+<!--                 Integrated Lights-Out 2 (iLO 2)                 -->
+<!--                 Integrated Lights-Out (iLO)                     -->
+<!--                 Remote Insight Lights-Out Edition II (RILOE II) -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        and other values inside the quotation marks with values  -->
+<!--        that are appropriate for your environment.               -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - All versions.                                -->
+<!--              iLO - All versions.                                -->
+<!--         RILOE II - All versions.                                -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="root" PASSWORD="Unix4dmin">
+  <RIB_INFO MODE="write">
+    <HOTKEY_CONFIG>
+      <CTRL_T value="R_ALT,SYS RQ,c"/>
+      <CTRL_U value="R_ALT,SYS RQ,m"/>
+      <CTRL_V value="R_ALT,SYS RQ,t"/>
+      <CTRL_W value="R_ALT,SYS RQ,p"/>
+      <CTRL_X value=""/>
+      <CTRL_Y value=""/>
+    </HOTKEY_CONFIG>
+  </RIB_INFO>
+  </LOGIN>
+</RIBCL>

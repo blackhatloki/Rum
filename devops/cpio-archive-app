@@ -1,0 +1,7 @@
+#!/bin/bash 
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin
+PATH=$PATH
+
+HOSTNAME=`hostname`
+find  /app | cpio -ovc > /var/tmp/`hostname`.app.cpio

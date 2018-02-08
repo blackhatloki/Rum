@@ -1,0 +1,623 @@
+#!/usr/bin/perl
+
+
+# This script will sweep through a list of hosts and run a command file or line
+# The command file can be any language you wish, as long as the file is executable
+
+use Net::Ping;
+use Getopt::Long;
+
+$p = Net::Ping->new( "icmp", 1, 64 );
+
+
+###########################################################
+# BEGIN - Configurable Variables
+###########################################################
+
+# Set to Maintained master hostlist of your environment for use by --allhosts option
+# This list should be a comma delimited file with hostname and GRIP
+#      eg. wnl06a-9470a,500766=AGORA US
+#
+# This is used if the hostcli command returns nothing or is not in use
+# UPDATE - Use prevhostlist as main hostlist and let 'Morning CheckOut' do the work for getting it all from HostDB and NonCoreDBHosts,etc.
+$logdir = "/app/shared/logs";
+$prevhostlist = "$logdir/hostlist.all.prev";
+$hostfunctionfile = "/app/llt-tools/admin/Hosts.Function";
+
+
+## TEST NEW CATI FIX ###########
+# $logdir = "/home/gkomsky2/scripts/CHECKS/LOGS";
+# $prevhostlist = "$logdir/hostlist.all.prev";
+# $hostfunctionfile = "/home/gkomsky2/scripts/CHECKS/Hosts.Function";
+################################
+
+
+# Location of 'hostcli' command
+# $scriptdir = "/app/llt-tools/scripts";
+
+# SET to your CS Team based on return from hostcli/HostDB command
+# $team = "ll";
+
+# These are key words that we want to avoid when doing a sweep
+# Later put in a -F (force) flag to allow to run with these key words
+%flagged_words = (
+	"rm",		1,
+	"reboot",	1,
+	"fdisk",	1,
+	"init",		1,
+);
+
+# These settings allow location based sweeps assuming the CS naming convention where the
+# first two letters of a host name determine locale
+%location = (
+	"ch",	"1",
+	"ny",	"1",
+	"pn",	"1",
+	"sp",	"1",
+	"wn",	"1",
+);
+
+# Setting Applications / AppID to allow for Application based sweeps
+%app2appID=(
+        "admin",        "ICTO-11470",
+        "aesoptions",   "ICTO-15630",
+        "aepaes",       "ICTO-9689",
+        "agora",        "ICTO-6937",
+        "correlix",     "ICTO-17148",
+        "crossfinder",  "ICTO-11054",
+        "emm",          "ICTO-12708",
+        "ems",          "ICTO-9583",
+        "fix",          "ICTO-6785",
+        "frankie",      "ICTO-18477",
+        "gce",          "ICTO-10260",
+        "gobus",        "ICTO-9007",
+	"lightpool",	"ICTO-23681",
+        "mantas",       "ICTO-12564",
+	"magic",	"ICTO-22954",
+        "marketdata",   "ICTO-11173",
+        "nis",          "ICTO-11911",
+        "omega",        "ICTO-24739",
+        "owl",          "ICTO-10053",
+        "pathfinderD",  "ICTO-10771",
+        "pulse",        "ICTO-9582",
+        "sor",          "ICTO-9583",
+        "sorcp",        "ICTO-9583",
+        "usexchange",   "ICTO-9635",
+        "unknown",      "unknown"
+);
+
+
+# NOTE: VERY IMPORTANT!!
+# For sub applications or functions within applications
+# that share appIDs, ONLY LIST THEM IN app2appID hash NOT appID2app
+%appID2app=(
+        "ICTO-11470",   "admin",
+        "ICTO-15630",   "aesoptions",
+        "ICTO-9689",    "aepaes",
+        "ICTO-6937",    "agora",
+        "ICTO-17148",   "correlix",
+        "ICTO-11054",   "crossfinder",
+        "ICTO-12708",   "emm",
+        "ICTO-6785",    "fix",
+        "ICTO-18477",   "frankie",
+        "ICTO-10260",   "gce",
+        "ICTO-9007",    "gobus",
+	"ICTO-23681",	"lightpool",
+	"ICTO-22954",	"magic",
+        "ICTO-12564",   "mantas",
+        "ICTO-11173",   "marketdata",
+        "ICTO-11911",   "nis",
+	"ICTO-24739",	"omega",
+        "ICTO-10053",   "owl",
+        "ICTO-10771",   "pathfinderD",
+        "ICTO-9582",    "pulse",
+        "ICTO-9583",    "sor",
+        "ICTO-9635",    "usexchange",
+        "unknown",      "unknown",
+);
+
+
+
+###########################################################
+# END - Configurable Variables
+###########################################################
+
+chop($date = `date +%m%d%y-%H%M%S`);
+
+#$SECUREOPTIONS="-oBatchMode=yes -oPasswordAuthentication=no -oStrictHostKeyChecking=no";
+$SECUREOPTIONS="-oBatchMode=yes -oFallBackToRsh=yes -oPasswordAuthentication=no -oStrictHostKeyChecking=no -oConnectTimeout=10 -oServerAliveInterval=60 -oServerAliveCountMax=15";
+
+@hostlist = ();	  # Holds list of hosts that the sweep will run against
+
+# NOTE: Only one of the below variables/options will be set and used
+$scriptfile = ""; 	# Script file that will be rsynced and then run on sweeped hosts
+$scriptfile_args = "";	# script file arguments if any
+$runcommands = "";	# commands that will be run on remote hosts
+$option_list = 0;	# if 1 then only list data with hostname, no false
+$option_dataonly = 0;   # if 1 then turn off reporting NOTHING and only report if data is returned
+$option_force = 0;      # if 1 then allow to run even if flagged words are inside script file
+
+$option_forked = 0;     # fork off commands in batches
+$batchsize = 30;	# batchsize for forking
+
+$script_or_commands = "S"; # Default set to run a script but is ultimately set by command line options
+
+
+#___BEGIN MAIN________________
+
+sInit();
+if ($script_or_commands eq "S") {sCheckScriptfile ($scriptfile);};
+if ($option_forked) {
+	sRun_Loop_Forked(\@hostlist,$script_or_commands); 
+} else {
+	sRun_Loop(\@hostlist,$script_or_commands); 
+};
+
+#___END   MAIN________________
+
+sub Usage {
+	print "\n\n";
+	print "Usage: sweep  --allhosts               --script  <file name> [--list OR --dataonly] [--force]\n";
+	print "              --hostfile <file name>   --command \"<bash commands to run>\"\n";
+	print "              --hosts  <list of hosts>   \n";
+	print "              --byapp  <list of Applications>   (Can be used alone or with --bylocation)\n";
+	print "              --bylocation  <list of Locations> (Can be used alone or with --byapp) \n";
+	print "\n";
+	print "\n";
+	print "              Options\n";
+	print "              -------\n";
+	print "              --allhosts - uses all Low Latency Hosts \n";
+	print "              --hostfile - uses a file that contains a list of hosts \n";
+	print "              --hosts    - uses list of hosts supplied \n";
+	print "              --byapp    - uses list of Applications \n";
+	print "              --bylocation    - uses list of Locations \n";
+	print "              --script   - provide script file in language of your choice that can run on its own\n";
+	print "              --command  - commands inside \"\" that you would normally send via ssh to a remote host\n";
+	print "              --list     - output with hostname and data on every line, allowing easy greps\n";
+	print "              --dataonly - output data only and removes the reporting of NOTHING\n";
+	print "              --force    - if Attempting to use flagged words (rm, init, reboot, etc.) in script, must use force.\n";
+	print "\n";
+	print "              Examples\n";
+	print "              --------\n";
+	print "              ./sweep --allhosts --script pscheck.sh \n";
+	print "              ./sweep --hostfile hostlist --command \"uptime; date\" \n";
+	print "              ./sweep --hosts wnl06a-6701 wnl06a-6702 --command \"ps -ef|grep abc\" \n";
+	print "              ./sweep --hostfile hostlist --script mycheck.sh\n";
+	print "              ./sweep --byapp admin crossfinder --script mycheck.sh --dataonly\n";
+	print "              ./sweep --bylocation pn --command uptime --list\n";
+	print "              ./sweep --bylocation pn --byapp agora --command uptime --list\n";
+	print "\n\n";
+	exit;
+};
+
+#
+# Get Command line Options and check for proper usage
+sub sInit {
+
+#   NO LONG NEEDED - NOT RELYING ON HOSTCLI #############################
+#	if (! -e "$scriptdir/hostcli") {
+#		print "NOTE: allhosts, byapp, bylocation options use \"hostcli\" command to connect with HostDB.\n";
+#		print "      Please get copy of 'hostcli' and set variable inside sweep script for full functionality\n";
+#		print "\n";
+#		print "   OR Create Master comma separated list with \"hostname,GRIP\" for your group and set \$prevhostlist inside script.\n\n";
+#	};
+#########################################################################
+
+        my $option_return = GetOptions (
+        'allhosts'              => \$option_allhosts,
+        'hosts=s{1,}'           => \@option_hosts,
+        'hostfile=s'         	=> \$option_hostfile,
+        'byapp=s{1,}'           => \@option_byapp,
+        'bylocation=s{1,}'      => \@option_bylocation,
+        'script=s'		=> \$option_script,
+        'command=s'             => \$option_command,
+        'list'                  => \$option_list,
+        'dataonly'              => \$option_dataonly,
+        'force'                 => \$option_force,
+        'forkit'                => \$option_forked,
+        'help'                  => \$option_help);
+
+	# Initialize the hostlist
+	if (($option_help) || (! $option_return)) {
+               	Usage ();
+	};
+	if ($option_allhosts) {
+		if (($#option_hosts >= 0) || ($option_hostfile) || ($#option_byapp >=0) || ($#option_bylocation >=0)) {
+			print "ERROR: Can only use one host option (except byapp/bylocation).\n";
+			Usage();
+		} else {
+#			@hostlist = `$scriptdir/hostcli --get list team=$team`;
+#			if (($#hostlist < 0) || (grep(/Unable to connect/,@hostlist))) {
+#				print "ERROR: Hosts unavailable via HostDB. Attempting to Use Cached List ... ";
+				if (-e $prevhostlist) {
+					@hostlist = `cat $prevhostlist | awk -F, '{print \$1}'`;
+					if ($#hostlist < 0) {
+						print "Empty. Aborting.\n";
+						exit;
+					} else {
+						print "Moving on.\n";
+					};
+				} else {
+					print "\"$prevhostlist\" Unavailable. Aborting.\n";
+					exit;
+				};
+#			};
+		};
+	} elsif ($#option_hosts >= 0) {
+		if (($option_hostfile) || ($#option_byapp >=0) || ($#option_bylocation >=0)) {
+			print "ERROR: Can only use one host option (except byapp/bylocation).\n";
+			Usage();
+		} else {
+			@hostlist = @option_hosts;
+		};
+	} elsif ($option_hostfile) {
+		if (($#option_byapp >=0) || ($#option_bylocation >=0)) {
+			print "ERROR: Can only use one host option (except byapp/bylocation).\n";
+			Usage();
+		} else {
+			if (! -e $option_hostfile) {
+				print "$option_hostfile does not exist. Aborting.\n";
+				exit;
+			} else {
+				@hostlist = `cat $option_hostfile`;
+			};
+		};
+	} elsif ($#option_byapp >=0) {
+##################
+# Leaving commented out for now in case of change back 
+# Removed to allow for byapp and bylocation options to be used together
+#		if ($#option_bylocation >=0) {
+#			print "ERROR: Can only use one host option.\n";
+#			Usage();
+#		} else {
+##################
+	                for (@option_byapp) {
+				if (! $app2appID{$_}) {
+					if (grep(/help/,@option_byapp)) {
+						print "Available application names to use:\n";
+					} else {
+						print "Error: '$_' is not a recognized app. Name must be in the following list:\n";
+					};
+					for (sort keys %app2appID) {
+                                        	if (! /unknown/) {
+                                                	print "\t$_\n";
+                                        	};
+                                	};
+                                	exit;
+                        	} else {
+					if (-e $prevhostlist) {
+						# @tmp_hostlist = `cat $prevhostlist |grep -i $app2appID{$_} | awk -F, '{print \$1}'`;
+						@tmp_hostlist = `cat $prevhostlist |grep -i $app2appID{$_}`;
+						# go through each host and find out if it belongs to sub-category with same appID
+						@tmp_hostlist = sCheckSubCategory($_,@tmp_hostlist);
+						
+					} else {
+						print "\"$prevhostlist\" Unavailable. Exiting.\n";
+						exit;
+					};
+					push (@hostlist,@tmp_hostlist);
+				};
+                	};
+			# Make more efficient later - added in for now to give --byapp and bylocation options to work simultaneously
+			if ($#option_bylocation >=0) {
+				for (@option_bylocation) {
+					if (! $location{$_}) {
+						print "Available locations are:\n";
+						for (sort keys %location) {
+							print "\t$_\n";
+						};
+						exit;
+					};
+				};
+				my $locations = join("|",@option_bylocation);
+				@hostlist = grep(/^$locations/,@hostlist);
+			};
+#		};
+	} elsif ($#option_bylocation >=0) {
+		for (@option_bylocation) {
+			if (! $location{$_}) {
+				print "Available locations are:\n";
+				for (sort keys %location) {
+					print "\t$_\n";
+				};
+				exit;
+			};
+		};
+		my $locations = join("|",@option_bylocation);
+#		@hostlist = `$scriptdir/hostcli --get list team=$team |egrep \"^$locations\"`;
+#		if ($#hostlist < 0) {
+#			print "ERROR: Hosts unavailable via HostDB. Attempting to Use Cached List ... ";
+			@hostlist = `cat $prevhostlist |egrep \"^$locations\" |awk -F, '{print \$1}'`;
+			if ($#hostlist < 0) {
+				print "Unavailable. Aborting.\n";
+				exit;
+			} else {
+				print "Moving on.\n";
+			};
+#		};
+		
+	} else {
+		Usage();
+	};
+
+	if (($option_list) && ($option_dataonly)) {
+		print "Must only use --list OR --dataonly, not both.\n";
+		Usage();
+	};
+
+	# Initialize the scripts/commands
+	if (($option_script) && ($option_command)) {
+		print "ERROR: Can use either --script or --command, not both.\n";
+		Usage();
+	} elsif ($option_script) {
+
+		($option_script,$scriptfile_args) = split(/\s+/,$option_script,2);
+
+		if (! -e $option_script) {
+			print "$option_script does not exist. Aborting.\n";
+			exit;
+		} elsif ((! -r $option_script) || (! -x $option_script)) {
+                        print "$option_script - may not be readable or executable. Please modify. Aborting.\n";
+                        exit;
+		} else {
+			$scriptfile = $option_script;
+			$script_or_commands = "S";
+		};
+	} elsif ($option_command) {
+		$runcommands = $option_command;
+		# if there is a dollar sign referenced inside the command it needs to be escaped
+		$runcommands =~ s/\$/\\\$/g;
+		$script_or_commands = "C";
+	} else {
+		Usage();
+	};
+};
+
+
+# Go through hostlist given and return subsection if it belongs to subcategory
+sub sCheckSubCategory {
+	my $apptoget = shift;
+	my @tmphostlist = @_;
+	my @ret_hostlist = ();
+        for (@tmphostlist) {
+                chomp;
+		my ($host,$environ,$appID,$name) = split(/,|=/,$_,4);
+                my $app = sGetApp($host,$appID);
+
+                # if $appID is unknown, attempt to use newly found app to get it.
+                #  (reason we don't check before is because we can potentially get it from sGetApp since that also checks
+                #   inside Hosts.Function file and if found, can discover proper app and thus we can get appID now.
+                if (! $appID) {
+                        if ($app2appID{$app}) {
+                                $appID = $app2appID{$app};
+                        } else {
+                                $appID = "unknown";
+                        };
+                };
+
+                # Only keep on list if the app is the one that the user requested unless they asked for ALL
+                # The reason for this extra check is due to sub-categorization of apps that share appIDs
+                if ($app eq $apptoget) {
+                        push (@ret_hostlist,"$host");
+                };
+        };
+	return @ret_hostlist;
+};
+
+
+# Get the actual application we want the host to be categorized as.
+# The Grip is the official but check against a 'hostfunctionfile' and
+# if the host is categorized as something else, which doesn't have its own Grip
+# then use that 'app name' instead when running modules
+# In order for this to work, though, the sub-app must also be listed in the app2appID
+# hash using the same appID id
+sub sGetApp {
+        my $host = shift;
+        my $appID = shift;
+
+        # by default the app will be what came from CoreDB/HostDB
+        my $app = $appID2app{$appID};
+
+        # if the host is specifically listed as another category, then use that
+        open (HOSTFUNCTION,"$hostfunctionfile") || "Can't open $hostfunctionfile: $!";
+        while (<HOSTFUNCTION>) {
+                chomp;
+                my ($h,$a) = split(/:/,$_,2);
+                if ($h eq $host) {
+                        # if the app listed in hosts function file matches with what's in the
+                        # hash, then we're good to go, otherwise send up a flag and kick us out
+                        if ($app2appID{$a}) {
+                                $app = $a;
+                        } else {
+                                print "ERROR: '$a' in $hostfunctionfile next to '$h' entry does not match any apps in checkOut.pl.\n";
+                                print "       Please fix before proceeding. Aborting.\n";
+                                exit;
+                        };
+                };
+        };
+        if (! $app) {
+                $app = "unknown";
+        };
+
+        return $app;
+};
+
+
+
+sub sCheckScriptfile {
+	my $infile = shift;
+	my @scriptfile = `cat $infile`;
+	for my $scriptline (@scriptfile) {
+		# if the line is not a comment
+		if ($scriptline !~ /^#/) {
+			my @scriptwords = (split/\W+/,$scriptline);
+			for my $scriptword (@scriptwords) {
+				if ($flagged_words{$scriptword}) {
+					if (! $option_force) {
+						print "Attempting to do sweep with command \"$scriptword\" -- Must use --force.\n";
+						exit;
+					};
+				};
+			};
+		};
+	};
+};
+
+
+
+
+#sub sGetArg {
+#	my @myargs = @_;
+#        if ($myargs[0] eq "ALL") {
+#		$myargs[0] = "/app/llt-tools/admin/lists/AES.servers.list";
+#	};
+#	if (($#myargs < 1) || (! -e $myargs[0]) || (! -e $myargs[1])) {
+#		Usage();
+#	} else {
+#		if ((! -r $myargs[1]) || (! -x $myargs[1])) {
+#			print "$myargs[1] - may not be readable or executable. Please modify. Aborting.\n";
+#			exit;
+#		} else {
+#			return $myargs[0], $myargs[1];
+#		};
+#	};
+#};
+
+sub sRun_Loop_Forked {
+	my @hostlist = @{$_[0]};
+	my $script_or_commands = $_[1];
+	
+# 	for (@hostlist) {
+
+	while (my @batch = splice(@hostlist, 0, $batchsize)) {
+
+		for (@batch) {
+
+			#chomp;
+			$_ = sStripExtraSpaces($_);
+			if (($_) && (! /^#/)) {
+		        	# check ping
+				if ( ! $p->ping($_) ) {
+					if (! $option_list) { print "------------------------\n";};
+					print "$_ : Unpingable ... skipping.\n";
+				} else {
+					my $pid = fork();
+					if ($pid) {
+						# parent
+						push(@childs, $pid);
+					} elsif ($pid == 0) {
+
+						# run ssh and timeout if not able to connect
+						my @test = `ssh $SECUREOPTIONS $_ "/bin/date" 2> /dev/null `;
+						# if file comes back empty return error (0)
+						if (! @test) {
+							if ((! $option_list) && (! $option_dataonly)) { print "------------------------\n"; };
+							print "$_ : Not able to ssh ... skipping.\n";
+						} else {
+							eval {
+								local $SIG{ALRM} = sub { die "Timeout\n"; };
+								alarm(600); #
+								if ($script_or_commands eq "S") {
+									# rsync the test command onto the server being tested
+									`rsync --rsh="ssh $SECUREOPTIONS" $scriptfile $_:/tmp/sweep_cmnd_$date 2> /dev/null`;
+									# Run the command, then immediately empty out the script 
+									# so there is no lingering scripts or commands that could be run
+								        @test_output = `ssh $SECUREOPTIONS $_ \"/tmp/sweep_cmnd_$date $scriptfile_args; rm /tmp/sweep_cmnd_$date /tmp/sweep_cmnd\" 2> /dev/null`;
+								} else {
+									# run the commands remotely
+									@test_output = `ssh $SECUREOPTIONS $_ \"$runcommands\" 2> /dev/null`;
+								};
+								alarm(0); # turn off the alarm clock
+							};
+							if ($@) {
+								print "$_ -\tTimed Out. Moving on.\n";
+							};
+							
+							# if there is output, start off the printing with a header of sorts
+							if (@test_output) {
+								if ((! $option_list) && (! $option_dataonly)) { print "------------------------\n"; };
+							 	if ((! $option_list) && (! $option_dataonly)) { print "$_ :\n"; };
+							} else {
+								if ((! $option_list) && (! $option_dataonly)) { print "------------------------\n"; };
+								if (! $option_dataonly) {print "$_ : NOTHING\n"; };
+							};
+			
+							for my $output (@test_output) {
+								if ((! $option_list) && (! $option_dataonly)) { print "\t$output"; };
+								if (($option_list) && (! $option_dataonly)) { print "$_\t: $output"; };
+								if (($option_dataonly) && (! $option_list)) { print "$output"; };
+								# print "$_\t: $output";
+							};
+						};
+						exit (0);
+					} else {
+						die "couldn't fork: $!\n";
+					};
+				};
+			};
+		};
+		foreach (@childs) {
+			waitpid($_,0);
+		};
+	};
+};
+
+sub sRun_Loop {
+	my @hostlist = @{$_[0]};
+	my $script_or_commands = $_[1];
+	
+	for (@hostlist) {
+		#chomp;
+		$_ = sStripExtraSpaces($_);
+		if (($_) && (! /^#/)) {
+	        	# check ping
+			if ( ! $p->ping($_) ) {
+				if (! $option_list) { print "------------------------\n";};
+				print "$_ : Unpingable ... skipping.\n";
+			} else {
+				# run ssh and timeout if not able to connect
+				my @test = `ssh $SECUREOPTIONS $_ "/bin/date" 2> /dev/null `;
+				# if file comes back empty return error (0)
+				if (! @test) {
+					if ((! $option_list) && (! $option_dataonly)) { print "------------------------\n"; };
+					print "$_ : Not able to ssh ... skipping.\n";
+				} else {
+					if ($script_or_commands eq "S") {
+						# rsync the test command onto the server being tested
+						`rsync --rsh="ssh $SECUREOPTIONS" $scriptfile $_:/tmp/sweep_cmnd_$date 2> /dev/null`;
+						# Run the command, then immediately empty out the script 
+						# so there is no lingering scripts or commands that could be run
+#					        @test_output = `ssh $SECUREOPTIONS $_ \"/tmp/sweep_cmnd; echo > /tmp/sweep_cmnd\" 2> /dev/null`;
+					        @test_output = `ssh $SECUREOPTIONS $_ \"/tmp/sweep_cmnd_$date $scriptfile_args; rm /tmp/sweep_cmnd_$date /tmp/sweep_cmnd\" 2> /dev/null`;
+					} else {
+						# run the commands remotely
+						@test_output = `ssh $SECUREOPTIONS $_ \"$runcommands\" 2> /dev/null`;
+					};
+					
+					# if there is output, start off the printing with a header of sorts
+					if (@test_output) {
+						if ((! $option_list) && (! $option_dataonly)) { print "------------------------\n"; };
+						if ((! $option_list) && (! $option_dataonly)) { print "$_ :\n"; };
+					} else {
+						if ((! $option_list) && (! $option_dataonly)) { print "------------------------\n"; };
+						if (! $option_dataonly) {print "$_ : NOTHING\n"; };
+					};
+	
+					for my $output (@test_output) {
+						if ((! $option_list) && (! $option_dataonly)) { print "\t$output"; };
+						if (($option_list) && (! $option_dataonly)) { print "$_\t: $output"; };
+						if (($option_dataonly) && (! $option_list)) { print "$output"; };
+					};
+				};
+			};
+		};
+	};
+};
+
+sub sStripExtraSpaces {
+        my $inline = shift;
+        $inline =~ s/^\s+//;
+        $inline =~ s/\s+$//;
+        $inline =~ s/\s+/ /;
+        return $inline;
+};

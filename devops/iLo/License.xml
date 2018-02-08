@@ -1,0 +1,44 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to apply the license  -->
+<!--               key for the Integrated Lights-Out Advanced Pack.  -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        You will need to replace the sample value for the KEY    -->
+<!--        with the value from your iLO Advanced Pack.              -->
+<!--        The iLO Advanced Pack is licensed to a single server.    -->
+<!--        You may not use the same individual license key on more  -->
+<!--        than one server.                                         -->
+
+<!--        Contact your Account Representative for information on   -->
+<!--        Volume Licensing or Master License Agreements if you     -->
+<!--        want to use the same key for multiple servers.           -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - All versions.                                -->
+<!--              iLO - All versions.                                -->
+<!--         RILOE II - None.                                        -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <RIB_INFO MODE="write">
+    <LICENSE>
+      <ACTIVATE KEY="1111122222333334444455555"/>
+    </LICENSE>
+  </RIB_INFO>
+  </LOGIN>
+</RIBCL>

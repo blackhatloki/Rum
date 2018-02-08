@@ -1,0 +1,30 @@
+<RIBCL VERSION="2.0">
+<LOGIN USER_LOGIN="Administrator" PASSWORD="ribAdm1n">
+<RIB_INFO mode="write">
+<MOD_NETWORK_SETTINGS>
+    <PRIM_DNS_SERVER VALUE="169.40.0.1" />
+    <SEC_DNS_SERVER VALUE="169.40.0.2" />
+</MOD_NETWORK_SETTINGS>
+</RIB_INFO>
+<DIR_INFO mode="write">
+<MOD_DIR_CONFIG>
+    <DIR_AUTHENTICATION_ENABLED VALUE="Y" />
+    <DIR_LOCAL_USER_ACCT VALUE="Y" />
+    <DIR_SERVER_ADDRESS VALUE="ilo-auth.glb3.hedani.net" />
+    <DIR_SERVER_PORT VALUE="636" />
+    <DIR_USER_CONTEXT_1 VALUE="OU=Functional,OU=US,OU=CS,DC=gbl,DC=ad,DC=hedani,DC=net" />
+    <DIR_USER_CONTEXT_2 
+    VALUE="OU=Functional,OU=SG,OU=CS,DC=gbl,DC=ad,DC=hedani,DC=net" />
+    <DIR_ENABLE_GRP_ACCT VALUE="Y" />
+    <DIR_GRPACCT1_NAME VALUE="CN=DSA-CS-US-WinConsoleSuper,OU=FunctionalGroups,OU=US,OU=CS,DC=gbl,DC=ad,DC=hedani,DC=net" />
+    <DIR_GRPACCT1_PRIV VALUE="1,2,3,4,5" />
+    <DIR_GRPACCT2_NAME VALUE="CN=DSA-CS-US-WinConsoleOper,OU=FunctionalGroups,OU=US,OU=CS,DC=gbl,DC=ad,DC=hedani,DC=net" />
+    <DIR_GRPACCT2_PRIV VALUE="2,3,4" />
+    <DIR_GRPACCT2_NAME VALUE="CN=DSA-CS-US-UnixConsoleOper,OU=FunctionalGroups,OU=US,OU=CS,DC=gbl,DC=ad,DC=hedani,DC=net" />
+    <DIR_GRPACCT2_PRIV VALUE="1,2,3,4,5" />
+    <DIR_GRPACCT2_NAME VALUE="CN=DSA-CS-US-UnixConsoleSuper,OU=FunctionalGroups,OU=US,OU=CS,DC=gbl,DC=ad,DC=hedani,DC=net" />
+    <DIR_GRPACCT2_PRIV VALUE="1,2,3,4,5" />
+</MOD_DIR_CONFIG>
+</DIR_INFO>
+</LOGIN>
+</RIBCL>

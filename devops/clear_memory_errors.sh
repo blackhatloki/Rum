@@ -1,0 +1,1 @@
+ dcicfg command=clearmemfailures

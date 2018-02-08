@@ -1,0 +1,55 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to configure the      -->
+<!--               virtual media boot options.			     -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        You might need to tailor this script for the firmware    -->
+<!--        running on your Lights-Out device according to the       -->
+<!--        information in "Firmware support infomation" comment(s). -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - All versions.                                -->
+<!--              iLO - All versions.                                -->
+<!--         RILOE II - All versions.                                -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+    <RIB_INFO MODE="write">
+		
+      <!--        Firmware support infomation for next tag:          -->
+      <!--            iLO 2 - All versions.                          -->
+      <!--              iLO - All versions.                          -->
+      <!--         RILOE II - None.                                  -->
+      <SET_VM_STATUS DEVICE="FLOPPY">
+        <VM_BOOT_OPTION VALUE="BOOT_ONCE"/>
+        <VM_WRITE_PROTECT VALUE="YES" />
+      </SET_VM_STATUS>
+		
+      <!--        Firmware support infomation for next tag:          -->
+      <!--            iLO 2 - None.                                  -->
+      <!--              iLO - None.                                  -->
+      <!--         RILOE II - All versions.                          -->
+      <!--
+      <SET_VF_STATUS>
+        <VF_BOOT_OPTION ="BOOT_ONCE"/>
+        <VF_WRITE_PROTECT value ="YES"/>
+      </SET_VF_STATUS>
+      -->
+      </RIB_INFO>
+    </LOGIN>
+</RIBCL>

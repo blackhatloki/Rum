@@ -1,0 +1,11 @@
+[Unit]
+Description=one_mount
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/mount /dev/partition /path/to/point
+ExecStop=/usr/bin/umount /path/to/point
+
+[Install]
+WantedBy=multi-user.target

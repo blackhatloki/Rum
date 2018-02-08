@@ -1,0 +1,10 @@
+#!/bin/bash 
+for i in `cat servers` ; do 
+    sed -e "s/SERVERNAME/$i/g"  server.xml > /var/tmp/$i.server.xml 
+    sed -e "s/SERVERNAME/$i/g"  network.xml > /var/tmp/$i.network.xml 
+    echo $i 
+    echo "Setting $i-ilo" 
+    ./locfg.pl -s $i-ilo.equity.csfb.com -f /var/tmp/$i.server.xml
+    echo "setting $i network name" 
+   ./locfg.pl -s $i-ilo.equity.csfb.com -f /var/tmp/$i.network.xml 
+done 

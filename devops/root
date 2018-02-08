@@ -1,0 +1,2 @@
+MAILTO=hpc-notify@nyu.edu,tst722@nyu.edu
+*/15 * * * * /usr/sbin/nhc  NHC_RM=slurm

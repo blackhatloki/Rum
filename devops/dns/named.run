@@ -1,0 +1,38 @@
+13-May-2009 10:22:10.364 received control channel command 'null'
+13-May-2009 10:22:10.371 received control channel command 'reload'
+13-May-2009 10:22:10.371 loading configuration from '/var/dns/named.conf'
+13-May-2009 10:22:10.390 couldn't add command channel ::1#953: address not available
+13-May-2009 10:22:10.391 now using logging configuration from config file
+13-May-2009 10:22:10.400 load_configuration: success
+13-May-2009 10:22:10.401 calling free_rbtdb(.)
+13-May-2009 10:22:10.401 done free_rbtdb(.)
+13-May-2009 10:22:10.401 zone 1.168.192.in-addr.arpa/IN: skipping load: master file older than last load
+13-May-2009 10:22:10.402 zone 0.0.127.in-arpa.arpa/IN: skipping load: master file older than last load
+13-May-2009 10:22:10.402 zone ny/IN: skipping load: master file older than last load
+13-May-2009 10:22:10.402 dns_zone_maintenance: zone ny/IN: enter
+13-May-2009 10:22:10.402 dns_zone_maintenance: zone 1.168.192.in-addr.arpa/IN: enter
+13-May-2009 10:22:10.402 dns_zone_maintenance: zone 0.0.127.in-arpa.arpa/IN: enter
+13-May-2009 10:22:10.402 dns_zone_maintenance: zone version.bind/CH: enter
+13-May-2009 10:22:10.402 dns_zone_maintenance: zone hostname.bind/CH: enter
+13-May-2009 10:22:10.402 dns_zone_maintenance: zone authors.bind/CH: enter
+13-May-2009 10:22:10.402 dns_zone_maintenance: zone id.server/CH: enter
+13-May-2009 10:27:22.444 createfetch: nyct.net A
+13-May-2009 10:28:25.994 createfetch: 0.0.0.224.in-addr.arpa PTR
+13-May-2009 10:28:26.023 createfetch: NS.ISI.EDU A
+13-May-2009 10:28:26.023 createfetch: NS.ISI.EDU AAAA
+13-May-2009 10:28:26.024 createfetch: NIC.NEAR.NET A
+13-May-2009 10:28:26.024 createfetch: NIC.NEAR.NET AAAA
+13-May-2009 10:28:26.024 createfetch: FLAG.EP.NET A
+13-May-2009 10:28:26.025 createfetch: FLAG.EP.NET AAAA
+13-May-2009 10:28:26.025 createfetch: STRUL.STUPI.SE A
+13-May-2009 10:28:26.025 createfetch: STRUL.STUPI.SE AAAA
+13-May-2009 10:28:26.142 createfetch: ns5.opm-server.de A
+13-May-2009 10:28:26.143 createfetch: ns5.opm-server.de AAAA
+13-May-2009 10:28:26.143 createfetch: ns7.opm-server.de A
+13-May-2009 10:28:26.144 createfetch: ns7.opm-server.de AAAA
+13-May-2009 10:28:28.241 createfetch: losaltos.stupi.com A
+13-May-2009 10:28:28.241 createfetch: losaltos.stupi.com AAAA
+13-May-2009 10:28:28.374 no_references: delete from rbt: 131670 LosAltos.Stupi.com
+13-May-2009 10:28:28.387 no_references: delete from rbt: 12fb98 LosAltos.Stupi.com
+13-May-2009 10:28:28.488 lame server resolving 'NIC.NEAR.NET' (in 'NEAR.net'?): 67.159.44.81#53
+13-May-2009 10:28:59.694 createfetch: highcaliber.com NS

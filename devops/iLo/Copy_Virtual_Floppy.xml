@@ -1,0 +1,32 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to copy the contents  -->
+<!--               of the Virtual Floppy from the on-board memory of -->
+<!--               a Remote Insight Lights-Out Edition (RILOE II)    -->
+<!--               device to a file specified in IMAGE_LOCATION.     -->
+
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        Use CPQLOCFG.EXE ver 2.10 or greater with this script    -->
+<!--        This script was written for RILOE II fw ver 1.10 or      -->
+<!--        higher.                                                  -->
+
+<!--        See the RILOE II User Guide for more information on      -->
+<!--        scripting and the syntax of the RIBCL XML.               -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - None                                         -->
+<!--              iLO - None                                         -->
+<!--         RILOE II - Version 1.10 or later.                       -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <RIB_INFO MODE="write">
+    <COPY_VIRTUAL_FLOPPY IMAGE_LOCATION="C:\test.img"/>
+  </RIB_INFO>
+  </LOGIN>
+</RIBCL>

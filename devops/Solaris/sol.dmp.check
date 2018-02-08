@@ -1,0 +1,16 @@
+#!/bin/bash 
+for i in `vxdisk -o alldgs  list  | egrep -v "invalid|error|^DEVICE" | awk -F" " ' { print $1 } ' ` ; do
+#	echo $i;
+        NUMPATH=`vxdisk list $i | egrep numpath | awk -F":" ' { print $2 } ' | sed -e 's/ //g'`
+        ENABLE=`vxdisk list $i | egrep "state" | grep enabled | wc -l  | sed -e 's/ //g'`
+        DISABLE=`vxdisk list $i | egrep "state" | grep -v enabled | wc -l  | sed -e 's/ //g'`
+	CTRL=`vxdisk list $i | egrep "state" | grep "enable" | awk ' { printf "%s ",$1 } ' `
+        CTRL=`echo $CTRL |  sed -e 's/t0*d[0-9]*//g'`
+	DISABLECTRL=`vxdisk list $i | egrep "state" | grep -v "enable" | awk ' { printf "%s ",$1 } ' `
+        DISBABLECTRL=`echo $DISABLECTRL |  sed -e 's/t0*d[0-9]*//g'`
+	DMPDISK=`vxdisk list $i | egrep "state" | awk ' { printf "%s ",$1 } ' `
+        DMPDISK=`echo $DMPDISK | sed -e 's/ $//g' `
+	DISABLEDMPDISK=`vxdisk list $i | egrep "state" | grep -v enabled | awk ' { printf "%s ",$1 } ' `
+        DISABLEDMPDISK=`echo $DISABLEDMPDISK | sed -e 's/ $//g' `
+        echo "`hostname`,$i,$CTRL,$DMPDISK,$NUMPATH,$ENABLE,$DISABLE,$DISBABLECTRL,$DISABLEDMPDISK"
+done

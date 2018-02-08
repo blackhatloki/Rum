@@ -1,0 +1,25 @@
+#!/usr/bin/ksh
+#**********************************************************************
+#                                                                     *
+# ROOTSH.CONFIG                                                       *
+#                                                                     *
+# This is the install procedure for the lpp component:                *
+# rootsh.rootsh                                                       *
+#                                                                     *
+#                                                                     *
+#**********************************************************************
+test ! -d /var/adm/rootsh && mkdir /var/adm/rootsh
+chmod 700 /var/adm/rootsh
+chown root:system /var/adm/rootsh
+if [ -f /usr/bin/rootsh ]; then
+  chown bin:bin /usr/bin/rootsh
+  chmod 500 /usr/bin/rootsh
+  if [ -f /usr/share/man/man1/rootsh.1 ]; then
+    chmod 644 /usr/share/man/man1/rootsh.1
+    chown bin:bin /usr/share/man/man1/rootsh.1
+  fi
+  exit 0
+else
+  echo where is /usr/bin/rootsh
+  exit 1
+fi

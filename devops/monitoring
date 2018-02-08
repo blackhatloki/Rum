@@ -1,0 +1,11 @@
+Here are few address/ports to monitor.
+
+http://babar.es.its.nyu.edu:11000 - Oozie
+http://babar.es.its.nyu.edu:25010 - Impala
+http://babar.es.its.nyu.edu:18089 - Spark2
+
+
+http://babar.es.its.nyu.edu:8088 - Yarn
+http://babar.es.its.nyu.edu:8020 - HDFS
+http://babar.es.its.nyu.edu:7337- Spark
+

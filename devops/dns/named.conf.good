@@ -1,0 +1,32 @@
+// BIND Configuration file for trusted.ny 
+//
+options { 
+       directory "/var/dns"; 
+       check-names master warn;
+}; 
+
+zone "ny" in { 
+      type master; 
+      file "db.ny"; 
+}; 
+
+zone "1.168.192.in-addr.arpa" in { 
+      type master; 
+      file "db.192.168.1"; 
+}; 
+
+zone "0.0.127.in-arpa.arpa" in { 
+      type master; 
+      file "db.127.0.0"; 
+}; 
+
+zone "." in { 
+      type hint; 
+      file "db.cache"; 
+}; 
+
+zone "rr.nyc.com" in { 
+      type slave;
+      masters {  24.29.103.15; }; 
+      file "db.rr.nyc.com"; 
+}; 

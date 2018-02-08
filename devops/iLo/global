@@ -1,0 +1,727 @@
+#!/usr/bin/perl
+
+# global, v1.03 - Ed Finch (efinch@newsreal.com) June, 1999
+
+# Execute commands on any number of hosts, collect the stdout and stderr,
+# and mail them to the executor.
+
+use File::Basename;
+use File::Path;
+use Getopt::Long;
+use POSIX;
+use strict;
+
+# Variables set by Getopt
+use vars '$opt_column';
+use vars '$opt_command';
+use vars '$opt_fork';
+use vars '$opt_host';
+use vars '$opt_long';
+use vars '$opt_mail';
+use vars '$opt_prefix';
+use vars '$opt_recipients';
+use vars '$opt_shell';
+use vars '$opt_single';
+use vars '$opt_subject';
+use vars '$opt_verbose';
+use vars '$opt_wait';
+use vars '$opt_yes';
+
+my(
+   $me,                 # basename(1) of this script
+   $num_children,       # number of active children
+   $paused,             # have we paused for children to die?
+   $rsh,                # how should we talk to remote hosts? (rsh or remsh)
+   $temp_dir,           # temp directory for stdout and stderr files
+   @fields,             # used to select the column in the $opt_host file that
+                        # contains host names
+   @hosts,$host,        # @hosts holds the hostnames; $host iterates through them
+   $num_hosts,          # the number of hosts
+   $stdout,$stderr,     # stdout and sterrr for a new child
+   $pid,                # PID of a new child
+   $file,               # for post-processing the stdout and stderr files
+   %mailers,$mailer,    # known mail programs; mail program for this OS
+   $uname_sr,           # this hosts "uname -sr" output
+   $longest_host_len,   # length of the longest host name
+   $len,                # misc. length
+   $prefix_dirname,     # dirname(1) of $opt_prefix
+   $waiting_for_termination,  
+   $rval, 
+
+   @signals,            # the signals that are sent to processes that are alive too long
+                        # signals are sent in the order listed
+
+   # The following are indexed by $pid
+   %stdout,%stderr,     # stdout and stderr for each child
+   %hostname,           # name of the host each child is for
+   %start_time,         # time each child was created
+   %last_signal_time,   # time each child was signalled
+   %last_signal_sent,   # which signal, if any, has been sent to each child
+   %exit_value,         # exit value of each child
+   %stdout_sizes,       # sizes of the initial stdout files
+   %stderr_sizes,       # sizes of the initial stderr files
+   %fork_order,
+   $fork_cnt,           # order that the processes were created, the counter
+);
+
+local *HOSTS;
+
+$me = basename($0);
+
+# We must have some arguments
+if (scalar @ARGV == 0) {
+   &usage;
+}
+
+# Process command-line parameters
+# Note that some of the switch names and their shortcuts don't match. Oh well.
+GetOptions("column|o=i",
+           "command|c=s",
+           "fork|f=i",
+           "host|h=s",
+           "long|l",
+           "mail|m=s",
+           "prefix|p:s",
+           "recipients|r=s",
+           "shell|e=s",
+           "single|1",
+           "subject|s=s",
+           "verbose|v",
+           "wait|w=i",
+           "yes|y"
+          ) or die "$me: bad options\n";
+
+# There should be no more arguments
+if (scalar @ARGV != 0) {
+   print "Bad arguments\n";
+   &usage;
+}
+
+if ($opt_host) {
+   if ($opt_host ne "-") { 
+      if (! -f $opt_host) {
+         print "$opt_host is not a regular file\n";
+         &usage;
+      }
+   }
+} else {
+   print "A hostfile must be specified with the -h option\n";
+   &usage;
+}
+
+if (! $opt_command) {
+   print "A command must be specified with the -c option\n";
+   &usage;
+}
+
+# Should we write results to a file?
+if (defined $opt_prefix) {
+   $prefix_dirname = dirname($opt_prefix);
+   if (! -d $prefix_dirname) {
+      print "$opt_prefix is not a directory\n";
+      &usage;
+   } elsif (! -w $prefix_dirname) {
+      print "$opt_prefix is not writable\n";
+      &usage;
+   }
+
+   if (-e "$opt_prefix.stdout") {
+      print "Warning: $opt_prefix.stdout will be overwritten\n";
+   }
+   if (-e "$opt_prefix.stderr") {
+      print "Warning: $opt_prefix.stderr will be overwritten\n";
+   }
+} else {
+   # Don't write resuls to a file; mail them instead
+   $opt_recipients=getpwuid($>) unless $opt_recipients;
+}
+
+# Set default values for parameters that were not specified
+$opt_column = 1 unless $opt_column;
+$opt_long = 0 unless $opt_long;
+$opt_subject = $opt_command unless $opt_subject;
+$opt_wait = 0 unless $opt_wait;
+
+# Number of active children
+$num_children = 0;
+
+# We haven't paused for processes to terminate
+$paused = 0;
+
+# Make stdout and stderr unbuffered
+select STDERR; $| = 1;
+select STDOUT; $| = 1;
+
+# Catch some signals
+$SIG{'HUP'}  = "catch_signals";
+$SIG{'INT'}  = "catch_signals";
+$SIG{'TERM'} = "catch_signals";
+
+# The list of signals to be sent
+@signals = (15, 9);
+
+# Known OSs and mail programs
+$mailers{"AIX 2"}="/usr/bin/mail";
+$mailers{"HP-UX A.09."}="/usr/bin/mail";
+$mailers{"HP-UX B.10."}="/usr/bin/mail";
+$mailers{"Linux 2"}="/bin/mail";
+$mailers{"IRIX 5."}="/usr/bin/mail";
+$mailers{"IRIX 6."}="/usr/bin/mail";
+$mailers{"IRIX64 6."}="/usr/bin/mail";
+$mailers{"OSF1 V3."}="/usr/bin/mail";
+$mailers{"OSF1 V4."}="/usr/bin/mail";
+$mailers{"SunOS 4.1."}="/usr/bin/mail";
+$mailers{"SunOS 5."}="/usr/bin/mail";
+
+# Temp directory for output files
+$temp_dir="/tmp/$me.$$";
+mkdir $temp_dir, 0700 or die "Can't create temp directory $temp_dir: $!\n";
+
+# Load the hosts
+$longest_host_len=0;
+if ($opt_host eq "-") {
+   # Don't prompt
+   $opt_yes = 1;
+   *HOSTS = *STDIN;
+} else {
+   open HOSTS, $opt_host or die "Can't open host file $opt_host: $!\n";
+}
+while (<HOSTS>) {
+   chomp($_);
+   @fields=split /\s+/, $_;
+   if (defined $fields[$opt_column - 1]) {
+      push @hosts, $fields[$opt_column - 1];
+      # Save the length of the longest host
+      $len = length($fields[$opt_column - 1]);
+      if ($len > $longest_host_len) {
+         $longest_host_len = $len;
+      }
+   }
+}
+close HOSTS if ($opt_host ne "-");
+
+# Are there any hosts to process?
+$num_hosts = scalar(@hosts);
+if ($num_hosts == 0) {
+   print "No hosts were found in column $opt_column of $opt_host\n";
+   exit 1;
+} else {
+   print "There are $num_hosts host(s) to process\n";
+}
+
+# Immediately fork a process for each host unless a limit was specified on 
+# the command-line
+$opt_fork=$num_hosts unless $opt_fork;
+
+# Find the appropriate remote-shell program
+if ($opt_shell) {
+   $rsh = $opt_shell;
+} else {
+   $rsh=find_in_path("ssh");
+   if (! defined $rsh) {
+      $rsh=find_in_path("ssh");
+      if (! defined $rsh) {
+         print "Can't find remsh or rsh in your path.\n";
+         exit 1;
+      }
+   }
+}
+print "$rsh will be used to create remote processes\n";
+
+if ($opt_recipients) {
+   # Did the user specify a mail program?
+   if ($opt_mail) {
+      if (-x $opt_mail) {
+         $mailer=$opt_mail;
+         print "$mailer will be used to send mail\n";
+      } else {
+         print "$opt_mail does not exist or is not executable\n";
+         exit 1;
+      }
+   } else {
+      # Check our list of known OSs and mail programs.
+      $uname_sr=`uname -sr`;
+      chop($uname_sr);
+      foreach (keys %mailers) {
+         if ($uname_sr =~ /$_/) {
+            $mailer=$mailers{$_};
+            last;
+         }
+      }
+      if (defined $mailer) {
+         print "$mailer will be used to send mail\n";
+      } else {
+         print "Could not find a suitable mail program. Try using the -m switch\n";
+      }
+   }
+}
+
+$fork_cnt = 0;
+
+print "\n";
+# Process each host
+foreach $host (@hosts) {
+
+   # Should we prompt the user before processing each host?
+   if (! $opt_yes) {
+      my($choice);   # user input
+
+      print "Launch a process for $host? (\".\" to quit) [n] ";
+      $choice = <STDIN>;
+      chop $choice;
+      if ($choice eq ".") {
+         last;
+      }
+      if ($choice ne "y" && $choice ne "yes") {
+         next;
+      }
+   }
+      
+   # Setup the stderr file for the new child
+   $stderr="$temp_dir/$host.stderr";
+
+   # Put a header in the stderr file
+   open ERR, "> $stderr" or die "Can't open stderr ($stderr) for $host: $!\n";
+   print ERR "################\n";
+   print ERR "# $host\n";
+   print ERR "################\n";
+   print ERR "\n";
+   close ERR;
+
+   # Setup the stdout file for the new child
+   $stdout="$temp_dir/$host.stdout";
+ 
+   # Put a header in the stdout file
+   open OUT, ">$stdout" or die "Can't open stdout ($stdout) for $host: $!\n";
+   if ($opt_single) {
+      printf OUT "# %-${longest_host_len}.${longest_host_len}s   ", $host;
+   } else {
+      print OUT "################\n";
+      print OUT "# $host\n";
+      print OUT "################\n";
+      print OUT "\n";
+   }
+   close OUT;
+
+   # Fork and exec the new child
+   FORK: {
+      # Don't fork too many processes
+      if ($num_children == $opt_fork) {
+         # Indicate that we aren't forking at the moment
+         print ".";
+         $paused = 1;
+         # Wait for some children to die
+         sleep 1;
+         # Harvest some children
+         &harvest;
+         # Try to fork again
+         redo FORK;
+      }
+
+      if ($pid = fork) {
+         say(sprintf("%-${longest_host_len}.${longest_host_len}s - forked ok\n", $host));
+         # This is the parent
+         # Save some stuff about the child
+         $hostname{$pid}=$host;
+         $stdout{$pid}=$stdout;
+         $stderr{$pid}=$stderr;
+         $stderr_sizes{$pid} = -s $stderr;
+         $stdout_sizes{$pid} = -s $stdout;
+         $start_time{$pid}=time();
+         $fork_order{$pid}=++$fork_cnt;
+         # Count the number of children
+         ++$num_children;
+      } elsif (defined $pid) {
+         # This is the child
+         exec("/bin/sh",'-c',"($rsh -q -oBatchMode=yes -oFallBackToRsh=yes -oPasswordAuthentication=no -oStrictHostKeyChecking=no $host '$opt_command' >> $stdout) 2>>  $stderr") ||
+            say(sprintf("%-${longest_host_len}.${longest_host_len}s - exec() failed: $!\n", $host));
+         exit 1;
+      } elsif ( $! == EAGAIN ) {
+         # Out of resources; sleep and try again
+         sleep 5;
+         redo FORK;
+      } else {
+         # Fatal error; unable to fork
+         say(sprintf("%-${longest_host_len}.${longest_host_len}s - fork() failed: $!\n", $host));
+         &cleanup;
+         exit 1;
+      }
+   }
+   # Harvest some children
+   &harvest;
+}
+
+say("\nWaiting for forked processes to terminate\n");
+$waiting_for_termination = 1;
+
+foreach $pid (sort keys %start_time) {
+   if ($start_time{$pid} == 0) {
+      say(sprintf("%-${longest_host_len}.${longest_host_len}s - already terminated\n",
+          $hostname{$pid})) if ($opt_verbose);
+   }
+}
+
+# Harvest the children
+while (1) {
+   $rval = harvest();
+   if ($rval == -1) {
+      last;
+   } elsif ($rval > 0) {
+      print_remaining_hosts();
+   }
+   sleep 1;
+}
+
+&write_results;
+
+&cleanup;
+
+# All done.
+exit 0;
+
+#
+# We caught a signal; abort
+#
+sub catch_signals() {
+   my($sig) = @_;
+
+   my $killed_something = 0;
+
+   # stack_trace();
+
+   say("\nCaught a SIG$sig -- shutting down\n");
+
+   foreach $pid (keys %start_time) {
+      # Is this PID still alive?
+      if ($start_time{$pid} > 0 ) {
+         if (! $killed_something) {
+            $killed_something = 1;
+            say("\nKilling forked processes\n");
+            print "\n" if ($opt_verbose);
+         }
+         if ($opt_verbose) {
+            say(sprintf("%-${longest_host_len}.${longest_host_len}s - killed\n",
+                $hostname{$pid}));
+         }
+         kill 9, $pid;
+      }
+   }
+   # Wait for children to die
+   say("\nWaiting for forked processes to die\n");
+   while (harvest() != -1) {
+      sleep 1;
+   }
+
+   &write_results;
+
+   &cleanup;
+   exit 1;
+}
+
+#
+# Remove temp files, etc.
+#
+sub cleanup() {
+   rmtree($temp_dir, 0, 0);
+}
+
+#
+# Find a file in the PATH and return its location
+#
+sub find_in_path() {
+   my($file)=@_;
+   my(@dirs,$dir);
+   my($path);
+ 
+   @dirs=split /:/, $ENV{PATH};
+   foreach $dir (@dirs) {
+      $path="$dir/$file";
+      if (-f $path) {
+         return $path;
+      }
+   }
+   return undef;
+}
+
+#
+# Harvest some children
+#
+sub harvest() {
+   my($num_harvested);
+
+   # Count the number of children we harvest
+   $num_harvested=0;
+   # Loop until no children die
+   while (1) {
+      $pid=waitpid(-1,&WNOHANG);
+      if ($pid == -1) {
+         # No more children
+         return $pid;
+      } elsif ($pid == 0) {
+         # No children died
+         # This is a good time to look for children that have been running for more
+         # than $opt_wait seconds, and kill them.
+         if ($opt_wait > 0) {
+            foreach $pid (keys %start_time) {
+               # Is this PID still alive?
+               if ($start_time{$pid} > 0 ) {
+                  # Has the child been alive more than $opt_wait seconds?
+                  if (difftime(time(),$start_time{$pid}) > $opt_wait) {
+                     signal_child($pid);
+                  }
+               }
+            }
+         }
+         return $pid;
+      } else {
+         # A child died.
+         # Decrement the number of active children
+         --$num_children;
+         say(sprintf("%-${longest_host_len}.${longest_host_len}s - terminated; %d left\n",
+                      $hostname{$pid}, $num_children)) if ($opt_verbose && $waiting_for_termination);
+         # Count the number of children harvested
+         ++$num_harvested;
+         # Save this child's exit value
+         $exit_value{$pid}=$?;
+         # Ignore this PID in the future
+         $start_time{$pid}=0;
+      }
+   }
+   return $num_harvested;
+}
+
+#
+# Compare two numbers
+#
+sub numerically() {
+   return $fork_order{$a} <=> $fork_order{$b};
+}
+
+#
+# Print the list of processes that are still running
+#
+sub print_remaining_hosts() {
+   my($now);
+
+   $now = time();
+
+   foreach $pid (sort keys %start_time) {
+      if ($start_time{$pid} > 0) {
+         if ($opt_wait > 0) {
+            say(sprintf("%-${longest_host_len}.${longest_host_len}s - still running; PID is %d; %s seconds remaining\n",
+                        $hostname{$pid}, $pid, difftime($now,$start_time{$pid}))) if ($opt_verbose);
+         } else {
+            say(sprintf("%-${longest_host_len}.${longest_host_len}s - still running; PID is %d\n",
+                        $hostname{$pid}, $pid)) if ($opt_verbose);
+         }
+      }
+   }
+}
+
+#
+# Print a message. If "."s were printed, put a newline first.
+#
+sub say($) {
+   my($msg)=@_;
+
+   if ($paused==1) {
+      print "\n";
+      $paused=0;
+   }
+   print $msg;
+}
+
+#
+# Send a signal to a process that has been alive too long
+#
+sub signal_child($) {
+   my($pid) = @_;
+
+   my(
+      $signal,   # the signal to be sent
+      $idx,      # misc. index
+     );
+
+   if (!defined($last_signal_sent{$pid})) {
+      # Send the first signal
+      $signal = $signals[0];
+   } else {
+      # A subsequent signal
+      for ($idx = 0; $idx < $#signals; $idx++) {
+         if ($last_signal_sent{$pid} == $signals[$idx]) {
+            $signal = $signals[$idx + 1];
+         }
+      }
+      # If no signal is defined, then we've already sent the last one
+      return if (!defined($signal));
+
+      # If it's been less than 10 seconds since the last signal, return
+      return if (difftime(time,$last_signal_time{$pid}) < 10);
+   }
+
+   say(sprintf("%-${longest_host_len}.${longest_host_len}s - kill %d sent; it was alive more than $opt_wait seconds\n",
+               $hostname{$pid}, $signal));
+   kill $signal, $pid;
+
+   # Remember the last signal that was sent
+   $last_signal_sent{$pid} = $signal;
+
+   # Remember the last time we signalled
+   $last_signal_time{$pid} = time;
+}
+ 
+#
+# Generate a stack trace
+#
+sub stack_trace() {
+   my $i =0;
+   my($pack, $file, $line, $subname, $hasargs, $wantarray);
+   while (($pack, $file, $line, $subname, $hasargs, $wantarray) = caller($i++)) {
+      print "$pack, $file, $line, $subname, $hasargs, $wantarray\n";
+   }
+}
+
+#
+# Print usage and exit
+#
+sub usage() {
+   print <<"EOF";
+
+   Usage: $me
+   Options:
+      -1        Single-line, formatted output for stdout
+
+      -c str    The command(s) to execute. Commands must follow the syntax 
+                of the Bourne shell
+
+      -e str    The shell command and arguments to use when creating
+                the remote processes.
+                  default: remsh or rsh, as appropriate
+
+      -f num    Don't fork (create) more than this many children at once
+                  default: no limit
+
+      -h file   File containing hostnames to process
+
+      -l        Mail the complete stdout and stderr files
+                  default: mail stdouts that contain output
+                           mail stderrs that resulted in errors
+
+      -m str    Program and flags to use for sending mail. The subject of
+                mail messages should be specifiable via "Subject: <text>"
+                on the first line of the message.
+                  default: /usr/bin/mail, or something similar
+
+      -o num    Hostnames in the host file are in column <num>
+
+      -p str    Instead of mailing the stdout and stderr files, write them
+                to files named <str>.stdout and <str>.stderr
+
+      -r str    Recipients of stdout and stderr files
+                  default: mail is sent to the executor
+
+      -s str    The subject for mail messages
+                  default: for stdout, "(stdout) <cmd>"
+                           for stderr, "(stderr) <cmd>"
+
+      -v        Display more verbose output
+
+      -w num    Wait no longer than <num> seconds for each child to die
+                  default: wait forever
+
+      -y        Fork (create) a process for each host automatically (Don't 
+                prompt for confirmation.)
+
+EOF
+
+   exit;
+}
+
+#
+# Write the stderr and stdout to files/and or mail
+#
+sub write_results() {
+
+   # stack_trace();
+
+   say("\n");
+
+   # Should we mail the stdout?
+   if (defined $opt_recipients) {
+      say("Mailing stdout to $opt_recipients\n");
+      open MAIL, "| $mailer $opt_recipients" or die "Can't open $mailer: $!\n";
+ 
+      # Write the subject and a blank line
+      print MAIL "Subject: stdout for \"$opt_subject\"\n";
+      print MAIL "\n";
+   }
+ 
+   # Should we write the stdout to a file?
+   if (defined $opt_prefix) {
+      say("Writing $opt_prefix.stdout\n");
+      open FILE, "> $opt_prefix.stdout" or die "Can't open stdout file: $!\n";
+   }
+
+   # Process the stdout files in the order their process was forked
+   foreach $pid (sort numerically keys %fork_order) {
+      # Should this file be mailed?
+      if ($opt_long || (-s $stdout{$pid} > $stdout_sizes{$pid})) {
+         open OUT, "$stdout{$pid}" or die "Can't open stdout file for $hostname{$pid}: $!\n";
+         while (<OUT>) {
+            print MAIL $_ if (defined $opt_recipients);
+            print FILE $_ if (defined $opt_prefix);
+         }
+         if ($opt_single) {
+            # Write a newline if there was no output
+            print MAIL "\n" if (-s $stdout{$pid} == $stdout_sizes{$pid} && defined($opt_recipients));
+            print FILE "\n" if (-s $stdout{$pid} == $stdout_sizes{$pid} && defined($opt_prefix));
+         } else {
+            print MAIL "\n" if (defined $opt_recipients);
+            print FILE "\n" if (defined $opt_prefix);
+         }
+         close OUT;
+      }
+   }
+   close MAIL if (defined $opt_recipients);
+   close FILE if (defined $opt_prefix);
+ 
+   # Should we mail the stderr?
+   if (defined $opt_recipients) {
+      say("Mailing stderr to $opt_recipients\n");
+      open MAIL, "| $mailer $opt_recipients" or die "Can't open $mailer: $!\n";
+ 
+      # Write the subject and a blank line
+      print MAIL "Subject: stderr for \"$opt_subject\"\n";
+      print MAIL "\n";
+   }
+ 
+   # Should we write the stderr to a file?
+   if (defined $opt_prefix) {
+      say("Writing $opt_prefix.stderr\n");
+      open FILE, "> $opt_prefix.stderr" or die "Can't open stderr file: $!\n";
+   }
+
+   # Process the stderr files in the order their process was forked
+   foreach $pid (sort numerically keys %fork_order) {
+      # Should this file be mailed/written?
+      if ($opt_long || (-s $stderr{$pid} > $stderr_sizes{$pid}) || 
+          (defined($exit_value{$pid}) && $exit_value{$pid} > 0)) {
+         open OUT, "$stderr{$pid}" or die "Can't open stderr file for $hostname{$pid}: $!\n";
+         while (<OUT>) {
+            print MAIL $_ if (defined $opt_recipients);
+            print FILE $_ if (defined $opt_prefix);
+         }
+         if (defined $opt_recipients) {
+            print MAIL "# Exit value from $rsh for $hostname{$pid} was $exit_value{$pid}\n";
+            print MAIL "\n";
+         }
+         if (defined $opt_prefix) {
+            print FILE "# Exit value from $rsh for $hostname{$pid} was $exit_value{$pid}\n";
+            print FILE "\n";
+         }
+         close OUT;
+      }
+   }
+   close MAIL if (defined $opt_recipients);
+   close FILE if (defined $opt_prefix);
+}

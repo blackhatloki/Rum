@@ -1,0 +1,17 @@
+$TTL 3h
+@ IN SOA trusted.ny root.trusted.ny (
+          1    ; Serial 
+          3h   ; Refresh after 3 hours
+          1h   ; Retry after 1 hour 
+          1w   ; Expire after 1 week 
+          1h ) ; Negative caching TTL of 1 hour
+
+;
+;
+;  Name servers
+; 
+      IN NS trusted.ny. 
+      IN NS ns1.ny.
+      IN NS ns2.ny. 
+
+1     IN PTR localhost.

@@ -1,0 +1,470 @@
+dnl  ----- Start off like we always need to
+AC_INIT([rootsh],[1.5.2])
+AC_CONFIG_SRCDIR(src)
+dnl ---- AC_CONFIG_HEADER(src/config.h)
+AC_CONFIG_HEADERS([src/config.h])
+
+dnl  ----- Put helper applications in a separate directory
+AC_CONFIG_AUX_DIR(config)
+
+dnl -- AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE()
+AC_CANONICAL_HOST
+
+syslog=
+AC_MSG_CHECKING(for syslog)
+AC_ARG_ENABLE(syslog,
+[  --enable-syslog[=facility.priority]     enable logging to syslog],
+[
+  syslog=$enableval
+])
+if test "x$syslog" = "xno" ; then
+  AC_MSG_RESULT(no)
+dnl --  AC_DEFINE(LOGTOSYSLOG, 0,[no logging to syslog])
+else
+  AC_MSG_RESULT(enabled)
+  AC_DEFINE(LOGTOSYSLOG, 1,[also logging to syslog])
+  AC_MSG_CHECKING(for syslog facility)
+  if test "x$syslog" = "xyes" ; then
+    syslogfac="local5.notice"
+  elif test "x$syslog" = "x" ; then
+    syslogfac="local5.notice"
+  elif test `expr $syslog : "."` -eq 1 ; then
+    syslogfac=$syslog
+  else
+    AC_MSG_ERROR($syslog is not a valid syslog level)
+  fi
+  facility=`echo $syslogfac | sed -e 's/\..*$//g'`
+  priority=`echo $syslogfac | sed -e 's/^.*\.//g'`
+  AC_MSG_RESULT($facility.$priority)
+  AC_DEFINE_UNQUOTED(SYSLOGFACILITYNAME, "$facility", [syslog facility as string])
+  AC_DEFINE_UNQUOTED(SYSLOGPRIORITYNAME, "$priority", [syslog priority as string])
+  facility="LOG_"`echo $facility | tr '[[:lower:]]' '[[:upper:]]'`
+  priority="LOG_"`echo $priority | tr '[[:lower:]]' '[[:upper:]]'`
+  AC_DEFINE_UNQUOTED(SYSLOGFACILITY, $facility, [syslog facility])
+  AC_DEFINE_UNQUOTED(SYSLOGPRIORITY, $priority, [syslog priority])
+  AC_MSG_CHECKING(for syslog linenumbering)
+  AC_ARG_ENABLE(linenumbering,
+  [  --disable-linenumbering               disable numbering of syslog lines],
+  [
+    linenumbering=$enableval
+  ])
+  if test "x$linenumbering" = "xno" ; then
+    AC_MSG_RESULT(disabled)
+  else
+    AC_MSG_RESULT(enabled)
+    AC_DEFINE(LINECNT, 1,[enable numbering of syslog lines])
+  fi
+  AC_MSG_CHECKING(for username in syslog)
+  AC_ARG_ENABLE(syslog-username,
+  [  --disable-syslog-username             disable logging of username in every line],
+  [
+    syslogusername=$enableval
+  ])
+  if test "x$syslogusername" = "xno" ; then
+    AC_MSG_RESULT(disabled)
+  else
+    AC_DEFINE(LOGUSERNAMETOSYSLOG, 1,[enable logging of username in every line])
+    AC_MSG_RESULT(enabled)
+  fi
+fi
+AM_CONDITIONAL(LOGTOSYSLOG, test "x$syslog" != "xno")
+
+
+logfile=
+AC_MSG_CHECKING(for logfile)
+AC_ARG_ENABLE(logfile,
+[  --enable-logfile                      enable logging to a file],
+[
+  logfile=$enableval
+])
+if test "x$logfile" = "xyes" || test "x$logfile" = "x" ; then
+  AC_MSG_RESULT(enabled)
+  AC_DEFINE(LOGTOFILE, 1,[enable logging to a file])
+  logdir=
+  AC_MSG_CHECKING(for logdir)
+  AC_ARG_WITH(logdir,
+  [  --with-logdir=PATH      specify path where logfiles will be written],
+  [
+    if test "x$withval" != "x" ; then
+      logdir=$withval
+    fi
+  ])
+  if test "x$logdir" = "x" ; then
+    case "$host_os" in
+      *linux*)
+        logdir="/var/log/rootsh"
+        ;;
+      *solaris*)
+        logdir="/var/adm/rootsh"
+        ;;
+      *hp*)
+        logdir="/var/adm/rootsh"
+        ;;
+      *aix*)
+        logdir="/var/adm/rootsh"
+        ;;
+      *freebsd*)
+        logdir="/var/log/rootsh"
+        ;;
+      *cygwin*)
+        logdir="/var/log/rootsh"
+        ;;
+      *irix*)
+        logdir="/var/adm/rootsh"
+        ;;
+      *apple-darwin*)
+        logdir="/var/log/rootsh"
+        ;;
+      *)
+        logdir="/tmp/rootsh"
+        ;;
+    esac
+  fi
+  AC_MSG_RESULT($logdir)
+  AC_DEFINE_UNQUOTED(LOGDIR,"$logdir",[directory for session protocols])
+  maxlogfilesize=
+  AC_MSG_CHECKING(for maximum logfile size)
+  AC_ARG_WITH(maxlogfilesize,
+  [  --with-maxlogfilesize=SIZE  specify maximum size of a logfile in bytes/megabytes/gigabytes],
+  [
+    if test "x$withval" != "x" ; then
+      maxlogfilesize=$withval
+    fi
+  ])
+  if test "x$maxlogfilesize" = "x" ; then
+    maxlogfilesize=0
+  fi
+  changequote(<<, >>)dnl
+  byte=`expr $maxlogfilesize : '\([0-9]*\)$'`
+  giga=`expr $maxlogfilesize : '\([0-9]*\)[gG]$'`
+  mega=`expr $maxlogfilesize : '\([0-9]*\)[mM]$'`
+  changequote([, ])dnl
+  if test ! -z "$giga" ; then
+    maxlogfilesize=`expr $giga \* 1073741824`
+  elif test ! -z "$mega" ; then
+    maxlogfilesize=`expr $mega \* 1048576`
+  elif test ! -z "$byte" ; then
+    maxlogfilesize=$byte
+  else
+    AC_MSG_ERROR(invalid logfile size)
+  fi
+  AC_MSG_RESULT($maxlogfilesize)
+  AC_DEFINE_UNQUOTED(MAXLOGFILESIZE,$maxlogfilesize,[maximum size of a logfile in bytes])
+else
+  AC_MSG_RESULT(disabled)
+dnl --  AC_DEFINE(LOGTOFILE, 0,[no logging to a file])
+fi
+
+if test "x$logfile" = "xno" && test "x$syslog" = "xno" ; then
+  AC_MSG_ERROR(you MUST log either to a file or syslog or both)
+fi
+
+defaultshell=
+AC_MSG_CHECKING(for defaultshell)
+AC_ARG_WITH(defaultshell,
+[  --with-defaultshell=PATH    specify which shell to call if rootsh is used as login shell],
+[
+  if test "x$withval" != "x" ; then
+    defaultshell=$withval
+  fi
+])
+if test "x$defaultshell" = "x" ; then
+  case "$host_os" in
+    *linux*)
+      defaultshell="/bin/bash"
+      ;;
+    *solaris*)
+      defaultshell="/bin/sh"
+      ;;
+    *hp*)
+      defaultshell="/sbin/sh"
+      ;;
+    *aix*)
+      defaultshell="/usr/bin/sh"
+      ;;
+    *freebsd*)
+      defaultshell="/bin/sh"
+      ;;
+    *cygwin*)
+      defaultshell="/bin/bash"
+      ;;
+    *irix*)
+      defaultshell="/bin/bash"
+      ;;
+    *apple-darwin*)
+      defaultshell="/bin/bash"
+      ;;
+    *)
+      defaultshell="/bin/sh"
+      ;;
+  esac
+fi
+AC_DEFINE_UNQUOTED(DEFAULTSHELL,"$defaultshell",[default shell])
+AC_MSG_RESULT($defaultshell)
+
+if test "x$prefix" = "xNONE" ; then
+    prefix="/usr/local"
+    prefix_nondefault="NONE"
+fi
+
+
+dnl  ----- Figure out a C compiler to use; set @CC@
+AC_PROG_CC(gcc cc)
+
+dnl  ----- enable --enable-static
+
+dnl  ----- Figure out if /etc/shells is in use
+etcshells=
+AC_MSG_CHECKING(for /etc/shells)
+if test -f /etc/shells; then
+  AC_MSG_RESULT(found)
+  AC_DEFINE(HAS_ETC_SHELLS, 1,[system uses /etc/shells])
+else
+  AC_MSG_RESULT(not found)
+  AC_DEFINE(HAS_ETC_SHELLS, 0,[system doesnt use /etc/shells])
+fi
+
+
+dnl  ----- Figure out if ansi headers are available
+AC_HEADER_STDC
+
+dnl  ----- Need to know where libutil is; set @LIBUTIL@
+AC_CHECK_LIB(util,  [LIBUTIL=-lutil])
+AC_SUBST(LIBUTIL)
+
+
+dnl  ----- Find header files
+AC_HEADER_STDC([])
+AC_CHECK_HEADERS([string.h fcntl.h sys/file.h sys/param.h stropts.h])
+AC_CHECK_HEADERS([libgen.h])
+AC_CHECK_HEADERS([pty.h])
+
+
+dnl  ----- Find functions
+AC_CHECK_FUNCS(forkpty,, AC_CHECK_LIB(util,forkpty, [AC_DEFINE(HAVE_FORKPTY)] [LIBS="$LIBS -lutil"]))
+dnl check for getopt in standard library
+adl_FUNC_GETOPT_LONG
+dnl check for basename in standard library
+adl_FUNC_BASENAME
+dnl  ----- Irix doesnt have xxxusershell functions at all. We supply our own.
+dnl  ----- Solaris has no own prototypes for xxxusershell
+dnl - AC_DEFINE(NEED_GETUSERSHELL_PROTO,,[Solaris for example has no own prototypes for xxxusershell])
+AC_CHECK_FUNCS(getusershell, have_getusershell=yes)
+if test "$have_getusershell" = yes ; then
+  AC_MSG_CHECKING(getusershell prototype)
+  AC_EGREP_HEADER(getusershell, unistd.h, have_getusershell_prototype=yes)
+  if test "$have_getusershell_prototype" = yes ; then
+    AC_MSG_RESULT(yes)
+    AC_DEFINE(NEED_GETUSERSHELL_PROTO, 0, [os has its own prototype])
+  else
+    AC_MSG_RESULT(no)
+    AC_DEFINE(NEED_GETUSERSHELL_PROTO, 1, [need my own prototype])
+  fi
+else
+  AC_LIBOBJ(getusershell)
+  AC_DEFINE(NEED_GETUSERSHELL_PROTO, 1, [need my own prototype])
+fi
+
+AC_CHECK_FUNCS(clearenv,
+  AC_DEFINE(HAVE_CLEARENV, 1, [clearenv found]),)
+
+
+AC_CHECK_FUNCS(sigset, 
+  AC_DEFINE(HAVE_SIGSET, 1, [sigset found]),
+  AC_DEFINE(HAVE_SIGSET, 0, [sigset not found]))
+
+AC_CHECK_FUNCS(sigaction, 
+  AC_DEFINE(HAVE_SIGACTION, 1, [sigaction found]),
+  AC_DEFINE(HAVE_SIGACTION, 0, [sigaction not found]))
+
+
+AC_MSG_CHECKING(whether supplying sigset prototypes is permitted)
+AC_DEFINE([SUPPLY_SIGSET_PROTO], [], [Description])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <signal.h>]], [[__sighandler_t sigset (int __sig, __sighandler_t __disp);]])],[AC_MSG_RESULT(yes)
+     AC_DEFINE(SUPPLY_SIGSET_PROTO)],[AC_MSG_RESULT(no)])
+AC_TYPE_SIGNAL
+
+dnl ----- Look for header that defines select() and fd_set.
+AC_MSG_CHECKING([select() and fd_set in sys/select.h and sys/bsdtypes.h])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
+#include <stddef.h>
+#include <unistd.h>
+#include <sys/types.h>]], [[fd_set fds;
+select(0, NULL, NULL, NULL, NULL);]])],[xpdf_ok=yes],[xpdf_ok=no])
+if test $xpdf_ok = yes; then
+  AC_MSG_RESULT([not needed])
+else
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
+#include <stddef.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/select.h>]], [[fd_set fds;
+select(0, NULL, NULL, NULL, NULL);]])],[xpdf_ok=yes],[xpdf_ok=no])
+  if test $xpdf_ok = yes; then
+    AC_DEFINE(HAVE_SYS_SELECT_H, ,[we have a sys/select.h])
+    AC_MSG_RESULT([need sys/select.h])
+  else
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
+#include <stddef.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/bsdtypes.h>]], [[fd_set fds;
+select(0, NULL, NULL, NULL, NULL);]])],[xpdf_ok=yes],[xpdf_ok=no])
+    if test $xpdf_ok = yes; then
+      AC_DEFINE(HAVE_SYS_BSDTYPES_H, , [we have a sys/bsdtypes.h])
+      AC_MSG_RESULT([need sys/bsdtypes.h])
+    else
+      AC_MSG_RESULT([problem])
+    fi
+  fi
+fi
+
+dnl ----- Look for header that defines FD_ZERO.
+AC_MSG_CHECKING([FD_ZERO and strings.h or bstring.h])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
+#include <sys/types.h>
+#ifdef HAVE_SYS_SELECT_H
+#include <sys/select.h>
+#endif]], [[fd_set fds; FD_ZERO(&fds);]])],[xpdf_ok=yes],[xpdf_ok=no])
+if test $xpdf_ok = yes; then
+  AC_MSG_RESULT([not needed])
+else
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
+#include <sys/types.h>
+#include <strings.h>
+#ifdef HAVE_SYS_SELECT_H
+#include <sys/select.h>
+#endif]], [[fd_set fds; FD_ZERO(&fds);]])],[xpdf_ok=yes],[xpdf_ok=no])
+  if test $xpdf_ok = yes; then
+    AC_DEFINE(HAVE_STRINGS_H)
+    AC_MSG_RESULT([need strings.h])
+  else
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
+#include <sys/types.h>
+#include <bstring.h>
+#ifdef HAVE_SYS_SELECT_H
+#include <sys/select.h>
+#endif]], [[fd_set fds; FD_ZERO(&fds);]])],[xpdf_ok=yes],[xpdf_ok=no])
+    if test $xpdf_ok = yes; then
+      AC_DEFINE(HAVE_BSTRING_H, , [we have bstring.h])
+      AC_MSG_RESULT([need bstring.h])
+    else
+      AC_MSG_RESULT([problem])
+    fi
+  fi
+fi
+
+
+
+dnl -----  pseudo terminal handling
+dnl -----  os        pty master      streams modules
+dnl -----  aix       /dev/ptc        - (loads ldterm by default)
+dnl -----  hpux      /dev/ptmx       ldterm ptem
+dnl -----  solaris   /dev/ptmx       ldterm ptem ttcompat
+
+dnl -----  aix loads module ldterm by default and wants no ptem
+dnl -----  ptmx takes precedence
+AC_MSG_CHECKING([for master pty])
+if test -r /dev/ptc ; then
+  if test -r /dev/ptmx ; then
+    AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/ptmx", [hp and sun style pty master])
+    AC_MSG_RESULT(ptmx)
+  else
+    AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/ptc", [aix style pty master])
+    AC_MSG_RESULT(ptc)
+  fi
+elif test -r /dev/ptmx ; then
+  AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/ptmx", [hp and sun style pty master])
+  AC_MSG_RESULT(ptmx)
+else
+  AC_DEFINE_UNQUOTED(MASTERPTYDEV, "/dev/null", [lets see what happens])
+fi
+
+dnl -----  this will succeed on solaris and fail on hpux
+AC_MSG_CHECKING(if your system supports the ttcompat streams module)
+AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#include <stdio.h>
+#include <fcntl.h>
+#include <stropts.h>
+main()
+{ int line;
+
+  if ( (line = open("/dev/ptmx", O_RDWR)) >= 0 &&
+       ioctl(line, I_PUSH, "ttcompat") == 0 )
+    exit(0);
+  exit(1);
+}
+]])],[AC_DEFINE(HAVE_TTCOMPAT, 1,
+	     "Define if your system supports the ttcompat streams module")
+   AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)],[AC_MSG_RESULT(assuming no)])
+
+
+AC_ARG_ENABLE(more-warnings,
+  [  --disable-more-warnings  Inhibit compiler warnings], set_more_warnings=no)
+
+if test "$GCC" = "yes" -a "$set_more_warnings" != "no"; then
+  CFLAGS="$CFLAGS -Wall -Wstrict-prototypes -Wmissing-declarations \
+  -Wnested-externs -Wpointer-arith -pedantic"
+fi
+
+dnl --- set operating specific defines
+dnl --- freebsd is missing IUCLC for c_iflag &= ~(INLCR|IGNCR|ICRNL|IUCLC|IXON);
+dnl --- macos is missing O_SYNC for open(file, O_RDWR|O_CREAT|O_EXCL|O_SYNC,
+dnl --- we define them as 0, so we can still use them in the code
+AC_MSG_CHECKING(operating system)
+case "$host_os" in 
+  *solaris*)
+    AC_MSG_RESULT(solaris)
+    AC_DEFINE(SOLARIS_COMPAT,,descr)
+    ;;
+  *linux*)
+    AC_MSG_RESULT(linux)
+    AC_DEFINE(LINUX_COMPAT,,descr)
+    CFLAGS="$CFLAGS -pedantic -Wstrict-prototypes"
+    ;;
+  *hp*)
+    AC_MSG_RESULT(hp-ux)
+    AC_DEFINE(HPUX_COMPAT,,descr)
+    ;;
+  *aix*)
+    AC_MSG_RESULT(aix)
+    AC_DEFINE(AIX_COMPAT,,descr)
+    AC_DEFINE(_ALL_SOURCE,,descr)
+    ;;
+  *freebsd*)
+    AC_MSG_RESULT(freebsd)
+    AC_DEFINE(IUCLC, 0, own replacement for iuclc)
+    ;;
+  *cygwin*)
+    AC_MSG_RESULT(cygwin)
+    ;;
+  *irix*)
+    AC_MSG_RESULT(irix)
+    ;;
+  *apple-darwin*)
+    AC_MSG_RESULT(macosx)
+    AC_DEFINE(O_SYNC, 0, own replacement for o_sync)
+    ;;
+  *)
+    AC_MSG_RESULT($host_os)
+    ;;
+esac
+
+AC_PATH_PROG(SUCMD, su, "/bin/false")
+AC_DEFINE_UNQUOTED(SUCMD,"$SUCMD", "path to the su command")
+
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+
+dnl  --- LIB@&t@OBJS=`echo "$LIB@&t@OBJS" |
+dnl  ---             sed 's,\.[[^.]]* ,$U&,g;s,\.[[^.]]*$,$U&,'`
+dnl  --- LTLIBOBJS=`echo "$LIB@&t@OBJS" |
+dnl  ---           sed 's,\.[[^.]]* ,.lo ,g;s,\.[[^.]]*$,.lo,'`
+dnl  --- AC_SUBST(LTLIBOBJS)
+
+dnl  ----- Write the Makefile
+AC_CONFIG_FILES([Makefile src/Makefile])
+AC_OUTPUT
+
+

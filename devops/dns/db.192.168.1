@@ -1,0 +1,53 @@
+$TTL 3h 
+@ IN SOA trusted.ny root.trusted.ny (
+          3    ; Serial 
+          3h   ; Refresh after 3 hours
+          1h   ; Retry after 1 hour 
+          1w   ; Expire after 1 week 
+          1h ) ; Negative caching TTL of 1 hour
+
+;
+;
+;  Name servers
+; 
+	IN NS trusted.ny. 
+	IN NS ns1.ny.
+	IN NS ns2.ny. 
+
+; 
+; Address for the caconical names
+; 
+1                        IN PTR  router.ny.
+40                       IN PTR  esxi.ny.
+42                       IN PTR  rcli.ny.
+60                       IN PTR  stewie.ny.
+61                       IN PTR  cartman.ny.
+70                       IN PTR  beta.ny.
+72                       IN PTR  kickstart.ny.
+76                       IN PTR  jumpstart.ny.
+100                      IN PTR  daemon.ny.
+101                      IN PTR  dhcp101.ny.
+102                      IN PTR  dhcp102.ny.
+103                      IN PTR  dhcp103.ny.
+104                      IN PTR  dhcp104.ny.
+105                      IN PTR  dhcp105.ny.
+106                      IN PTR  dhcp106.ny.
+107                      IN PTR  dhcp107.ny.
+108                      IN PTR  dhcp108.ny.
+109                      IN PTR  dhcp109.ny.
+110                      IN PTR  dhcp110.ny.
+111                      IN PTR  dhcp111.ny.
+112                      IN PTR  dhcp112.ny.
+113                      IN PTR  dhcp113.ny.
+114                      IN PTR  dhcp114.ny.
+115                      IN PTR  dhcp115.ny.
+116                      IN PTR  nx01.ny.
+117                      IN PTR  dhcp117.ny.
+118                      IN PTR  dhcp118.ny.
+119                      IN PTR  dhcp119.ny.
+120                      IN PTR  dhcp120.ny.
+200                      IN PTR  trusted.ny.
+220                      IN PTR  theta-sol.ny.
+215                      IN PTR  beta-sol.ny.
+220                      IN PTR  bridge.ny.
+251                      IN PTR  theta.ny.

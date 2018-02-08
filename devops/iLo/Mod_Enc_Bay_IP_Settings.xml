@@ -1,0 +1,54 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+<!--					                             -->
+<!-- Description:  This is a sample XML script to configure the      -->
+<!--               Enclosure Bay Static IP in an rack enclosure.     -->
+<!--					                             -->
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        and other values inside the quotation marks with values  -->
+<!--        that are appropriate for your environment.               -->
+
+<!--        The server must be located in slot one of the encloser   -->
+<!--        for this script to be successful.                        -->
+
+<!--        Double check your values before executing this script.   -->
+<!--        Incorrect or mismatched network settings may cause you   -->
+<!--        to lose the ability to connect to your iLO or iLO 2      -->
+<!--        device.                                                  -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - All versions.                                -->
+<!--              iLO - Version 1.55 or later.                       -->
+<!--         RILOE II - None.                                        -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+    <RACK_INFO MODE="write">
+      <MOD_ENCLOSURE_IP_SETTINGS>
+        <BAY_ENABLE MASK="0xFFFF"/>
+        <IP_ADDRESS VALUE="16.100.222.111"/>
+        <SUBNET_MASK VALUE="255.255.252.0"/>
+        <GATEWAY_IP_ADDRESS VALUE="16.100.222.1"/>
+        <DOMAIN_NAME VALUE="sum.won.here.now"/>
+        <PRIM_DNS_SERVER VALUE="16.11.1.111"/>
+        <SEC_DNS_SERVER VALUE=""/>
+        <TER_DNS_SERVER VALUE=""/>
+        <PRIM_WINS_SERVER VALUE="16.22.2.222"/>
+        <SEC_WINS_SERVER VALUE=""/>
+        <STATIC_ROUTE_1 DEST="16.33.3.33" GATEWAY="16.100.11.11"/>
+        <STATIC_ROUTE_2 DEST="" GATEWAY=""/>
+        <STATIC_ROUTE_3 DEST="" GATEWAY=""/> 
+      </MOD_ENCLOSURE_IP_SETTINGS>
+    </RACK_INFO>
+  </LOGIN>
+</RIBCL>

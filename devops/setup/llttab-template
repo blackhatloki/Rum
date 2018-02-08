@@ -1,0 +1,6 @@
+set-node HOST
+set-cluster CID
+link eth1 eth1 - ether - -
+link eth2 eth2 - ether - -
+link-lowpri link3  bond0  - ether - -
+start

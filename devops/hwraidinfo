@@ -1,0 +1,14 @@
+#!/bin/sh
+SLOTLIST=$(hpacucli ctrl all show | \
+grep Slot | sed -e 's/^.*Slot //g' -e 's/ .*$//g')
+
+for i in $SLOTLIST
+do
+echo
+hpacucli ctrl slot=$i show | grep -v "^$"
+echo
+hpacucli ctrl slot=$i ld all show | grep -v "^$"
+hpacucli ctrl slot=$i pd all show | grep -v "^$"
+done
+echo
+

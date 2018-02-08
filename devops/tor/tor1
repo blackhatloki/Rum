@@ -1,0 +1,60 @@
+OpenSSH is a great means to protect your connection from being sniffed by others. However, this isn't always enough. Simply proving that you connected to a server is enough to get incriminated. Unfortunately, SSH doesn't provide a native way to obfuscate to whom it connects. Instead, a proxy server can be set up. And this is where TOR comes to play. This howto covers installing TOR on a Debian based system and setting up SSH to use TOR.
+
+Installing TOR
+
+First you should to add the TOR repository to your system. It's only necessary if there's no package in the default repositories.
+Add the following line to your /etc/apt/sources.list file. You have to replace lenny with your distribution.
+deb http://mirror.noreply.org/pub/tor lenny main
+To use this repository without problems, you have to add the PGP key to your system.
+apt-key adv --recv-keys --keyserver subkeys.pgp.net 0x94C09C7F
+
+Update your repositories and install TOR.
+apt-get update && apt-get install -y tor
+
+If you want to use TOR with OpenSSH, you have to install another program called connect-proxy.
+apt-get install -y connect-proxy
+
+Setup OpenSSH to use TOR for all connections
+
+However, this is not recommended, but here is how it works.
+Add the following block to the top of your ~/.ssh/config file.
+Host *
+CheckHostIP no
+Compression yes
+Protocol 2
+ProxyCommand connect -4 -S localhost:9050 $(tor-resolve %h localhost:9050) %p
+The command line syntax won't change at all.
+ 
+Set up OpenSSH to use TOR for a specific connection
+
+I recommend using TOR only for a specific connection. All other connections won't be affected.
+
+Add this block to your ~/.ssh/config. You have to replace mydomain with the host domain name or IP address and myaccount with your user name.
+Host mydomain
+HostName mydomain.com
+User myaccount
+CheckHostIP no
+Compression yes
+Protocol 2
+ProxyCommand connect -4 -S localhost:9050 $(tor-resolve %h localhost:9050) %p
+ 
+Set up OpenSSH to use TOR for a bunch of connections
+
+Instead of setting up TOR for every single connections, you can do this for a bunch of connections at once. Following example shows how it works.
+Host anon_*
+CheckHostIP no
+Compression yes
+Protocol 2
+ProxyCommand connect -4 -S localhost:9050 $(tor-resolve %h localhost:9050) %p
+Host anon_mydomain
+HostName mydomain.com
+User myaccount
+Host anon_mydomain2
+HostName mydomain2.com
+User myaccount
+Port 980
+This way you know exactly if you're using TOR or not.
+ 
+Conclusion
+
+It is very simple to anonymize your SSH sessions if you know what you're doing. I've written this tutorial for legal purposes only. Using this is your own risk.

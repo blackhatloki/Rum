@@ -1,0 +1,2 @@
+for i in `cat gpu-deploy | awk -F" " ' { printf "%s\n",$1 } '` ;do  echo $i ; ping -c 3 $i ;  done
+for i in `cat gpu-deploy | awk -F" " ' { printf "%s-ipmi\n",$1 } '` ;do  echo $i ; ping -c 3 $i ;  done

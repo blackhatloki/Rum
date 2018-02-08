@@ -1,0 +1,37 @@
+Bastions 24x7
+Compute  Weekdays 9x5
+login    24x7
+home     24x7
+mgmt     Weekdays 9x5 idac,ipmi,cmc
+ibswitch 24x7
+1Ge      24x7 
+10Ge     24x7 
+
+up/down
+disk
+powersupply 
+fan
+memory 
+hardware
+batteries
+temp
+bondings
+
+Master 
+Warewulf 
+dhcpd
+vsftpd
+httpd 
+slum
+mysql 
+slurm 
+
+home
+ssh/automounter
+nfsd
+znapzend
+
+
+login
+ssh 
+

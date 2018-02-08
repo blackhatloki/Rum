@@ -1,0 +1,12 @@
+#!/bin/ksh
+
+
+date
+/opt/VRTSvcs/bin/hastatus -summary
+
+for i in `/opt/VRTSvcs/bin/hagrp -list | awk '{print $1}' |sort -u`
+do
+
+/opt/VRTSvcs/bin/hagrp -unfreeze $i
+
+done

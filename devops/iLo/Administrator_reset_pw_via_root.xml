@@ -1,0 +1,47 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description: This is a sample XML script to set the default     -->
+<!--              Adminstrator account password using HPONCFG.EXE.   -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        and other values inside the quotation marks with values  -->
+<!--        that are appropriate for your environment.               -->
+
+<!--        Use this script with HPONCFG to install a known password -->
+<!--        for the Administrator account.  HPONCFG requires that you-->
+<!--        log into Windows or Linux with administrator or root     -->
+<!--        credentials.                                             -->
+
+<!--        Note that this assumes that there is an Administrator    -->
+<!--        account because it is not intended to create one.  The   -->
+<!--        LOGIN credentials are ignored when used with HPONCFG.    -->
+
+<!--        After this script has been used successfully with HPONCFG,-->
+<!--        you may login using the credentials: "Administrator" and  -->
+<!--        "password".                                               -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - All versions.                                -->
+<!--              iLO - Versions 1.41 or later.                      -->
+<!--         RILOE II - All versions.                                -->
+
+<RIBCL VERSION="2.0">
+ <LOGIN USER_LOGIN="root" PASSWORD="Unix4dmin">
+  <USER_INFO MODE="write">
+   <MOD_USER USER_LOGIN="Administrator">
+    <PASSWORD value="ribAdm1n"/>
+   </MOD_USER>
+  </USER_INFO>
+ </LOGIN>
+</RIBCL>

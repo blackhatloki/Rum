@@ -1,0 +1,4 @@
+hponcfg all  http://169.49.251.101/Add_User_root.xml
+hponcfg all  http://169.49.251.101/Add_User_admin.xml
+hponcfg all  http://169.49.251.101/Add_User_csadmin.xml
+hponcfg all  http://169.49.251.101/Administrator_reset_pw.xml

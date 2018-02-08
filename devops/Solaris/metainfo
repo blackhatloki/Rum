@@ -1,0 +1,49 @@
+#!/usr/bin/ksh
+#
+# 'nawk' script to parse 'metastat' output and present 
+# in a useful output. 
+#
+# Example:
+#  # metainfo
+# Device  Size MB Mirror0 State0  Device0         Mirror1 State1  Device1
+# d60:    10240,6 d61     Okay    c1t0d0s6        d62     Okay    c1t1d0s6
+# d40:    4099,22 d41     Okay    c1t0d0s4        d42     Okay    c1t1d0s4
+# d30:    2052,09 d31     Okay    c1t0d0s3        d32     Okay    c1t1d0s3
+# d20:    2052,09 d21     Okay    c1t0d0s1        d22     Okay    c1t1d0s1
+# d10:    3075,66 d11     Okay    c1t0d0s0        d12     Okay    c1t1d0s0
+# d50:    2052,09 d51     Okay    c1t0d0s5        d52     Okay    c1t1d0s5
+#
+# Submitted by: Adrian Meier
+#
+
+metastat | nawk '
+BEGIN 		{ print "Device Size MB Mirror0 State0  Device0 Mirror1 State1  Device1" 
+		 OFS="   "}
+/Mirror/	{ if (dev != "") print dev, size, mir0, stat0, dev0, mir1, stat1, dev1 
+		 dev=$1; size=""; mir0=""; stat0=""; dev0="" }
+/Size:/		{ if (size == "") size=$2/2048 }
+/Submirror 0/	{ mir0=$3 }
+/Submirror 1/	{ mir1=$3 }
+/State:/	{ if (stat0 == "") stat0=$2; else stat1=$2 }
+/c.t.d.s./	{ if (dev0 == "") dev0=$1; else dev1=$1 }
+END		{ print dev, size, mir0, stat0, dev0, mir1, stat1, dev1 }' 
+
+# Exit
+exit 0
+
+
+
+
+##############################################################################
+### This script is submitted to BigAdmin by a user of the BigAdmin community.
+### Sun Microsystems, Inc. is not responsible for the
+### contents or the code enclosed. 
+###
+###
+### Copyright 2008 Sun Microsystems, Inc. ALL RIGHTS RESERVED
+### Use of this software is authorized pursuant to the
+### terms of the license found at
+### http://www.sun.com/bigadmin/common/berkeley_license.html
+##############################################################################
+
+

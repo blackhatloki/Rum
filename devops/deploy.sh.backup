@@ -1,0 +1,72 @@
+#!/bin/bash 
+OLD_IFS=$IFS
+nodemin=1
+nodemax=17 
+chassis="28 29 30 31" 
+touch junk.log 
+for c in $chassis ; do 
+    for  (( i=$nodemin; i<$nodemax; i++)) ;  do 
+        hostname=""
+        mac=""
+        ip=""
+        ibip=""
+        ipipmi=""
+        flag=0
+        if [ $i -lt 10 ]
+         then 
+#            echo "c$c-0$i"  
+            grep c$c-0$i data5.dat > c$c-0$i.values.dat 
+            echo "wwsh  -y node clone c27-16 c$c-0$i" 
+            while IFS=',' read line ;do
+            IFS=$OLD_IFS
+               hostname=`echo $line | awk -F" " '{ print $1 } ' ` 
+               if [ $hostname == "" ] ; then 
+                 echo $hostname
+                 flag=1
+               fi 
+               mac=`echo $line |  tr A-Z a-z| awk -F" " ' { print $2 } ' `
+               ip=`echo $line | awk -F" " ' { print $3 } ' ` 
+               ibip=`echo $line | awk -F" " ' { print $4 } ' ` 
+               ipipmi=`echo $line | awk -F" " ' { print $5 } ' ` 
+            done < c$c-0$i.values.dat
+            IFS=$OLD_IFS
+            if [ $flag == 0 ] ; then  
+            echo "wwsh  -y node set c$c-0$i --netdev=eno1 --hwaddr=$mac"
+            echo "wwsh  -y node set c$c-0$i -D eno1 -I $ip"
+            echo "wwsh  -y node set c$c-0$i -D ib0 -I $ibip"
+            echo "wwsh  -y object modify -s IPMI_IPADDR=\"$ipipmi\" c$c-0$i"
+            echo "wwsh  provision set c$c-0$i --bootlocal=normal"
+            echo "./idrac-pxe.sh c$c-0$i-ipmi" 
+            echo "./idrac-powercycle.sh c$c-0$i-ipmi" 
+            fi 
+         else 
+#            echo "c$c-$i"  
+            grep c$c-$i data5.dat > c$c-$i.values.dat 
+            while IFS=',' read line  ; do
+               IFS=$OLD_IFS
+               hostname=`echo $line | awk -F" " ' { print $1 } ' ` 
+                 echo $hostname
+               if [ $hostname == "" ] ; then 
+                 flag=1
+               fi 
+               mac=`echo $line |  tr A-Z a-z | awk -F" " ' { print $2 } ' `
+               ip=`echo $line | awk -F" " ' { print $3 } ' ` 
+               ibip=`echo $line | awk -F" " '  { print $4 } ' ` 
+               ipipmi=`echo $line | awk -F" " '  { print $5 } ' ` 
+           done < c$c-$i.values.dat
+            IFS=$OLD_IFS
+            echo "$hostname"
+            if [ $flag == 0 ] ; then  
+            echo "wwsh  -y node clone c27-16 c$c-$i" 
+            echo "wwsh  -y node set c$c-$i --netdev=eno1 --hwaddr=$mac"
+            echo "wwsh  -y node set c$c-$i -D eno1 -I $ip"
+            echo "wwsh  -y node set c$c-$i -D ib0 -I $ibip" 
+            echo "wwsh  -y object modify -s IPMI_IPADDR=\"$ipipmi\" c$c-$i"
+            echo "wwsh  provision set c$c-$i --bootlocal=normal"
+            echo "./idrac-pxe.sh c$c-$i-ipmi" 
+            echo "./idrac-powercycle.sh c$c-$i-ipmi" 
+            fi 
+         fi 
+     
+    done 
+done 

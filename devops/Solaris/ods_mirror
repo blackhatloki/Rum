@@ -1,0 +1,148 @@
+#!/bin/sh
+# 
+# Building new automation infrastructure. First Baby step before we can 
+# walk. 
+# Script comes from BigAdmin. I had CSFBism it ..     
+# Welcome to the House of Pain.
+# 
+
+
+# THINGS CAN HAPPEN WHEN MESSING AROUND WITH DISK DRIVES
+# USE AT YOUR OWN RISK
+
+# Variable initialisation
+# SOURCEDISK is the actual root disk
+# DESTDISK is the disk that is to become the other side of the 
+#     mirror, it will be destroyed in the process, of course
+# SLICEMIR is the disk slices that are being mirrored
+# NUMMETA is the number of state databases replicas to be kept
+# METASLICE is the disk slice that is to contain the state database replicas
+#      It should be approx 50-100Mb in size
+# RCSCRIPT is the name of the rc script that the system will create in order
+#      finish the second half of the mirror on reboot
+# VFSTAB
+
+SOURCEDISK=$1
+DESTDISK=$2
+# SLICEMIR="0 1 3 4"
+NUMMETA=3
+METASLICE=s3
+RCSCRIPT=/etc/rc3.d/S99mirrorattach
+
+if [ "${SOURCEDISK}" = ""  -o  "${DESTDISK}" = "" ] ; then
+   echo "Usage: ods_mirror.sh SOURCEDISK DESTDISK"
+   exit
+fi
+
+echo "Source disk is ${SOURCEDISK} and Target is ${DESTDISK}" 
+echo "Are you sure you want to proceed[Y/n]"
+read answer
+if [ ${answer} != "Y" ]; then 
+   echo ">>>>>>>>>> Bailing out sds_root_mirror.sh program"
+   exit  
+fi 
+   echo ">>>>>>>>>> Mirroring root disk, please wait "
+   echo ">>>>>>>>>> Processsing Script"
+   echo 
+   sleep 10
+
+# Repartition the destination disk to be identical to the source
+
+echo "Partitioning destination disk"
+prtvtoc /dev/rdsk/${SOURCEDISK}s2 | fmthard -s - /dev/rdsk/${DESTDISK}s2
+
+# Create $NUMMETA state database replicas on s${METASLICE}
+
+echo "Setting DiskSuite state database replicas $NUMMETA on slice $METASLICE"
+metadb -a -f -c $NUMMETA ${SOURCEDISK}${METASLICE} ${DESTDISK}${METASLICE}
+
+# Create rc script to attach other side of mirror after a reboot
+
+echo "Building one side of the mirror & script to finish the other"
+echo "#!/bin/ksh" > $RCSCRIPT
+echo "PATH=/sbin:/bin:/usr/bin:/usr/sbin" >> $RCSCRIPT
+echo "export PATH" >> $RCSCRIPT
+echo "echo Completing root disk mirror" >> $RCSCRIPT
+
+    metainit -f d11 1 1 ${SOURCEDISK}s0
+    metainit d10 -m d11 
+    metainit -f d21 1 1 ${SOURCEDISK}s1 
+    metainit d20 -m d21
+    metainit -f d31 1 1 ${SOURCEDISK}s5
+    metainit d30 -m d31
+    metainit -f d41 1 1 ${SOURCEDISK}s6
+    metainit d40 -m d41 
+    metainit d12 1 1 ${DESTDISK}s0
+    metainit d22 1 1 ${DESTDISK}s1
+    metainit d32 1 1 ${DESTDISK}s5
+    metainit d42 1 1 ${DESTDISK}s6
+    echo "metattach d10 d12  " >> $RCSCRIPT
+    echo "metattach d20 d22  " >> $RCSCRIPT
+    echo "metattach d30 d32  " >> $RCSCRIPT
+    echo "metattach d40 d42 " >> $RCSCRIPT
+    echo "sleep 30 " >> $RCSCRIPT
+   
+
+echo "Mirroring root slices, use 'metastat | grep -i progress' to monitor"
+echo "rm $RCSCRIPT" >> $RCSCRIPT
+chmod 755 $RCSCRIPT
+
+# Fix /etc/vfstab & /etc/system to allow for booting from the mirror
+
+VFSTAB=/etc/vfstab
+cp $VFSTAB ${VFSTAB}.premirror
+cp /etc/system /etc/system.premirror
+metaroot d10
+echo "set md:mirrored_root_flag=1" >> /etc/system
+
+# Fix /etc/vfstab to allow mounting of new, partially, mirrored metadevices
+
+# sed "s,$SOURCEDISK,d,g" $VFSTAB | sed "s,/dev/,/dev/md/,g" > $VFSTAB.tmp
+sed     -e s_dsk/${SOURCEDISK}s1_md/dsk/d20_ \
+        -e s_rdsk/${SOURCEDISK}s1_md/rdsk/20_ \
+        -e s_dsk/${SOURCEDISK}s5_md/dsk/d30_ \
+        -e s_rdsk/${SOURCEDISK}s5_md/rdsk/d30_ \
+        -e s_dsk/${SOURCEDISK}s6_md/dsk/d40_ \
+        -e s_rdsk/${SOURCEDISK}s6_md/rdsk/d40_ \
+        $VFSTAB > $VFSTAB.tmp
+
+mv $VFSTAB.tmp $VFSTAB
+
+MDTAB=/etc/lvm/md.tab 
+cp ${MDTAB} ${MDTAB}.premirror 
+touch ${MDTAB}
+echo "#"                      >> ${MDTAB}  
+echo "#"                      >> ${MDTAB}  
+echo "#"                      >> ${MDTAB}  
+echo "#"                      >> ${MDTAB}  
+echo "#"                      >> ${MDTAB}  
+echo "#"                      >> ${MDTAB}  
+echo "#"                      >> ${MDTAB}  
+echo "#"                      >> ${MDTAB}  
+echo "# /"                    >> ${MDTAB} 
+echo "#"                      >> ${MDTAB} 
+echo "d10 -m d11"     >> ${MDTAB} 
+echo "d11 1 1 ${SOURCEDISK}s0"   >> ${MDTAB} 
+echo "d12 1 1 ${DESTDISK}s0"   >> ${MDTAB} 
+echo "#"                      >> ${MDTAB}  
+echo "# swap"                 >> ${MDTAB} 
+echo "#"                      >> ${MDTAB} 
+echo "d20 -m d21"               >> ${MDTAB} 
+echo "d21 1 1 ${SOURCEDISK}s1 "    >> ${MDTAB} 
+echo "d22 1 1 ${DESTDISK}s1"  >> ${MDTAB} 
+echo "#"                      >> ${MDTAB} 
+echo "# /var"                 >> ${MDTAB} 
+echo "#"                      >> ${MDTAB} 
+echo "d30 -m 31"               >> ${MDTAB} 
+echo "d31 1 1 ${SOURCEDISK}s3"    >> ${MDTAB} 
+echo "d32 1 1 ${DESTDISK}s3"  >> ${MDTAB} 
+echo "#"                      >> ${MDTAB} 
+echo "d40 -m d41"              >> ${MDTAB} 
+echo "d41 1 1 ${SOURCEDISK}s4"   >> ${MDTAB} 
+echo "d42 1 1 ${DESTDISK}s4" >> ${MDTAB} 
+
+ 
+echo "### Root disk mirror will be completed on reboot ###"
+echo "### Please reboot as soon as possible ###"
+
+

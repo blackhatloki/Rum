@@ -1,0 +1,95 @@
+#!/bin/bash
+Version=` cat /etc/SuSE-release  | grep VERSION | awk -F"=" ' { print $2 } '  | sed -e 's/ *//g'`
+case $Version in 
+  9)  
+	hosts=$*;
+	hosts=`ls -1 -d /sys/bus/pci/drivers/lpfc/*/host* | sed -e "s/.*host//" ` 
+	for host in $hosts ; do
+	if [ ! -e /sys/bus/pci/drivers/lpfc/*/host$host ] ; then
+          echo "Error: Cannot find an lpfc HBA instance."
+          exit 2
+         fi
+ 	 echo -n "`hostname`"
+         echo -n ",port_name: "
+  	 echo -n "`cat /sys/class/scsi_host/host$host/port_name`"
+  	 echo -n ",node_name: "
+  	 echo -n "`cat /sys/class/scsi_host/host$host/node_name`"
+  	 echo -n ",port_state: "
+  	 echo -n "`cat /sys/class/scsi_host/host$host/state | grep Link`"
+  	 echo -n ",Port_type: "
+  	 echo -n "`cat /sys/class/scsi_host/host$host/port_type `"
+  	 echo -n ",speed: "
+  	 echo -n "`cat /sys/class/scsi_host/host$host/speed `"
+  	 echo -n ",controller: "
+         fa=""
+         for i in ` cat /sys/class/fc_transport/$host:*:*:*/port_name | sort -u ` 
+          do 
+           fa=`echo -n  "$i,$fa"`
+          done 
+          fa=`echo "$fa"  |  sed -e 's/,$//' `
+          echo -n $fa 
+          echo
+	done
+         ;; 
+
+  10)
+	hosts=$*;
+	hosts=`ls -1 -d /sys/bus/pci/drivers/lpfc/*/host* | sed -e "s/.*host//" ` 
+	for host in $hosts ; do
+	if [ ! -e /sys/bus/pci/drivers/lpfc/*/host$host ] ; then
+         echo "Error: Cannot find an lpfc HBA instance "
+         exit 2
+  	fi
+  	 echo -n "`hostname`"
+ 	 echo -n ",port_name: "
+ 	 echo -n "`cat /sys/class/fc_host/host$host/port_name`"
+  	 echo -n ",node_name: "
+ 	 echo -n "`cat /sys/class/fc_host/host$host/node_name`"
+  	 echo -n ",port_state: "
+ 	 echo -n "`cat /sys/class/fc_host/host$host/port_state`"
+ 	 echo -n ",port_type: "
+ 	 echo -n "`cat /sys/class/fc_host/host$host/port_type `"
+  	 echo -n ",speed: "
+  	 echo -n "`cat /sys/class/fc_host/host$host/speed `"
+  	 echo -n ",controller: "
+         fa=""
+         for i in ` cat /sys/class/fc_transport/target$host:*/port_name | sort -u ` 
+          do 
+           fa=`echo -n  "$i,$fa"`
+          done 
+          fa=`echo "$fa"  |  sed -e 's/,$//' `
+          echo -n $fa 
+          echo
+	done
+       ;;
+   *)
+	hosts=$*;
+	hosts=`ls -1 -d /sys/bus/pci/drivers/lpfc/*/host* | sed -e "s/.*host//" ` 
+	for host in $hosts ; do
+	if [ ! -e /sys/bus/pci/drivers/lpfc/*/host$host ] ; then
+         echo "Error: Cannot find an lpfc HBA instance "
+         exit 2
+  	fi
+  	 echo -n "`hostname`"
+ 	 echo -n ",port_name: "
+ 	 echo -n "`cat /sys/class/fc_host/host$host/port_name`"
+  	 echo -n ",node_name: "
+ 	 echo -n "`cat /sys/class/fc_host/host$host/node_name`"
+  	 echo -n ",port_state: "
+ 	 echo -n "`cat /sys/class/fc_host/host$host/port_state`"
+ 	 echo -n ",port_type: "
+ 	 echo -n "`cat /sys/class/fc_host/host$host/port_type `"
+  	 echo -n ",speed: "
+  	 echo -n "`cat /sys/class/fc_host/host$host/speed `"
+  	 echo -n ",controller: "
+         fa=""
+         for i in ` cat /sys/class/fc_transport/target$host:*/port_name | sort -u ` 
+          do 
+           fa=`echo -n  "$i,$fa"`
+          done 
+          fa=`echo "$fa"  |  sed -e 's/,$//' `
+          echo -n $fa 
+          echo
+	done
+       ;;
+esac 

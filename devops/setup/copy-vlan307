@@ -1,0 +1,6 @@
+#!/bin/bash
+for i in `cat vlan307-list` ; do
+echo $i
+echo ifcfg-vlan307.$i
+ scp ifcfg-vlan307.$i $i:/etc/sysconfig/network/ifcfg-vlan307
+done

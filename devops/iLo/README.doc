@@ -1,0 +1,105 @@
+Setup default accounts on OA like root,admin,csadmin. 
+-- ssh Administrator@oa-ip
+-- eqlab> hponcfg all http://169.49.251.101/Add_User_root.xml
+-- eqlab> hponcfig all http://169.49.251.101/Add_User_admin.xml
+-- eqlab> hponcfig all http://169.49.251.101/Add_User_csadmin.xml 
+-- eqlab> exit 
+
+
+ILO upgrade via the OA. 
+--ssh into the Administrator@oa-ip
+-- eqlab_hp_o01>  update ilo all  http://169.49.251.101/ilo2_178.bin 
+-- It will take a few minitues but once its is done it takes 5 minutes to upgrade. 
+-- To check that the ilo has been upgrade run the following commands. 
+-- cd /app/patron/exp
+--  ./show_server_info.expect 169.37.41.228 | grep 1.78
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+-- ./show_server_info.expect 169.37.41.228 | grep 1.78 | wc -l 
+-- Now the blades in the chassis should match the count from -- 
+-- ./show_server_info.expect OA-IP | grep 1.78 | wc -l 
+-- ok 
+
+
+
+ILO upgrade via the command line from a Linux Server pnl06i-007. Only use this method if you want to blanket upgrade ilo via the network. 
+-- ssh into pnl06i-007 change directory into /app/patron . 
+The latest ilo will be 1.78. ok
+Now you need to have two lists. 
+First consists of a list of host you are going to upgrade the ilo.
+Please make sure these hosts are alive and operational. 
+Second you will create a list host-ilo list. Please make sure that hosts ilo are alive.
+Now you ready to upgrade the ilo. - cd /app/patron/ILO as root. Run the following commands
+- for j in `cat list-of-hostsilo ` ; do
+- echo $j 
+-       ./locfg.pl -s $j -l log/i$j.log -f Update_Firmware-1.78.xml
+- done 
+
+-- To check that the ilo has been upgrade run the following commands. 
+-- cd /app/patron/exp
+--  ./show_server_info.expect OA-IP | grep 1.78
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+        Firmware Version: 1.78 Jun 10 2009
+-- ./show_server_info.expect OA-IP | grep 1.78 | wc -l 
+-- Now the blades in the chassis should match the count from -- ./show_server_info.expect OA-IP | grep 1.78 | wc -l 
+-- ok 
+ 
+
+
+Upgrading OA 
+-- ssh Administrator@chassis-OA-ip 
+eqlab_hp_OA1> update image force http://169.49.251.101/hpoa260.bin
+Entering anything other than 'YES' will result in the command not executing.
+Forcing a firmware downgrade may cause a loss of saved settings. Are you sure you want to downgrade the firmware? yes
+Detected 2 Onboard Administrators, performing redundant flash upgrade
+Downloading image from http://169.49.251.101/hpoa260.bin...
+Preparing to flash redundant Onboard Administrator...
+Flashing Standby Onboard Administrator
+Standby flash: Done
+Waiting for standby to reboot...Done
+Flashing Active Onboard Administrator
+Active flash:  100%
+Connection to 169.37.41.228 closed by remote host.
+Connection to 169.37.41.228 closed.
+-- OA logs your out.  
+-- To check the OA version. Run the following command 
+-- ./showoa.expect 169.37.41.228 | egrep "Firmware Version" 
+   Firmware Version: 2.60
+
+ 
+Downgrading OA 
+-- ssh Administrator@chassis-OA-ip 
+-- update image force http://169.49.251.101/hpoa252.bin
+-- Watch the screen
+--  Entering anything other than 'YES' will result in the command not executing.
+--  Forcing a firmware downgrade may cause a loss of saved settings. Are you sure you want to downgrade the firmware? yes
+--  Detected 2 Onboard Administrators, performing redundant flash upgrade
+--  Downloading image from http://169.49.251.101/hpoa252.bin...
+Preparing to flash redundant Onboard Administrator.
+Flashing Standby Onboard Administrator
+Standby flash: Done
+Waiting for standby to reboot.
+Waiting for standby to reboot...Done
+Flashing Active Onboard Administrator
+Active flash:  100%
+Connection to 169.37.41.228 closed by remote host.
+Connection to 169.37.41.228 closed.
+-- OA logs you out. 
+-- To check the OA version. Run the following command 
+-- ./showoa.expect 169.37.41.228 | egrep "Firmware Version" 
+   Firmware Version: 2.52
+

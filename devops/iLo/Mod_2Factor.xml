@@ -1,0 +1,49 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003,2004 Hewlett-Packard Development           -->
+<!--   Company, L.P.                                                 -->
+
+<!-- Description:  This is a sample XML script to modify two-factor  -->
+<!--               authentication settings                           -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - Version 1.10 or later.                       -->
+<!--              iLO - Version 1.80 or later.                       -->
+<!--         RILOE II - Version 1.20 or later.                       -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <RIB_INFO MODE="write">
+    <MOD_TWOFACTOR_SETTINGS>
+      
+      <!-- Enables Two-Factor Authentication, If this tag changes the current iLO configuration, it causes a reset of iLO, possible values: "Yes" or "No" -->
+      <AUTH_TWOFACTOR_ENABLE value="Yes"/> 
+      
+      <!-- Configures iLO to download the certificate revocation list and check for certificate revocation with each authentication attempt, possible values: "Yes" or "No" -->
+      <CERT_REVOCATION_CHECK value="Yes"/> 
+      
+      <!-- Only 1 of the following two tags should be included in a script, if both are included, only the last tag will take effect -->
+      <!-- Causes iLO to use the User Principle Name within the Subject Alternative Name of the client certificate when attempting authentication with a directory, not used when authenticating with local accounts -->
+      <CERT_OWNER_SAN/> 
+      <!-- Causes iLO to use the Subject of the client certificate to derrive the user's distinguished name which is used when attempting authentication with a directory, not used when authenticating with local accounts -->
+      <CERT_OWNER_SUBJECT/> 
+      
+    </MOD_TWOFACTOR_SETTINGS>
+  </RIB_INFO>
+  </LOGIN>
+</RIBCL>
+
+

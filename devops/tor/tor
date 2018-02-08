@@ -1,0 +1,35 @@
+What is Tor? Tor is a free software and also an open network that helps you to defend your privacy and freedom. Tor will help you to be almost invisible to network traffic analysis. Tor is possible thanks to a a group of volunteers that work hardly donating bandwidth and network resources so all of us who use Tor can not be exposed to surveillance. With Tor you can have anonymous IP address, hostname and you can not be tracked at network or application level. What else do you need to know? Let’s install it.
+
+Tor repositories contain both i686 and x86_64 package builds.
+
+Create Tor repo
+
+nano -w /etc/yum.repos.d/tor.repo
+You must replace the word “DISTRIBUTION” with one of the following according to the Linux disto you are using: fc/19, fc/20, el/6
+
+[tor]
+name=Tor experimental repo
+enabled=1
+baseurl=http://deb.torproject.org/torproject.org/rpm/el/6/$basearch/
+gpgcheck=1
+gpgkey=http://deb.torproject.org/torproject.org/rpm/RPM-GPG-KEY-torproject.org.asc
+
+[tor-source]
+name=Tor experimental source repo
+enabled=1
+autorefresh=0
+baseurl=http://deb.torproject.org/torproject.org/rpm/el/6/SRPMS
+gpgcheck=1
+gpgkey=http://deb.torproject.org/torproject.org/rpm/RPM-GPG-KEY-torproject.org.asc
+Tor installation
+
+Now that you have your repo ready, let’s install tor.
+
+yum install tor
+Start Tor
+
+service tor start
+Configure Tor
+
+This is the last step on the road, and I suggest you to use this url to finish the Tor configuration: https://www.torproject.org/docs/tor-doc-unix.html.en#using
+Read more information at https://www.torproject.org/

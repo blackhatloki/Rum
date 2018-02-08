@@ -1,0 +1,5 @@
+#!/bin/bash 
+grep kernel.sysrq /etc/sysctl.conf
+if [ $? -eq 1 ] ; then 
+	echo "kernel.sysrq = 1" >> /etc/sysctl.conf 
+fi

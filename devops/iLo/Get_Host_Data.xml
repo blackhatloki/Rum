@@ -1,0 +1,42 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2004 Hewlett-Packard Development Company, L.P.  -->
+
+<!--   Description: This is a sample RIBCL script to retrieve the    -->
+<!--                host data displayed on the Server Information    -->
+<!--                page.                                            -->
+
+<!--                The data is extracted from SMBIOS records stored -->
+<!--                on the host.  The raw data in the SMBIOS records -->
+<!--                is retrieved using this script.  You can access  -->
+<!--                the data by base 64 decoding the returned data,  -->
+<!--                although these details are beyond the scope of   -->
+<!--                these notes.  The same fields that are displayed -->
+<!--                on the web page are also decoded through this    -->
+<!--                interface.                                       -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - All versions.                                -->
+<!--              iLO - Version 1.80 or later.                       -->
+<!--         RILOE II - None.                                        -->
+
+<RIBCL version="2.21">
+ <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <SERVER_INFO MODE="READ" >
+   <GET_HOST_DATA />
+  </SERVER_INFO>
+ </LOGIN>
+</RIBCL>

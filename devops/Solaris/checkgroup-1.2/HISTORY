@@ -1,0 +1,22 @@
+07/26/00 Print any group entries that have no username and are not
+         referenced in the password file
+
+07/26/00 Print the group the orphaned user is in
+
+
+05/18/00 Release as version 1.2
+
+05/18/00 Cross reference username entries in group file against password
+         Suggested by Craig McDowell <cmcdowell@cas.org>         
+
+05/18/00 Add checks for duplicate usernames and UIDs in password file
+
+
+01/31/00 Release as 1.1
+
+01/31/00 Check for duplicate group name (in addition to GID) entries
+
+
+01/26/00 Release as 1.0
+
+[Unless otherwise stated, changes made by Alek Komarnitsky, alek@komar.org]

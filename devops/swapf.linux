@@ -1,0 +1,32 @@
+#!/usr/bin/perl -w
+#
+# Usage : just run it! calc the total swap space in human readable form
+# Author : Paul Errington (ICT Technical)
+#
+
+my @result = `/sbin/swapon -s`;
+
+shift @result;
+
+my ($tblocks, $fblocks);
+
+foreach my $swapfile (@result) {
+        my @part = split(/\s+/, $swapfile);
+        if(@part == 5) {
+                $tblocks += $part[2];
+                $fblocks += $part[3];
+        }
+}
+$tblocks *= 1024;
+$fblocks *= 1024;
+
+my $padding="            ";
+print substr("total(gb)".$padding, 0, 12),
+        substr("free(gb)".$padding, 0, 12),
+        substr("%available".$padding, 0, 12)."\n";
+
+print substr(sprintf("%.2f", $tblocks/1024/1024/1024).$padding, 0, 12),
+        substr(sprintf("%.2f", $fblocks/1024/1024/1024).$padding, 0, 12),
+        substr(sprintf("%.0f", $fblocks/$tblocks*100).$padding, 0, 12)."\n";
+
+

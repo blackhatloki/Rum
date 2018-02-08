@@ -1,0 +1,12 @@
+#!/bin/bash
+HOST=`hostname`
+IP=`cat trade | grep $HOST | awk  -F"," ' { print $2 } ' `
+sed -e "s/STUB/$IP/g" ifcfg-trade-bond1-template > ifcfg-bond1.$HOST
+trade1=`ifconfig -a | grep trade1 | awk -F" " ' { printf "%s ",$5 } '` 
+trade2=`ifconfig -a | grep trade2 | awk -F" " ' { printf "%s ",$5 } '` 
+cp trade-template ifcfg-id-$trade1
+cp trade-template ifcfg-id-$trade2
+cp ifcfg-id-$trade1 /etc/sysconfig/network
+cp ifcfg-id-$trade2 /etc/sysconfig/network
+cp ifcfg-bond1.$HOST /etc/sysconfig/network/ifcfg-bond1
+ifup bond1 

@@ -1,0 +1,45 @@
+#!/usr/bin/expect
+
+set timeout 8
+set passall "ribAdm1n ribAdm1n ribAdm1n" 
+
+set loggedin 1;
+set ssh_cmd "ssh -o StrictHostKeyChecking=no Administrator@${argv}"
+set prompt "> ";
+eval spawn $ssh_cmd
+set pwcnt 0;
+set spid $spawn_id
+
+expect -i $spid ".*d:" {
+        set pass [lindex $passall $pwcnt]
+        send "$pass\r";
+        send_user "\nin password 1 $pass $pwcnt\n";
+        incr pwcnt;
+        exp_continue
+} "> " {
+        send "\n"
+        set loggedin 0;
+}
+
+expect "> "
+send "hponcfg all  http://169.49.251.101/Add_User_root.xml"
+send \015
+send \015
+expect "> "
+send "hponcfg all  http://169.49.251.101/Add_User_admin.xml"
+send \015
+send \015
+expect "> "
+send "hponcfg all  http://169.49.251.101/Add_User_csadmin.xml"
+send \015
+send \015
+expect "> "
+send "hponcfg all  http://169.49.251.101/Administrator_reset_pw.xml"
+send \015
+send \015
+expect "> "
+send \015
+send \015
+expect "> "
+send "exit"
+exit

@@ -1,0 +1,4 @@
+#!/bin/bash 
+node=$1 
+wwsh -y node set $node -D ib3 --netdel 
+wwsh -y provision set $node --filedel=ifcfg-ib3

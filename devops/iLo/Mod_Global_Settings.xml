@@ -1,0 +1,119 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2003 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to configure the      -->
+<!--               Global Settings for following devices:            -->
+<!--                 Integrated Lights-Out 2 (iLO 2)                 -->
+<!--                 Integrated Lights-Out (iLO)                     -->
+<!--                 Remote Insight Lights-Out Edition II (RILOE II) -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        and other values inside the quotation marks with values  -->
+<!--        that are appropriate for your environment.               -->
+
+<!--        You might need to tailor this script for the firmware    -->
+<!--        running on your Lights-Out device according to the       -->
+<!--        information in "Firmware support infomation" comment(s). -->
+
+<!--        Double check your values before executing this script.   -->
+<!--        Incorrect or mismatched port settings may cause you      -->
+<!--        to lose the ability to connect to your Lights-Out device.-->
+
+<!--        The Lights-Out device (not the server) will reset        --> 
+<!--        automatically to make changes to port settings effective -->
+
+<!--        Setting the ILO_FUNCT_ENABLED to No will disable the     -->
+<!--        management functions of iLO 2 and iLO.  If disabled, you -->
+<!--        must use the iLO Security Override Switch on your        -->
+<!--        server's system board and the iLO 2/iLO ROM-Based Setup  -->
+<!--        Utility (F8) to re-enable iLO 2/iLO.                     -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script    -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resouce Guide" for more       -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - All versions.                                -->
+<!--              iLO - All versions.                                -->
+<!--         RILOE II - All versions.                                -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <RIB_INFO MODE="write">
+    <MOD_GLOBAL_SETTINGS>
+      <SESSION_TIMEOUT value="60"/>
+      <F8_PROMPT_ENABLED value="Yes"/>
+      <HTTP_PORT value="80"/>
+      <HTTPS_PORT value="443"/>
+      <REMOTE_CONSOLE_PORT value="23"/>
+      <REMOTE_CONSOLE_PORT_STATUS value="2"/>
+      <!--        Firmware support infomation for next 6 tags:       -->
+      <!--            iLO 2 - All versions.                          -->
+      <!--              iLO - Version 1.50 and later.                -->
+      <!--         RILOE II - None.                                  -->
+      <REMOTE_CONSOLE_ENCRYPTION value="Yes"/>
+      <MIN_PASSWORD value="8"/>
+      <ILO_FUNCT_ENABLED value="Yes"/>
+      <VIRTUAL_MEDIA_PORT value="17988"/>
+      <F8_LOGIN_REQUIRED value="No"/>
+      <REMOTE_KEYBOARD_MODEL value="US"/>
+      <!--        Firmware support infomation for next 2 tags:       -->
+      <!--            iLO 2 - All versions.                          -->
+      <!--              iLO - Version 1.50 and later.                -->
+      <!--         RILOE II - Version 1.20 and later.                -->
+      <PASSTHROUGH_CONFIG value="1"/>
+      <TERMINAL_SERVICES_PORT value="3389"/>
+      <!--        Firmware support infomation for next 5 tags:       -->
+      <!--            iLO 2 - All versions.                          -->
+      <!--              iLO - Version 1.60 and later.                -->
+      <!--         RILOE II - None.                                  -->
+      <SSH_PORT value="22"/>
+      <SSH_STATUS value="Yes"/>
+      <SERIAL_CLI_STATUS value="3"/>
+      <SERIAL_CLI_SPEED value="1"/>
+      <RBSU_POST_IP value="Y"/>   
+      <!--        Firmware support infomation for next tag:          -->
+      <!--            iLO 2 - All versions.                          -->
+      <!--              iLO - None.                                  -->
+      <!--         RILOE II - None.                                  -->
+      <TELNET_ENABLE value="yes"/>
+      <!--        Firmware support infomation for next tag:          -->
+      <!--            iLO 2 - All versions.                          -->
+      <!--              iLO - Version 1.75 and later.                -->
+      <!--         RILOE II - None.                                  -->
+      <HIGH_PERFORMANCE_MOUSE value="Yes" /> 
+      <!--        Firmware support infomation for next tag:          -->
+      <!--            iLO 2 - Version 1.10 and later.                -->
+      <!--              iLO - Version 1.80 and later.                -->
+      <!--         RILOE II - None.                                  -->
+      <REMOTE_CONSOLE_ACQUIRE value="Yes" />
+      <!--        Firmware support infomation for next 13 tags:      -->
+      <!--            iLO 2 - None.                                  -->
+      <!--              iLO - None.                                  -->
+      <!--         RILOE II - All versions.                          -->
+      <!--
+      <HOST_KEYBOARD_ENABLED value ="YES"/>
+      <REMOTE_KEYBOARD_MODEL value = "US"/> 
+      <POCKETPC_ACCESS value = "YES"/>
+      <CIPHER_STRENGTH value = "128"/>
+      <SNMP_ADDRESS_1 value = "123.124.125.126"/>
+      <SNMP_ADDRESS_2 value = "test"/>
+      <SNMP_ADDRESS_3 value = "dest"/>
+      <OS_TRAPS value = "Y"/>
+      <RIB_TRAPS value = "N"/>
+      <CIM_SECURITY_MASK value = "3"/>
+      <EMS_STATUS value = "Y" />
+      <BYPASS_POWER_CABLE_REPORTING value = "N" />
+      <SNMP_PASSTHROUGH_STATUS value = "Y" />
+      -->
+
+    </MOD_GLOBAL_SETTINGS>
+  </RIB_INFO>
+  </LOGIN>
+</RIBCL>

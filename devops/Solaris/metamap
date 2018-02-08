@@ -1,0 +1,168 @@
+#!/usr/bin/ksh
+#set -x  # Uncomment for debugging
+
+# Script which looks for any soft partitions and captures their metadevice(s).
+# It then loops through the list of metadevice(s) displaying the extents via
+# "metarecover" twice, once with the standard metarecover output, then again
+# with the extents listed in phyical order on the drive and an additional field
+# at the end of the line which is the ending block that should be one less than
+# the starting block of the next extent.
+
+# Master copy: metamap
+
+Version=1.0  # Initial version              11/24/2006 Jim
+
+Version=1.1  # Allow for no FREE blocks when computing available
+             # unallocated space.            4/17/2007 Jim
+Version=1.2  # Allow for input of specific devices to display
+             #                              1/18/2008 Jim
+
+# Check if we have any soft partitions even defined
+export SoftPartitionMetaDevices=$(metastat -p | grep -- -p | awk '{print $3}' | sort | uniq)
+
+if [ -z "${SoftPartitionMetaDevices}" ]
+then print "No soft partitions defined on this server, exiting..."
+     exit
+else print "List of devices with soft partitions: $( print ${SoftPartitionMetaDevices})"
+fi
+
+# Temp file to hold info about each metadevice
+# with soft partitions so we don't have to
+# keep executing the metarecover command
+export TempFile=/tmp/$(basename $0).$$
+
+###########################
+# This is sample output from a server with two devices with soft partitions,
+# one of which has some free space left on it and the other which has none.
+####
+#    root:skfamep1:/> metastat -p | grep -- -p
+#    d101 -p d110 -o 4713 -b 398213120
+#    d125 -p d120 -o 10208 -b 429925791
+####
+#    root:skfamep1:/> metarecover -vn d110 -p
+#    Verifying on-disk structures on d110.
+#    The following extent headers were found on d110.
+#                    Name  Seq#    Type               Offset               Length
+#                    d101     0   ALLOC                 4712            398213121
+#                    NONE     0     END            425724487                    1
+#                    NONE     0    FREE            398217833             27506654
+#    Found 1 soft partition(s) on d110.
+#    Checking sequence numbers.
+#    d110: Validating soft partition metadb entries.
+#    Verifying device d101.
+#    d101: Status "Okay" is valid.
+#     Extent Number        Virtual Offset       Physical Offset                Length
+#                 0                     0                  4713             398213120
+#    d110: Soft Partition metadb configuration is valid
+#    d110: Verifying metadb allocations match extent headers.
+#    Metadb extent:
+#                    Name  Seq#    Type               Offset               Length
+#                    d101     0   ALLOC                 4712            398213121
+#    Extent header extent:
+#                    Name  Seq#    Type               Offset               Length
+#                    d101     0   ALLOC                 4712            398213121
+#    d110: Soft Partition metadb matches extent header configuration
+####
+#    root:skfamep1:/> metarecover -vn d120 -p
+#    Verifying on-disk structures on d120.
+#    The following extent headers were found on d120.
+#                    Name  Seq#    Type               Offset               Length
+#                    d125     0   ALLOC                10207            429925792
+#                    NONE     0     END            429935999                    1
+#                    NONE     0    FREE                10176                   31
+#    Found 1 soft partition(s) on d120.
+#    Checking sequence numbers.
+#    d120: Validating soft partition metadb entries.
+#    Verifying device d125.
+#    d125: Status "Okay" is valid.
+#     Extent Number        Virtual Offset       Physical Offset                Length
+#                 0                     0                 10208             429925791
+#    d120: Soft Partition metadb configuration is valid
+#    d120: Verifying metadb allocations match extent headers.
+#    Metadb extent:
+#                    Name  Seq#    Type               Offset               Length
+#                    d125     0   ALLOC                10207            429925792
+#    Extent header extent:
+#                    Name  Seq#    Type               Offset               Length
+#                    d125     0   ALLOC                10207            429925792
+#    d120: Soft Partition metadb matches extent header configuration
+#    root:skfamep1:/>
+####
+
+#### Start of MapMetaDevice() function
+MapMetaDevice()
+{
+   print "\nDisplaying $1 ..."
+   metarecover -vn $1 -p > ${TempFile}
+     # This sed command prints lines between "The following"
+     # and "Found " including those two lines
+   sed -n '/^The following/,/^Found /p' ${TempFile}
+   print "Redisplaying extents in physical sorted order and with end block number computed..."
+     # Single header line with "End block" verbiage tacked on
+   print  "$(sed -n '/^The following/,/^Found/p' ${TempFile} | grep Name)       End block"
+     # Save off IFS and then set it to a pipe character
+     # so that $line appears to be one value. This was done
+     # to preserve readability because the read command
+     # truncates spaces which ends up skewing the output
+     # around like a snake
+   OLDIFS=$IFS
+   IFS='|'
+     # Include "Offset" in the grep -v because
+     # we don't want that header line either
+   sed -n '/^The following/,/^Found/p' ${TempFile} | egrep -v "^The following|^Found|Offset" | sort -k4 | while read line
+     do print -n "$line" # Print without the line feed.
+          # Because we mucked with IFS need to tell awk to use
+          # a space instead of | character. And the printf
+          # command results in a right justified space filled 16
+          # character field, for more of that good ol' readability
+        printf "%16d\n"  $(print $line | awk -F" " '{print $4 + $5 - 1}')
+     done
+   FreeSpaceBlocks=$(sed -n '/^The following/,/^Found/p' ${TempFile} | grep " FREE " | awk -F" " '{n+=$5} END {print n}')
+   if [ -z "${FreeSpaceBlocks}" ]
+   then print "No FREE space found on ${Device}"
+   else # FreeSpaceKBytes=$(( ${FreeSpaceBlocks} \* 512 / 1024 )) # <- Next line is equivalent math
+        FreeSpaceKBytes=$(( ${FreeSpaceBlocks} / 2 ))
+        print "Amount of free space on ${Device} is ${FreeSpaceBlocks} 512 byte blocks or ${FreeSpaceKBytes} KBytes"
+   fi
+     # Reset IFS back and clean up ${TempFile} file
+   IFS=$OLDIFS
+   if [ -f ${TempFile} ] ; then rm ${TempFile} ; fi
+}
+#### End of MapMetaDevice() function
+
+# If there's no specific ones input, list out all of them that are found.
+
+if [ $# = 0 ]
+then # List out all that were found earlier
+     for Device in ${SoftPartitionMetaDevices}
+     do MapMetaDevice ${Device}
+     done
+else # Loop through any input parameters and if it's a legit
+     # name in ${SoftPartitionMetaDevices} list, display it.
+     for InputList in $@
+     do  for ValidMetaDeviceName in ${SoftPartitionMetaDevices}
+         do if [ ${InputList} = ${ValidMetaDeviceName} ]
+            then MapMetaDevice ${ValidMetaDeviceName}
+            else print "\n${InputList} not a valid device name, skipping...\n"
+            fi
+         done
+     done
+fi 
+
+
+
+
+
+##############################################################################
+### This script is submitted to BigAdmin by a user of the BigAdmin community.
+### Sun Microsystems, Inc. is not responsible for the
+### contents or the code enclosed. 
+###
+###
+### Copyright 2008 Sun Microsystems, Inc. ALL RIGHTS RESERVED
+### Use of this software is authorized pursuant to the
+### terms of the license found at
+### http://www.sun.com/bigadmin/common/berkeley_license.html
+##############################################################################
+
+

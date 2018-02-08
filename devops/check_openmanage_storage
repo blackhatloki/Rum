@@ -1,0 +1,10 @@
+#!/bin/bash 
+value=`/usr/lib64/nagios/plugins/check_openmanage --only storage`
+echo $value  | grep Storage | grep Error | grep No | grep controllers  > /dev/null 2>&1
+if [ $? -eq 0 ] ; then 
+  echo "STORAGE OK - No Raid Controller" 
+  exit 0 
+else 
+  echo "$value"
+  exit 0
+fi   

@@ -1,0 +1,2 @@
+#!/bin/bash 
+/usr/lib64/nagios/plugins/check_openmanage --only memory

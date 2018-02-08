@@ -1,0 +1,18 @@
+# vicfg-nas --server my_vcserver --username u42 --password mypwd --vihost my_esxhost --list
+vicfg-nas --server 192.168.1.116 --username vmwareadm --password vmware --vihost 192.168.1.40 --list
+vicfg-mpath --config <my_saved_config> --list
+vicfg-mpath --config <my_saved_config> --list
+#
+HOST=your.hostname.com
+vifs --server $HOST --username admin --password xxyyzz --get
+/host/hostAgentConfig.xml /tmp/ha.xml
+sed -e "s#<level>.*</level>#<level>$1</level>#" < /tmp/ha.xml > /tmp/ha_new.xml
+vifs --server $HOST --username admin --password xxyyzz --put /tmp/ha_new.xml
+/host/hostAgentConfig.xml
+rm /tmp/ha.xml
+rm /tmp/ha_new.xml
+#
+vicfg-user <conn_params> -e <user | group> -o <add | modify | delete | list>
+vicfg-user -e user  -o  list
+vifs --server $HOST --username admin --password xxyyzz --get
+/host/hostAgentConfig.xml /tmp/ha.xml

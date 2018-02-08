@@ -1,0 +1,6 @@
+#!/bin/bash
+cp /dev/null  /var/tmp/`hostname`.cdp.log
+for i in ` ifconfig -a | egrep 'hme|eri|bge|ce|ge|nxge|e1000g'  | awk -F":" ' { print $1 } '  | sort -u `; do
+echo "$i" >> /var/tmp/`hostname`.cdp.log
+/app/llt-tools/scripts/cdpinfo.pl -i $i >>  /var/tmp/`hostname`.cdp.log
+done

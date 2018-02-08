@@ -1,0 +1,52 @@
+
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2006 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description:  This is a sample XML script to set the automatic  -->
+<!--               power on and power on delay settings of the       -->
+<!--               server in which Integrated Lights-Out 2 (iLO 2)   -->
+<!--               is operating.                                     -->
+
+<!--               The values are:                                   -->
+<!--                   Yes = Enable automatic power on with a        -->
+<!--                         minimun delay.                          -->
+<!--                    No = Disable automatic power on.             -->
+<!--                    15 = Enable automatic power on with 15       -->
+<!--                         seconds delay.                          -->
+<!--                    30 = Enable automatic power on with 30       -->
+<!--                         seconds delay.                          -->
+<!--                    45 = Enable automatic power on with 45       -->
+<!--                         seconds delay.                          -->
+<!--                    60 = Enable automatic power on with 60       -->
+<!--                         seconds delay.                          -->
+<!--                Random = Enable automatic power on with random   -->
+<!--                         delay up to 60 seconds.                 -->
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - Version 1.20 or later.                       -->
+<!--              iLO - None.                                        -->
+<!--         RILOE II - None.                                        -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="Administrator" PASSWORD="password">
+    <SERVER_INFO MODE="write">
+      <!-- Enable automatic power on with 30 seconds delay-->
+      <SERVER_AUTO_PWR VALUE="30"/>
+    </SERVER_INFO>
+  </LOGIN>
+</RIBCL>
+

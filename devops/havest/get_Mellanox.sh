@@ -1,0 +1,3 @@
+#!/bin/bash 
+lspci | grep Mellanox | awk '{print $1}' | xargs -i -r mstvpd {}
+

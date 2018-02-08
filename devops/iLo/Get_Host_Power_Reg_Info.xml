@@ -1,0 +1,33 @@
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--    Copyright (c) 2005 Hewlett-Packard Development Company, L.P. --> 
+
+<!--  Description:  This is a sample XML script to return the        --> 
+<!--         p-State monitoring information of the ProLiant Power    -->
+<!--         Regulator.                                              --> 
+
+<!--  NOTE:  You will need to replace the USER_LOGIN and PASSWORD    --> 
+<!--         values with values that are appropriate for your        --> 
+<!--         environment.                                            --> 
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - Version 1.10 or later.                       -->
+<!--              iLO - Version 1.80 and later.                      -->
+<!--         RILOE II - None.                                        -->
+
+<RIBCL VERSION="2.0">
+  <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+    <SERVER_INFO MODE="read">
+      <GET_HOST_POWER_REG_INFO/> 
+    </SERVER_INFO>
+  </LOGIN>
+</RIBCL>

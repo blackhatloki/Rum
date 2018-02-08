@@ -1,0 +1,10 @@
+#!/bin/bash
+    IP=$1 
+    NN=$2 
+    sed -e "s/SERVERNAME/$NN/g"  server.xml > /var/tmp/$i.server.xml 
+    sed -e "s/SERVERNAME/$NN/g"  network.xml > /var/tmp/$i.network.xml 
+    echo $i 
+    echo "Setting $NN-ilo" 
+    ./locfg.pl -s $IP -f /var/tmp/$i.server.xml
+    echo "setting $i network name" 
+   ./locfg.pl -s $IP -f /var/tmp/$i.network.xml 

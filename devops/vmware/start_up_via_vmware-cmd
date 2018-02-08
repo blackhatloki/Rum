@@ -1,0 +1,9 @@
+#!/bin/bash 
+HOST=192.168.1.116
+TARGET=192.168.1.40
+USER=vmwareadm
+PASS=vmware
+for i in `cat vmx.list ` ; do
+   echo $i 
+   vmware-cmd  -H $HOST -T $TARGET -U $USER  "$i" start force 
+done

@@ -1,0 +1,99 @@
+need this link 
+https://dokuwiki.wesleyan.edu/doku.php?id=cluster:144
+
+root@wolf ipxe]# wwsh node print c28-10
+#### c28-10 ###################################################################
+         c28-10: ID               = 380
+         c28-10: NAME             = c28-10
+         c28-10: NODENAME         = c28-10
+         c28-10: ARCH             = UNDEF
+         c28-10: CLUSTER          = UNDEF
+         c28-10: DOMAIN           = UNDEF
+         c28-10: GROUPS           = compute
+         c28-10: ENABLED          = TRUE
+         c28-10: eno1.HWADDR      = 4c:76:25:6d:5e:36
+         c28-10: eno1.HWPREFIX    = UNDEF
+         c28-10: eno1.IPADDR      = 172.16.3.241
+         c28-10: eno1.NETMASK     = 255.255.252.0
+         c28-10: eno1.NETWORK     = UNDEF
+         c28-10: eno1.GATEWAY     = 172.16.0.1
+         c28-10: eno1.MTU         = UNDEF
+         c28-10: eno1.FQDN        = UNDEF
+         c28-10: ib0.HWADDR       = UNDEF
+         c28-10: ib0.HWPREFIX     = UNDEF
+         c28-10: ib0.IPADDR       = 10.0.3.241
+         c28-10: ib0.NETMASK      = 255.255.252.0
+         c28-10: ib0.NETWORK      = UNDEF
+         c28-10: ib0.GATEWAY      = UNDEF
+         c28-10: ib0.MTU          = UNDEF
+         c28-10: ib0.FQDN         = UNDEF
+         c28-10: ib7.HWADDR       = UNDEF
+         c28-10: ib7.HWPREFIX     = UNDEF
+         c28-10: ib7.IPADDR       = 10.0.5.31
+         c28-10: ib7.NETMASK      = 255.255.252.0
+         c28-10: ib7.NETWORK      = UNDEF
+         c28-10: ib7.GATEWAY      = UNDEF
+         c28-10: ib7.MTU          = UNDEF
+         c28-10: ib7.FQDN         = UNDEF
+
+[root@wolf ipxe]# wwsh node list  c28-10
+NAME                GROUPS              IPADDR              HWADDR
+================================================================================
+c28-10              compute             10.0.3.241,172.16.3.241,10.0.5.31 4c:76:25:6d:5e:36
+
+[root@wolf ipxe]# wwsh provision  list  c28-10
+NODE                VNFS            BOOTSTRAP             FILES
+================================================================================
+c28-10              centos7.4       3.10.0-693.11.1.el... dynamic_hosts,grou...
+
+[root@wolf ipxe]# wwsh provision print   c28-10
+#### c28-10 ###################################################################
+         c28-10: BOOTSTRAP        = 3.10.0-693.11.1.el7.x86_64
+         c28-10: VNFS             = centos7.4
+         c28-10: FILES            = dynamic_hosts,group,ifcfg-ib0,ifcfg-ib0_0,network,passwd,shadow
+         c28-10: PRESHELL         = FALSE
+         c28-10: POSTSHELL        = FALSE
+         c28-10: CONSOLE          = UNDEF
+         c28-10: PXELINUX         = UNDEF
+         c28-10: SELINUX          = DISABLED
+         c28-10: KARGS            = "net.ifnames=0 biosdevname=0 quiet"
+         c28-10: BOOTLOADER       = sda
+         c28-10: BOOTLOCAL        = FALSE
+
+
+wwsh -y node new ${c_name[i]} --ipaddr=${c_ip[i]} --hwaddr=${c_mac[i]} -D ${eth_provision}
+wwsh -y provision set "${compute_regex}" --vnfs=centos7.4 --bootstrap=`uname -r`  --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network
+# wwsh provision set --bootloader=sda "${compute_regex}"
+
+
+wwsh -y node new c28-10  --ipaddr=172.16.3.241 --hwaddr=4c:76:25:6d:5e:36 -D eth0  --groups=compute
+wwsh -y provision set c28-10 --vnfs=centos7.4 --bootstrap=3.10.0-693.11.1.el7.x86_64  --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network
+wwsh provision set c28-10 --filesystem=ext4 
+wwsh provision set c28-10 --bootloader=sda c28-10
+
+wwsh -y  node set $node -D ib0 -I $ibip"
+wwsh -y  object modify -s IPMI_IPADDR="$ipipmi" $node"
+wwsh -y  node set $node -D ib7 -I $ibip0 -M 255.255.252.0"
+wwsh -y  provision set c28-10 --fileadd ifcfg-ib0_0 "
+wwsh -y  provision set c28-10 --bootlocal=normal"
+wwsh -y  provision set c28-10 --bootloader=stateful
+
+to set up pxe 
+ wwsh provision set --bootlocal=UNDEF c28-10
+:w!
+
+set base http://${next-server}/WW/
+kernel ${base}/bootstrap/x86_64/4928/kernel ro initrd=initfs.gz wwhostname=c28-10 net.ifnames=0 biosdevname=0 nosplash wwmaster=172.16.0.20 wwnetmask=255.255.0.0 wwnetdev=eth0 wwhwaddr=4c:76:25:6d:5e:36
+
+initrd ${base}/bootstrap/x86_64/928/initfs.gz
+boot`
+
+
+#!ipxe
+## Configuration for Warewulf node: c28-10
+## Warewulf data store ID: 930
+echo Set to bootlocal (normal), booting local disk
+set base http://${next-server}/WW/
+kernel ${base}/bootstrap/x86_64/928/kernel ro initrd=initfs.gz wwhostname=c28-10 net.ifnames=0 biosdevname=0 nosplash wwmaster=172.16.0.20 wwnetmask=255.255.0.0 wwnetdev=eth0 wwhwaddr=4c:76:25:6d:5e:36
+initrd ${base}/bootstrap/x86_64/928/initfs.gz
+boot

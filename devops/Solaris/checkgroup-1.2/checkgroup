@@ -1,0 +1,164 @@
+#!/usr/local/bin/perl -w
+#^^^^^^^^^^^^^^^^^^^^      Change this to your path to Perl
+
+# Default value of only show users >= $group_limit of groups
+$group_limit=16;
+
+#Do you have a "local" group file or want to use NIS?
+@group_data = `ypcat group | sort 2>&1`;
+@password_data = `ypcat passwd | sort 2>&1`;
+#@group_data = `cat /etc/ypfiles/group | sort 2>&1`;
+#@password_data = `cat /etc/ypfiles/passwd | sort 2>&1`;
+
+#Enable SITE hacks: what this does is:
+#   - If two groups have the same GID but just differ by ending numbers,
+#     then we don't bother telling you it's a possible conflict.
+#     Example would be cadds & cadds01 & cadds02.  This is typically
+#     used to deal with the line length problem in the group file so
+#     we do a "roll-up" of groups.
+$site_hacks = 1;
+
+
+#--------------------- Should be boiler plate from here on out -----------------
+# Copyright 2000 by Alek Komarnitsky, alek@komar.org, http://www.komar.org/
+# Use and distribution of this software is covered by the GNU GPL license.  
+# Please see the LICENSE file and http://www.gnu.org/
+
+
+&setup_defaults;
+&parse_args;
+&parse_stuff;
+&print_results;
+exit(); 
+
+
+sub usage {
+   print<<EOF;
+$0 parses through the group files and tells you how many groups
+each user belongs too. There are a few options:
+      -##              Only show users that belong to >=## groups (DEFAULT=10)
+      -no_password     Do NOT do any password checks
+      -sort_by_alpha   Sort output alphabetically (DEFAULT)
+      -sort_by_usage   Sort output by usage
+      -help OR -usage  Generate this listing
+EOF
+    print "\nversion $version - questions/comments to $author\n";
+    exit(2);
+}
+
+
+sub setup_defaults{
+   $version="1.2 (000518)";
+   $author="alek\@komar.org";
+   $| = 1;                    # buffer output
+}
+
+
+sub parse_args {
+   $debug = 0 ; $no_password = 0;  $sort_by_alpha = 1;
+   foreach $_ (@ARGV) {
+      if (( /-u.*/ ) || ( /-h.*/)) {
+         &usage(); 
+      } elsif ( /-debug/ ) { 
+         $debug = 1;
+      } elsif ( /-no_password/ ) { 
+         $no_password = 1;
+      } elsif ( /-sort_by_alpha/ ) { 
+         $sort_by_alpha = 1;
+         $sort_by_usage = 0;
+      } elsif ( /-sort_by_usage/ ) { 
+         $sort_by_alpha = 0;
+         $sort_by_usage = 1;
+      } elsif ( /-\d+$/ ) { 
+         s/-//;
+         $group_limit = $_; 
+      } elsif ( /^-.*/ ) {
+         print "$0: illegal option $_\n";
+         &usage();
+      }
+   }
+}
+
+
+sub parse_stuff {
+   $num_groups = 0 ; $num_users = 0;
+   if ( ! $no_password ) { 
+      foreach $_ (@password_data) {
+         ($user,$_,$uid,$gid,$_) = split(/\:/);
+         print "user $user is defined more than once in the password file\n" if ( defined($USERS{$user}));
+         print "UID $uid is defined more than once in the password file\n" if ( defined($UIDS{$user}));
+         $USERS{$user} = $user; 
+         $UIDS{$user} = $uid;
+         $GIDS{$user} = $gid;
+         $GIDS_NUM{$gid} = $gid;
+         $num_users++;
+      }
+      print "Total number of entries in the password file is $num_users\n";
+   }
+   foreach $_ (@group_data) {
+      chomp();
+      ($group,$_,$gid,$user_line) = split(/\:/);
+      if (( ! defined($user_line) ) || ( $user_line =~ /^\s*$/)) {
+         if (( ! defined($GIDS_NUM{$gid}) ) && ( ! $no_password ))  {
+            print "group = $group with gid = $gid appears null and not used in password\n";
+         }
+      }
+      (@users) = split(/\,/,$user_line);
+      foreach $user (@users) {
+         $user =~ s/ //g;
+         if ( (! $no_password) && ( ! defined($USERS{$user}) )) {
+            print "User $user in $group entry in group file is not defined in password file\n";
+         }
+         push (@{$USERS_GROUPS{$user}} , $group);
+      }
+      if ( defined ($GROUPS{$group})) {
+         print "duplicate group entry with $GROUPS{$group} and $group ...\n";
+      }
+      $GROUPS{$group} = $gid;
+      $group =~ s/\d+$// if ( $site_hacks );
+      if (( defined ($GIDS{$gid}) ) && ( $GIDS{$gid} ne $group )){
+         print "duplicate GID with $GIDS{$gid} and $group ...\n";
+      }
+      $GIDS{$gid} = $group;
+      $num_groups++;
+   }
+}
+
+
+sub print_results {
+   &print_array("No title",%USERS_GROUPS);
+}
+
+
+sub print_array {
+   my ($title,%local_array) = @_;
+   my $i = 0; my $num_keys = 0; my $num_values =0;
+   foreach $i (keys %local_array) {       
+      $num_values = $num_values + $#{$local_array{$i}} + 1;
+      $num_keys++;
+   }
+   print "A total of $num_values entries in the group file and $num_groups groups with $num_keys unique users (users with >= $group_limit displayed)\n";
+   print "   Entries    User        Groups\n";
+   if ( $sort_by_usage ) {
+      foreach $i (sort { $#{$local_array{$b}} <=> $#{$local_array{$a}}} keys %local_array) {
+         if ( ($#{$local_array{$i}}+1) >= $group_limit) { 
+            printf "%7d%15s" , $#{$local_array{$i}} + 1, "  $i :";
+            foreach $j ( 0 .. $#{$local_array{$i}}) {
+               print "  $local_array{$i}[$j]";
+            }
+            print "\n"
+         }
+      }
+   } else {
+      foreach $i (sort keys %local_array) {       
+         if ( ($#{$local_array{$i}} + 1) >= $group_limit) { 
+            printf "%7d%15s" , $#{$local_array{$i}} + 1, "  $i :";
+            foreach $j ( 0 .. $#{$local_array{$i}}) {
+               print "  $local_array{$i}[$j]";
+            }
+            print "\n"
+         }
+      }
+   }
+   print "\n"
+}

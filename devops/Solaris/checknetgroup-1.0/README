@@ -1,0 +1,27 @@
+       checknetgroup: Check netgroup file for various oddities 
+
+checknetgroup is a quick-n-dirty tool that parses the UNIX netgroup file and
+looks for various oddities - specifically: 
+    1. If a netgroup key has NO values
+    2. If a netgroup key is repeated
+    3. If a netgroup value (member) is "orphaned"
+    4. If the hostname value looks suspicious or does not exist
+    5. If the username value looks suspicious or does not exist
+    6. If a netgroup includes itself as a member
+    7. If a netgroup includes a member which is allready rolled up - i.e. 
+          netkey1 member1
+          netkey2 netkey1 member1
+    8. If a netgroup has a circular reference - i.e.
+          netkey2 netkey1
+          netkey3 netkey2
+          netkey1 netkey3
+       Note: Items from #6 above should/will probably show up here also
+
+You'll need to edit the checknetgroup Perl script to reflect the location
+of Perl on your machine. You may also want to tweek a few things that are
+noted at the top of the file. 
+
+
+Pls send me any suggestions and/or comments.
+
+Alek Komarnitsky, alek@komar.org  (http://www.komar.org/)

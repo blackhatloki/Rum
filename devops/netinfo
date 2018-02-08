@@ -1,0 +1,23 @@
+log-0,bond0,netmask,,SWP3B-R3A-SDC.NET.NYU.EDU,Ethernet1/27(PRINCE0.HPC.NYU.EDU (NIC 2) - [P1SC.12-059 / C13]),622,Cisco (Cisco Systems)
+
+log-0,bond1,netmask,,CN05KGDH2829851H0452A01,TenGigabitEthernet 2/4,,Cisco (N4032F)
+log-0,bond1,netmask,,,TenGigabitEthernet 2/4,,
+
+
+log-1,bond0,netmask,,SWP3A-R3A-SDC.NET.NYU.EDU,Ethernet1/25(PRINCE1.HPC.NYU.EDU (NIC 1) - [P1SC.12-059 / C04)),622,Cisco (Cisco Systems)
+
+log-1,bond1,netmask,,CN05KGDH2829851H0452A01,TenGigabitEthernet 2/2,,Cisco (N4032F)
+log-1,bond1,netmask,,,TenGigabitEthernet 2/2,,
+
+
+prince1.hpc.nyu.edu	128.122.215.13	em1	128.122.215.0/24	VL 622 	24-005, P3A.3.43.01-12	4	SWP3A-R3A-SDC	Eth1/25:
+prince1.hpc.nyu.edu	128.122.215.13	em2	128.122.215.0/24	VL 622 	24-005, P3A.3.44.13-24	17	SWP3B-R3A-SDC	Eth1/25
+												
+prince-master1.hpc.nyu.edu	128.122.215.17	em1	128.122.215.0/24	VL 622	24-005, P3A.3.43.01-12	3	SWP3A-R3A-SDC	Eth1/26
+prince-master1.hpc.nyu.edu	128.122.215.17	em2	128.122.215.0/24	VL 622 	24-005, P3A.3.44.13-24	16	SWP3B-R3A-SDC	Eth1/26
+												
+prince0.hpc.nyu.edu	128.122.215.12	em1	128.122.215.0/24	VL 622 	24-006 P3A.3.43.01-12	1	SWP3A-R3A-SDC	Eth1/27
+prince0.hpc.nyu.edu	128.122.215.12	em2	128.122.215.0/24	VL 622 	24-006 P3A.3.44.13-24	13	SWP3B-R3A-SDC	Eth1/27
+												
+prince-master0.hpc.nyu.edu	128.122.215.16	em1	128.122.215.0/24	VL 622 	24-006, P3A.3.43.01-12	2	SWP3A-R3A-SDC	Eth1/28
+prince-master0.hpc.nyu.edu	128.122.215.16	em2	128.122.215.0/24	VL 622 	24-006, P3A.3.44.13-24	14	SWP3B-R3A-SDC	Eth1/28

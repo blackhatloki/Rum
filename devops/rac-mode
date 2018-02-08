@@ -1,0 +1,30 @@
+Usage Examples:
+
+-  Clear all available alert settings
+   racadm eventfilters set -c idrac.alert.all -a none -n none
+
+-  Configure using severity as a parameter. For example, all informational
+   events in storage category are assigned poweroff as action,
+   and email and snmp as notifications:
+   racadm eventfilters set -c idrac.alert.storage.info -a poweroff -n email,snmp
+
+-  Configure using subcategory as a parameter. For example,  all configurations
+   under the licensing subcategory in the audit category are assigned poweroff
+   as action and all notifications are enabled:
+   racadm eventfilters set -c idrac.alert.audit.lic -a poweroff -n all
+
+-  Configure using subcategory and severity as parameters. For example, all
+   Information events under the licensing subcategory in the audit category are
+   assigned poweroff as action and all notifications are disabled:
+   racadm eventfilters set -c idrac.alert.audit.lic.info -a poweroff -n none
+
+-  Configure the event generation interval for temperature statistics:
+   racadm eventfilters set -c idrac.alert.system.tmps.warning -r 10
+
+-  Configure the event generation interval and notifications for temperature
+   statistics:
+   racadm eventfilters set -c idrac.alert.system.tmps -r 5 -a none -n snmp
+
+-------------------------------------------------------------------------------
+
+

@@ -1,0 +1,13 @@
+export TZ=America/Los_Angeles
+export TZ=EST5EDT
+export TZ=Asia/Hong_Kong
+export TZ=Asia/Tokyo
+export TZ=GB
+export TZ=America/New_York
+export TZ=America/Chicago
+export TZ=America/Denver
+export TZ=America/Los_Angeles
+export TZ=Australia/Sydney
+export TZ=Pacific/Honolulu
+export TZ=Europe/London
+export TZ=Asia/Calcutta

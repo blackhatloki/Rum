@@ -1,0 +1,49 @@
+
+<!--         RIBCL Sample Script for HP Lights-Out Products          -->
+<!--   Copyright (c) 2004 Hewlett-Packard Development Company, L.P.  -->
+
+<!-- Description: This is a sample XML script that configures        -->
+<!--              Lights-Out device to pass network traffic on the   -->
+<!--              shared host network port.  Change                  -->
+<!--              SHARED_NETWORK_PORT value to "N" to use the        -->
+<!--              Lights-Out device NIC.  On servers that do not     -->
+<!--              support this feature, this script generates an     -->
+<!--              error.                                             -->
+
+
+<!-- NOTE:  You will need to replace the USER_LOGIN and PASSWORD     -->
+<!--        values with values that are appropriate for your         -->
+<!--        environment.                                             -->
+
+<!--        The feature is only offered on selected hosts            -->
+
+<!--        After this script executes, Lights-Out device will be    -->
+<!--        reset for the changes to take place.                     -->
+
+<!--        Use CPQLOCFG.EXE ver 2.25 or greater with this script.   -->
+
+<!--        This script was written for iLO 2 firmware version 1.10  -->
+<!--        release.                                                 -->
+
+<!--        See "HP Integrated Lights-Out Management Processor       -->
+<!--        Scripting and Command Line Resource Guide" for more      -->
+<!--        information on scripting and the syntax of the RIBCL     -->
+<!--        XML.                                                     -->
+
+<!--        Firmware support infomation for this script:             -->
+<!--            iLO 2 - Version 1.10 or later.                       -->
+<!--              iLO - Version 1.55 or later.                       -->
+<!--         RILOE II - None.                                        -->
+
+<RIBCL version="2.21">
+ <LOGIN USER_LOGIN="adminname" PASSWORD="password">
+  <RIB_INFO MODE="WRITE" >
+   <MOD_NETWORK_SETTINGS>
+    <!-- Desired NIC:   Substitute:                                  -->
+    <!-- iLO NIC        <SHARED_NETWORK_PORT VALUE="N"/>             -->
+    <!-- Host NIC       <SHARED_NETWORK_PORT VALUE="Y"/>             -->
+    <SHARED_NETWORK_PORT VALUE="N"/>
+   </MOD_NETWORK_SETTINGS>
+  </RIB_INFO>
+ </LOGIN>
+</RIBCL>

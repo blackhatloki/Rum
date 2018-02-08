@@ -1,0 +1,162 @@
+#!/usr/bin/perl
+#
+# For this script to work, snmp must work on the target machine. For example:
+# snmpwalk -v2c -c public web1 1.3.6.1.4.1.674.10893.1.20.130.4.1.4.1
+
+
+use strict;
+use warnings;
+use File::Basename;
+use Nagios::Plugin ;
+use Net::SNMP;
+
+use vars qw($VERSION $PROGNAME  $verbose $warn $critical $timeout $result);
+$VERSION = "0.1";
+$PROGNAME = basename($0);
+	my%dellOIDs = (
+		temp => '1.3.6.1.4.1.674.10892.1.700.20.1.6.1.1',
+		array  => '1.3.6.1.4.1.674.10893.1.20.130.4.1.4.1',
+		storage => '1.3.6.1.4.1.674.10893.1.20.2',
+		);
+
+##############################################################################
+# define and get the command line options.
+#   see the command line option guidelines at
+#   http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOPTIONS
+
+
+# Instantiate Nagios::Plugin object (the 'usage' parameter is mandatory)
+my $plugin = Nagios::Plugin->new(
+    usage => "Usage: %s [ -v|--verbose ]",
+    version => $VERSION,
+    blurb => 'Check Dell OMSA via SNMP',
+    extra => ""
+    );
+
+
+# Define and document the valid command line options
+# usage, help, version, timeout and verbose are defined by default.
+
+$plugin->add_arg(
+	spec => 'host|H=s',
+	help =>
+qq{-H, --host=STRING
+   SNMP host name. },
+   default => 'localhost',
+);
+
+$plugin->add_arg(
+	spec => 'port|P=s',
+	help =>
+qq{-P, --port=INTEGER
+   SNMP port. },
+   default => 161,
+);
+
+$plugin->add_arg(
+	spec => 'community|C=s',
+	help =>
+qq{-C, --community=STRING
+   SNMP community. },
+   default => 'public',
+);
+
+$plugin->add_arg(
+	spec => 'what|W=s',
+	help =>
+qq{-W, --what=STRING. },
+   default => 'temp',
+);
+
+$plugin->add_arg(
+	spec => 'warning|w=s',
+
+	help =>
+qq{-w, --warning=INTEGER:INTEGER
+   Minimum and maximum number of allowable result, outside of which a
+   warning will be generated.  If omitted, no warning is generated.},
+
+	#required => 1,
+	#default => 10,
+);
+
+$plugin->add_arg(
+	spec => 'critical|c=s',
+	help =>
+qq{-c, --critical=INTEGER:INTEGER
+   Minimum and maximum number of the generated result, outside of
+   which a critical will be generated. },
+);
+
+$plugin->add_arg(
+	spec => 'result|r=f',
+	help =>
+qq{-r, --result=INTEGER
+   Specify the result on the command line rather than generating a
+   random number.  For testing.},
+);
+
+# Parse arguments and process standard ones (e.g. usage, help, version)
+$plugin->getopts;
+
+
+# perform sanity checking on command line options
+if ( (defined $plugin->opts->result) && ($plugin->opts->result < 0 || $plugin->opts->result > 20) )  {
+    $plugin->nagios_die( " invalid number supplied for the -r option " );
+}
+
+unless ( defined $plugin->opts->warning || defined $plugin->opts->critical ) {
+	$plugin->nagios_die( " you didn't supply a threshold argument " );
+}
+
+
+
+##############################################################################
+# check stuff.
+
+# THIS is where you'd do your actual checking to get a real value for $result
+my $result;
+my $what;
+if (defined $plugin->opts->what)
+	{ $what = $plugin->opts->what; }
+if (defined $plugin->opts->result)
+	{  # you got a 'result' option from the command line options
+	$result = $plugin->opts->result;
+	print " using supplied result $result from command line \n" if $plugin->opts->verbose;
+	}
+else
+	{
+	my $host = $plugin->opts->host;
+	my $community = $plugin->opts->community;
+	my $port = $plugin->opts->port;
+
+	my $oid = $dellOIDs{$what};
+	if (!defined ($oid))
+		{ $plugin->nagios_die (message => "Don't know how to check '$what'"); }
+
+	my ($session, $error) = Net::SNMP->session(
+		-hostname  => $host,
+		-community => $community,
+		-port      => $port
+		);
+	if (!defined($session))
+		{ $plugin->nagios_die (message => "snmpError, '$error'"); }
+
+	my $snmpResult = $session->get_request(
+		-varbindlist => [$oid]
+		);
+	if (!defined ($snmpResult))
+		{ $plugin->nagios_die (message => "SNMP ERROR, '" . $session->error . "'"); }
+		$result = $snmpResult->{$oid};
+	print "$what($oid)  on $host is  $result\n " if $plugin->opts->verbose;
+	$session->close;
+	}
+
+
+##############################################################################
+# check the result against the defined warning and critical thresholds,
+# output the result and exit
+$plugin->nagios_exit(
+	 return_code => $plugin->check_threshold($result),
+	 message => " $what was $result"
+);

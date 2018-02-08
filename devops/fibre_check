@@ -1,0 +1,32 @@
+#!/bin/ksh
+scsi_host=/sys/class/scsi_host
+fc_host=/sys/class/fc_host
+hba_count=0 
+
+if [ -x /sys/class/fc_host ] ; then 
+	for i in `ls -A /sys/class/fc_host` ; do 
+       		echo $i | sed -e 's/host/lpfc/g'
+       		cat $fc_host/$i/port_name
+       		cat $fc_host/$i/port_state
+       		cat $fc_host/$i/speed
+       		cat $fc_host/$i/symbolic_name
+		hba_count=`expr $hba_count + 1` 
+                echo
+	done 
+else 
+if [ -x  /sys/class/scsi_host ] ; then
+	for i in `ls -A /sys/class/scsi_host` ; do
+		echo $i | sed -e 's/host/lpfc/g'
+		cat $scsi_host/$i/port_name
+		cat $scsi_host/$i/state
+		cat $scsi_host/$i/speed
+		cat $scsi_host/$i/info
+		hba_count=`expr $hba_count + 1` 
+                echo
+	done
+fi 
+fi
+
+if [ -x /usr/sbin/fcinfo ] ; then 
+	/usr/sbin/fcinfo  hba-port
+fi 

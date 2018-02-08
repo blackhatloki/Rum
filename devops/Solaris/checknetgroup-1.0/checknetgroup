@@ -1,0 +1,307 @@
+#!/usr/local/bin/perl -w
+#^^^^^^^^^^^^^^^^^^^^    Change this to your path for Perl
+#
+# checknetgroup: Scan the netgroup file for oddities ... alek@komar.org, 4/2002
+# Copyright 2002 by Alek Komarnitsky
+#    alek@komar.org, http://www.komar.org/
+# Use and distribution of this software is covered by the GNU GPL license.
+# Please see the LICENSE file and http://www.gnu.org/
+
+use strict;
+use File::Basename; 
+use Socket;
+my ($author, $debug, $program, $version);
+my ($all_members, $local_hacks, $recurse_limit, $tmpfile); 
+my (%counters, %hosts, %options, %users); 
+my (%gethostaddr_cache, %getuser_cache); 
+my (%netbackup_entry, %no_values);
+my (%netgroup_includes_itself, %netgroup_key, %netgroup_members);
+my (%duplicate_keys, %netgroup_rollup, %netgroup_values);
+
+&setup_defaults;
+&parse_args;
+&parse_stuff;
+&print_results;
+exit(); 
+
+
+sub usage {
+   print<<EOF;
+$program parses through the netgroup files and flags various oddities
+      -no_host_check        Don't check host validity or existance
+      -no_user_check        Don't check user validity or existance
+      -netgroup_file=FILE   Read file as the netgroup file rather than
+                               ypcat -k netgroup
+      -help OR -usage       Generate this listing
+
+$program checks for the following oddities:
+    1. If a netgroup key has NO values
+    2. If a netgroup key is repeated
+    3. If a netgroup value (member) is "orphaned"
+    4. If the hostname value looks suspicious or does not exist
+    5. If the username value looks suspicious or does not exist
+    6. If a netgroup includes itself as a member
+    7. If a netgroup includes a member which is allready rolled up - i.e. 
+          netkey1 member1
+          netkey2 netkey1 member1
+    8. If a netgroup has a circular reference - i.e.
+          netkey2 netkey1
+          netkey3 netkey2
+          netkey1 netkey3
+       Note: Items from #6 above should/will probably show up here also
+EOF
+    print "\nversion $version - questions/comments to $author\n";
+    exit(2);
+}
+
+
+sub setup_defaults{
+   $author="alek\@komar.org";
+   $program = basename($0);
+   $recurse_limit = 50; # How deep we'll recurse before bailing ...
+   $tmpfile = "/tmp/netgroup-$$";
+   $version="1.0 (020426)";
+   select(STDERR); $| = 1;
+   select(STDOUT); $| = 1;
+   # We "overload" the hosts (first triplet) of the netgroup file
+   # with some misc. info for backups that includes entries that 
+   # have an "_" in 'em (which is not legal in a hostname).
+   # You probably want this set to 0 at your site.
+   $local_hacks = 1;
+}
+
+
+sub parse_args {
+   $debug = 0 ; 
+   $options{'no_host_check'} = 0;
+   $options{'no_user_check'} = 0;
+   $options{'netgroup_file'} = 0;
+   foreach $_ (@ARGV) {
+      if (( /-u.*/ ) || ( /-h.*/)) {
+         &usage(); 
+      } elsif ( /-debug/ ) { 
+         $debug = 1;
+      } elsif ( /-no_host_check/ ) { 
+         $options{'no_host_check'} = 1;
+      } elsif ( /-no_user_check/ ) { 
+         $options{'no_user_check'} = 1;
+      } elsif ( /-netgroup_file=/ ) { 
+         s/-netgroup_file=//; 
+         $options{'netgroup_file'} = $_;
+      } elsif ( /^-.*/ ) {
+         print "$0: illegal option $_\n";
+         &usage();
+      } else { 
+         print "$0: illegal parameter $_\n";
+         &usage();
+      }
+   }
+}
+
+
+sub parse_stuff {
+   my ($key, $key_value, $line, @values); 
+   foreach $_ ( "netgroup_key_repeat", "netgroup_has_redundant_entries" , "netgroup_has_circular_reference", "netgroup_includes_itself" , "netgroup_keys" , "netgroup_members" , "netgroup_values" , "num_unique_hosts" , "num_unique_users", "too_deep_recursion" ) { 
+      $counters{$_} = 0; 
+   }
+   if ( $options{'netgroup_file'} eq "0" ) { 
+      system("ypcat -k netgroup > $tmpfile");
+   } else {
+      if ( ! -r $options{'netgroup_file'} ) { 
+         print "Can NOT open netgroup file $options{'netgroup_file'} ... \n";
+         exit(2);
+      }
+      system("cp $options{'netgroup_file'} $tmpfile");
+   }
+   open (NETGROUPS,"<$tmpfile");
+   while (<NETGROUPS>) {
+      chomp(); s/^\s+//; s/\s+$//;
+      $line = $_;
+      while ( /\\$/ ) {
+         $line =~ s/\\$//;
+         $_ = <NETGROUPS>;
+         chomp(); s/^\s+//; s/\s+$//;
+         $line = "$line$_";
+      }
+      $_ = $line;
+      next if ( /^\s*$/ );
+      next if ( /^#/);
+      print "   DEBUG: parsing $_ ... \n" if ($debug); 
+      ($key,@values)=split();
+      print "   DEBUG:    We got $key for the key\n" if ( $debug ); 
+      if ( exists($netgroup_key{$key})) { 
+         $duplicate_keys{$key} = $key;
+         $counters{'netgroup_key_repeat'}++;
+         next; 
+      }
+      $netgroup_key{$key} = $key;
+      $counters{'netgroup_keys'}++;
+      if ( $#values eq -1 ) {
+         $no_values{$line} = $line;
+         $counters{'netgroup_keys_with_no_values'}++;
+      } else {
+         foreach $_ (@values) {
+            print "   DEBUG:       Parsing value of $_\n" if ( $debug ); 
+            $counters{'netgroup_values'}++;
+            if ( ! /\(/ ) {
+               $netgroup_values{$_} = $key; 
+               $counters{'netgroup_members'}++;
+               $key_value = $key . "_" . $_; 
+               $netgroup_rollup{$key_value} = $_; 
+               $netgroup_members{$key} = "" if ( ! exists($netgroup_members{$key})); 
+               $netgroup_members{$key} .= "$_ ";
+               if ( $_ eq $key ) { 
+                  $netgroup_includes_itself{$_} = $key; 
+                  $counters{'netgroup_includes_itself'}++;
+               }
+            } else {
+               if (      /^\([a-z,A-Z,0-9][a-z,A-Z,0-9,\-\.]*\,\-\,\)/ ) {
+                  s/^\(//;
+                  s/\,.*$//;
+                  $hosts{$_} = $key;
+                  print "   DEBUG:           Looks like $_ is a host\n" if ( $debug ); 
+               } elsif ((/^\([a-z,A-Z,0-9][a-z,A-Z,0-9,\-\_,]*\,\-\,\)/ ) && ( $local_hacks ) && ( $key =~ /-classes/ ) ){
+                  $netbackup_entry{$_} = $_;
+               } elsif ( /^\(\-\,[a-z,A-Z,0-9][a-z,A-Z,0-9,\-,\_]*\,\)/ ) {
+                  s/^\(\-\,//;
+                  s/\,.*$//;
+                  $users{$_} = $key;
+               } else {
+                  print "Got something strange with $_ value in key $key ...\n";
+               }
+            }
+         }
+      }
+   }
+   close (NETGROUPS);
+   system("rm $tmpfile");
+}
+
+
+sub print_results {
+   my ($host, $ip, $key, $key1, $key2, $key_both, $match, @members, $user);
+   print "\n\nKeys that do not appear to have any values:\n";
+   foreach $_ (sort keys %no_values) {
+      print "$_ netgroup key does not appear to have any values ... \n";
+   }
+
+   print "\n\nKeys that have duplicate values:\n";
+   foreach $_ (sort keys %duplicate_keys) {
+      print "$_ netgroup key is duplicated ... \n";
+   }
+
+   print "\n\nOrphaned values:\n";
+   foreach $_ (sort keys %netgroup_values) {    
+      if ( ! defined($netgroup_key{$_}) ) {
+         print "$_ appears to be an orphaned value under $netgroup_values{$_} ... \n";
+      }
+   }
+   
+   print "\n\nNetgroup keys that include itself as a member:\n";
+   foreach $_ (sort keys %netgroup_includes_itself) {
+      print "netgroup key $_ includes itself as a member ... \n";
+   }
+
+   print "\n\nKeys that have redundant netgroup rollups:\n";
+   foreach $key ( sort keys %netgroup_members ) {
+      @members = split(/\s+/,$netgroup_members{$key}); 
+      foreach $key1 ( @members ) { 
+         foreach $key2 ( @members ) { 
+            next if ( $key1 eq $key2 ) ; 
+            $key_both = $key1 . "_" . $key2; 
+            if ( exists($netgroup_rollup{$key_both})) { 
+               print "Check netgroup entry $key with members $key1 and $key2 ...\n"; 
+               $counters{'netgroup_has_redundant_entries'}++;
+            }
+         }
+      }
+   }
+
+   print "\n\nCicular references:\n";
+   foreach $key ( sort keys %netgroup_members ) {
+      $all_members = ""; 
+      &generate_all_members(1 , $key, $key); 
+   }
+
+   if (! $options{'no_host_check'} ) { 
+      print "\n\nHosts that do NOT appear to exist:\n";
+      foreach $host (sort keys %hosts) {    
+         $ip = &gethostaddr($host);
+         if (( ! defined($ip) ) || ($ip =~ /^$/ ))  {
+            print "$host in netgroup $hosts{$host} does not appear to be a legit host ...\n";
+         }
+      }
+   }
+
+   if (! $options{'no_user_check'} ) { 
+      print "\n\nUsers that do NOT appear to exist:\n";
+      foreach $user (sort keys %users) {    
+         $match = &getuser($user);
+         if ( ! defined($match) ) {
+            print "$user in netgroup $users{$user} does not appear to be a legit user ...\n";
+         }
+      }
+   }
+   print "\n\n"; 
+   foreach $_ (sort keys %counters) {    
+      printf "%9d%s" , $counters{$_} , "   $_\n";
+   }
+}
+
+
+
+sub gethostaddr {
+# caching stuff is somewhat redundant since hashed array is allready unique
+    my($query) = ($_[0]);
+    my($hostname,$addr);
+    return($gethostaddr_cache{$query})
+      if (defined($gethostaddr_cache{$query}));
+    @_ = gethostbyname($query);
+    $addr = pop(@_);
+    if ( (! defined($addr) ) || ( $addr eq "")) { 
+       $_ = ""; 
+    } else {
+       $gethostaddr_cache{$query} = inet_ntoa($addr);
+       $_ = $gethostaddr_cache{$query};
+    }
+    $counters{'num_unique_hosts'}++; 
+    return $_; 
+}
+
+
+sub getuser {
+# caching stuff is somewhat redundant since hashed array is allready unique
+    my($query) = ($_[0]);
+    return($getuser_cache{$query})
+      if (defined($getuser_cache{$query}));
+    $_ = getpwnam($query);
+    $counters{'num_unique_users'}++; 
+    return $_; 
+}
+
+
+
+
+sub generate_all_members {
+   my ($depth, $key_orig, $key) = @_;
+   my ($key1, @members); 
+   if (! exists($netgroup_members{$key} )) { 
+      $all_members .= "$key "; 
+      return;
+   }
+   if (($depth > 1 ) && ( $key eq $key_orig )) { 
+      print "netgroup entry $key_orig has circular reference ...\n"; 
+      $counters{'netgroup_has_circular_reference'}++;
+      return;
+   }
+   if ($depth > $recurse_limit ) {
+      print "netgroup entry $key_orig had greater than $recurse_limit recursions ...\n"; 
+      $counters{'too_deep_recursion'}++;
+      return;
+   }
+   $depth++; 
+   @members = split(/\s+/,$netgroup_members{$key}); 
+   foreach $key1 ( @members ) { 
+      &generate_all_members($depth, $key_orig, $key1); 
+   }
+}

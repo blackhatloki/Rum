@@ -1,0 +1,7 @@
+#!/bin/bash
+for i in `cat list5` ; do
+for j in eqfnlo1 eqfnlo2 eqfnhi1 eqfnhi2 ; do 
+# echo ifcfg-$j.$i $i:/etc/sysconfig/network/ifcfg-$j
+scp ifcfg-$j.$i $i:/etc/sysconfig/network/ifcfg-$j
+done
+done

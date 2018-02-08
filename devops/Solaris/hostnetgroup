@@ -1,0 +1,7 @@
+#!/bin/bash 
+HOST=$1
+if [ "$HOST" = ""  ] ; then 
+   echo "Usage: $0 HOSTNAME"
+   exit 1 
+fi 
+ypcat -k netgroup.byhost | grep ${HOST} | awk -F"*" ' { print $2 } ' | sed -e 's/^ //g' | tr "," "\n" | sort -u 

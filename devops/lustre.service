@@ -1,0 +1,16 @@
+[Unit]
+Description=Lustre client services
+Before=remote-fs-pre.target
+Wants=remote-fs-pre.target
+After=lnet.service network-online.target
+Requires=lnet.service network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/echo 'Pausing before mounting lustre...' ; /bin/sleep 30 ; /bin/mount /scratch
+ExecStop=/bin/umount -f /scratch ;  /sbin/lustre_rmmod  ; /sbin/lustre_rmmod
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=remote-fs.target

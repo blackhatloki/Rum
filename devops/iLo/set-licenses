@@ -1,0 +1,6 @@
+#!/bin/bash 
+for i in `cat servers`  ; do 
+    echo $i 
+    echo "Setting Licenses $i-ilo" 
+    ./locfg.pl -s $i-ilo.equity.csfb.com -f License.xml
+done 

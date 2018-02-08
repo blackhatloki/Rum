@@ -1,0 +1,25 @@
+#!/bin/bash
+
+for i in `vxdmpadm list dmpnode all | grep dmpdev | grep -v "cciss" | awk -F"=" ' { print $2 } ' | sed -e 's/ //g'` ; do
+STATE=`vxdmpadm list dmpnode dmpnodename=$i | grep "^state" | awk -F"=" ' { print $2 } ' | sed -e 's/ //g'`
+ENCLOSURE=`vxdmpadm list dmpnode dmpnodename=$i | grep "^enclosure" | awk -F"=" ' { print $2 } ' | sed -e 's/ //g'`
+SNCAB=`vxdmpadm list dmpnode dmpnodename=$i | grep "^cab-sno" | awk -F"=" ' { print $2 } ' | sed -e 's/ //g'`
+ARRAYNAME=`vxdmpadm list dmpnode dmpnodename=$i | grep "^array-name" | awk -F"=" ' { print $2 } ' | sed -e 's/ //g'`
+ARRAYTYPE=`vxdmpadm list dmpnode dmpnodename=$i | grep "^array-type" | awk -F"=" ' { print $2 } ' | sed -e 's/ //g'`
+IOPOLICY=`vxdmpadm list dmpnode dmpnodename=$i | grep "^iopolicy" | awk -F"=" ' { print $2 } ' | sed -e 's/ //g'`
+NUMPATH=`vxdmpadm list dmpnode dmpnodename=$i | grep "^path" | wc -l`
+DEVPATH=`vxdmpadm list dmpnode dmpnodename=$i | grep "^path" |  awk -F"=" ' { print $2 } '| sed -e 's/^ //g' | awk ' { printf "%s,",$1 } ' | sed -e 's/,$//g'  `
+DISABLE=`vxdmpadm list dmpnode dmpnodename=$i | grep "^path" | grep -v enabled`
+for k in `vxdmpadm listenclosure all | egrep "3par|EMC" |awk ' { print $1 }'`
+ do
+   CTRLNUM=0
+   CTRL=""
+   for l in `vxdmpadm listctlr enclosure=$k | grep "^c" | awk ' { print $1 } ' `
+    do
+      CTRL=`echo $l,$CTRL`
+      CTRLNUM=`expr $CTRLNUM +  1`
+     done
+      CTRL=`echo $CTRL | sed -e 's/,$//g' `
+   echo "`hostname`,$i,$STATE,$ENCLOSURE,$SNCAB,$ARRAYNAME,$ARRAYTYPE,$IOPOLICY,$NUMPATH,$DEVPATH,$CTRLNUM,$CTRL"
+ done
+done
