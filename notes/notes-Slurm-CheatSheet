@@ -1,0 +1,25 @@
+sbatch submit.sh 
+
+sinfo 
+acct --format JobID,jobname,NTasks,nodelist,MaxRSS,MaxVMSize,AveRSS,AveVMSize
+squeue 
+sstat 41227 
+scontrol show nodes
+sinfo -o "%10P %8c %8m %11G %5D %N"
+sinfo -R - State reason why a node is out of slurm
+
+How to “undrain” slurm nodes in drain state
+Found an approach, enter scontrol interpreter (in command line type scontrol) and then
+
+scontrol: update NodeName=node10 State=DOWN Reason="undraining"
+scontrol: update NodeName=node10 State=RESUME
+Then
+
+scontrol: show node node10
+
+
+You can get most information about the nodes in the cluster with the sinfo command, for instance with:
+
+sinfo --node --long
+` 
+

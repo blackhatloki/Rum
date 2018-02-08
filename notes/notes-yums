@@ -1,0 +1,132 @@
+yum grouplist hidden
+yum groupinstall "<group name>"
+yum groupinstall "KDE"
+
+Available Environment Groups:
+   Minimal Install
+   Compute Node
+   Infrastructure Server
+   File and Print Server
+   MATE Desktop
+   Basic Web Server
+   Virtualization Host
+   Server with GUI
+   GNOME Desktop
+   KDE Plasma Workspaces
+   Development and Creative Workstation
+Available Groups:
+   Additional Development
+   Anaconda Tools
+   Backup Client
+   Backup Server
+   Base
+   Basic legacy X Window System compatibility
+   Buildsystem building group
+   CIFS file server
+   Common NetworkManager submodules
+   Compatibility Libraries
+   Conflicts (Client)
+   Conflicts (ComputeNode)
+   Conflicts (Server)
+   Conflicts (Workstation)
+   Console Internet Tools
+   Core
+   DNS Name Server
+   Debugging Tools
+   Desktop
+   Desktop Debugging and Performance Tools
+   Desktop Platform
+   Desktop Platform Development
+   Development Tools
+   Dial-up Networking Support
+   Directory Client
+   Directory Server
+   E-mail Server
+   Eclipse
+   Educational Software
+   Electronic Lab
+   Emacs
+   FCoE Storage Client
+   FTP Server
+   Fedora Packager
+   File and Storage Server
+   Fonts
+   GNOME
+   GNOME Applications
+   General Purpose Desktop
+   Graphical Administration Tools
+   Graphics Creation Tools
+   Guest Agents
+   Guest Desktop Agents
+   Hardware Monitoring Utilities
+   Haskell
+   High Availability
+   Identity Management Server
+   Infiniband Support
+   Input Methods
+   Internet Applications
+   Internet Browser
+   Java Platform
+   KDE
+   KDE Applications
+   KDE Multimedia Support
+   Large Systems Performance
+   Legacy UNIX Compatibility
+   Legacy X Window System Compatibility
+   Load Balancer
+   MATE
+   Mainframe Access
+   MariaDB Database Client
+   MariaDB Database Server
+   Messaging Client Support
+   Messaging Server Support
+   Milkymist
+   Multimedia
+   MySQL Database client
+   MySQL Database server
+   NFS file server
+   Network File System Client
+   Network Infrastructure Server
+   Network Storage Server
+   Networking Tools
+   Office Suite and Productivity
+   PHP Support
+   Performance Tools
+   Perl Support
+   Perl for Web
+   Platform Development
+   PostgreSQL Database Client
+   PostgreSQL Database Server
+   Print Server
+   Printing Client
+   Python
+   Remote Desktop Clients
+   Remote Management for Linux
+   Resilient Storage
+   Ruby Support
+   SNMP Support
+   Scientific Support
+   Security Tools
+   Server Platform
+   Server Platform Development
+   Server Policy
+   Smart Card Support
+   Storage Availability Tools
+   System Administration Tools
+   System Management
+   TeX support
+   Technical Writing
+   TurboGears application framework
+   VMware platform specific packages
+   Virtualization
+   Virtualization Client
+   Virtualization Hypervisor
+   Virtualization Platform
+   Virtualization Tools
+   Web Server
+   Web Servlet Engine
+   Web-Based Enterprise Management
+   Workstation Policy
+   X Window System
+   Xfce
+   iSCSI Storage Client

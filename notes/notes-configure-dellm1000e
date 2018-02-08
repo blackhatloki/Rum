@@ -1,0 +1,7 @@
+setnicftg -s 172.90.144.1 255.255.255.0 172.90.255.1
+setnicftg -s IP NETMASK GATEWAY
+
+getniccfg -- get the network information 
+
+racadm racreset `
+

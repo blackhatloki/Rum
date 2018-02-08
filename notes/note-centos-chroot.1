@@ -1,0 +1,58 @@
+How to build a chroot jail environment for CentOS
+A chroot environment is simply a directory – inside which you can find a file system hierarchy exactly like your original operating system. You can then use the UNIX chroot command to open a shell in that directory so that command running under that shell see only the chroot environment and can’t mess up your system. This is very useful for many different reasons – for example if you want to build some software packages and you don’t want their build dependencies to pollute your real system.
+
+Building a chroot environment is not difficult at all using the right tools, and YUM – the CentOS installation tool – has what you need.
+
+
+To start, log into your CentOS system and create yourself a directory where you want to build your chroot jail. I usually choose something like /var/tmp/chroot, so I would run
+
+mkdir -p /var/tmp/chroot
+
+Next step is to initialize the RPM database so that we can install all of the software we need in the chroot jail: we will need to create the directory for the database because RPM expects it to exist, and then use the RPM “rebuilddb” command:
+
+mkdir -p /var/tmp/chroot/var/lib/rpm
+rpm --rebuilddb --root=/var/tmp/chroot
+
+In order for YUM to manage to install software into our chroot system it needs to know which CentOS version to install – for this to work it needs the package centos-release to be installed in the root. Doing this properly will take a lot of time and require us to manually download and install many packages – and that is boring. What we will do instead is just to download the centos-release file from CentOS mirrors:
+
+wget http://mirror.centos.org/centos/5/os/x86_64/CentOS/centos-release-5-4.el5.centos.1.x86_64.rpm
+
+and just install it forcefully:
+
+rpm -i --root=/var/tmp/chroot --nodeps centos-release-5-4.el5.centos.1.x86_64.rpm
+
+Finally we can call on YUM to install the rest of our system:
+
+yum --installroot=/var/tmp/chroot install -y rpm-build yum
+
+The last step will take a bit of time to complete as YUM has to download all the software that goes into your chroot jail environment, but when its ready – you can run chroot /var/tmp/chroot to see how it looks inside.
+
+Optional
+It probably feels pretty bare inside, with a default bash prompt and no aliases. To make the chroot jail a bit more comfortable you can populate the chrooted root directory with the skeleton account files so it feels more like a proper system – before you chroot, copy the files from /etc/skel to the chroot /root home die:
+
+cp /var/tmp/chroot/etc/skel/.??* /var/tmp/chroot/root
+
+Then run the chroot command and tell it to start Bash as a login shell:
+
+chroot /var/tmp/chroot /bin/bash -l
+
+Now you should have a nice bash prompt just like in a real system.
+
+The special file systems
+If you try to run some stuff inside the chroot, for example – yum, you’ll see that some things are not really functional because they want access to /proc or /dev. In order to work with these you will want to mount the real /proc and /dev file systems into the chroot, like so (but get out of the chroot first):
+
+mount --bind /proc /var/tmp/chroot/proc
+mount --bind /dev /var/tmp/chroot/dev
+
+As you can surely figure out – this will let processes from inside the chroot (especially if you’re running in the chroot as the root user) to see and tap into various parts of the real system even though they do not have access to the actual files – this is a security issue and if you plan to run software inside the chroot that you do not trust, then I suggest not doing a simple chroot, and instead using a virtual machine or something like User-Mode Linux.
+
+Of course binding the /proc and /dev file systems is optional and if you don’t run any software inside the chroot that needs these, you can skip that part.
+
+Network
+Network access should work fine inside the chroot, but we didn’t setup name resolving – fortunately this is rather easy: just copy the nameserver file from your real system into the chroot:
+
+cp /etc/resolv.conf /var/tmp/chroot/etc/resolv.conf
+
+And now you can use YUM to install additional software from inside the chroot jail. Of course you can always exit the jail and install from outside using the yum --installroot switch.
+
+

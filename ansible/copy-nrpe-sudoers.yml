@@ -1,0 +1,5 @@
+---
+- hosts: all
+  tasks:
+  - name : Copy nrpe sudoers files 
+    copy : 'src=nrpe  dest=/etc/sudoers.d/nrpe  owner=root group=root mode=400'

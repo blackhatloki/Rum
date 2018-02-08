@@ -1,0 +1,5 @@
+---
+- hosts: all
+  tasks:
+  - name : Copy 
+    copy : 'src=check_openmanage_storage  dest=/usr/lib64/nagios/plugins/check_openmanage_storage  owner=root group=root mode=755'

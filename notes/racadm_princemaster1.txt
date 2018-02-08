@@ -1,0 +1,753 @@
+    1  rpm -qa |grep munge
+    2  rpm -ql munge
+    3  ls -l /var/lib|grep munge
+    4  ls -l /var/log|grep munge
+    5  ls -l /var/log/munge
+    6  ls -l /var/lib/munge/
+    7  ls /etc/munge/
+    8  rpm -ql munge-lib
+    9  rpm -ql munge-libs
+   10  exit
+   11  ls -l /var/lib/munge/
+   12  ls -l /var/lib/ | grep munge
+   13  ls -l /var/log/ | grep munge
+   14  ls -l /etc/munge
+   15  exit
+   16  rpm -ql glibc-common | grep /usr/lib/locale
+   17  ls /usr/lib/locale/
+   18  ls -l /usr/lib/locale/
+   19  exit
+   20  cd var
+   21  ls
+   22  cd log
+   23  ls
+   24  ls -l
+   25  cd munge
+   26  ls
+   27  exit
+   28  ls -ln /var/log/
+   29  ls
+   30  ls -l /var/log
+   31  exit
+   32  cd /var/log
+   33  ls
+   34  ls -l
+   35  grep mung /etc/passwd
+   36  rpm -qa | grep mun
+   37  chown -R 200:200 munge
+   38  ls -l
+   39  cd /
+   40  cd /etc/
+   41  ls
+   42  vim passwd
+   43  vi passwd
+   44  exit
+   45  cd /etc/
+   46  ls
+   47  ls -ltrh
+   48  ls -ltrh | grep munge
+   49  chown -R 200:200 munge
+   50  cd /var/lib
+   51  ls
+   52  chown -R 200:200 munge
+   53  pwd
+   54  exit
+   55  ls
+   56  cd root/
+   57  ls
+   58  tar zxvf MLNX_OFED_LINUX-3.4-1.0.0.0-rhel7.2-x86_64-ext.tgz 
+   59  ls
+   60  cd MLNX_OFED_LINUX-3.4-1.0.0.0-rhel7.2-x86_64-ext
+   61  ls
+   62  ./mlnxofedinstall --without-fw-update --force
+   63  yum install libnl gcc-gfortran libxml2-python
+   64  ls
+   65  ./mlnxofedinstall --help
+   66  ./mlnxofedinstall --without-fw-update --force
+   67  more /tmp/MLNX_OFED_LINUX-3.4-1.0.0.0.165187.logs/mlnx-ofa_kernel-devel-3.4.rpminstall.log
+   68   
+   69  yum install python-devel make kernel-devel-3.10.0-327.36.3.el7.x86_64 redhat-rpm-config rpm-build gcc
+   70  ./mlnxofedinstall --without-fw-update --force
+   71  exit
+   72  cd /root/MLNX_OFED_LINUX-3.4-1.0.0.0-rhel7.2-x86_64-ext
+   73  ls
+   74  ls -ltrh RPMS/
+   75  ls
+   76  ./mlnxofedinstall --without-fw-update --force
+   77     exit
+   78  pwdw
+   79  pwd
+   80  rpm -qa |wc
+   81  exit
+   82  wget -q -O - http://linux.dell.com/repo/hardware/dsu/bootstrap.cgi | bash 
+   83  exit
+   84  rpm -qa |grep spank
+   85  exit
+   86  rpm -qa |grep microcode_ctl
+   87  history
+   88  yum --installroot=$CHROOT install $(cat /home/deng/xab)
+   89  yum --installroot=$CHROOT install $(cat /home/deng/xab)
+   90  ls -l /home/deng/xab
+   91  pwd
+   92  ls -ltr /home/deng
+   93  exit
+   94  rpm -qa  | wc -l
+   95  rpm -qa  
+   96  yum list installed
+   97  exit
+   98  yum history
+   99  exit
+  100  rpm -qa |grep spank
+  101  rpm -ql slurm-spank-x11
+  102  rpm -qa |grep slurm
+  103  exiit
+  104  exit
+  105  rpm -qa |wc -l
+  106  exit
+  107  yum history
+  108  exit
+  109  ls
+  110  exit
+  111  whoami
+  112  logout
+  113  ls
+  114  env
+  115  su - root
+  116  login
+  117  login root
+  118  bash -l
+  119  exit
+  120  cd
+  121  /bin/bash -l
+  122  su - 
+  123  logout
+  124  exit
+  125  ls -latr
+  126  ls -latr /root
+  127  diff /root/.bashrc.rpmnew  /root/.bashrc
+  128  diff /root/.bash_profile.rpmnew /root/.bash_profile
+  129  ls -ltr /home/deng/rpm*
+  130  exit
+  131  cd
+  132  ls
+  133  ls -altr
+  134  whoami
+  135  ls -l --lcontext /bin/bash
+  136  cd /var/log/
+  137  ls -altr
+  138  ls
+  139  cd /etc/profile.d/
+  140  ls
+  141  ls -l
+  142  getfacl lmod.sh
+  143  ls -altr
+  144  rpm -qf *
+  145  ls /etc/profile.d/
+  146  cd
+  147  ps acux
+  148  exit
+  149  login
+  150  cd
+  151  logout
+  152  which logout
+  153  which login
+  154  man login
+  155  exit
+  156  cd
+  157  /bin/tcsh
+  158  exit
+  159  cd
+  160  cat /etc/selinux/config 
+  161  ssh c01-02
+  162  exit
+  163  grub2-mkconfig -o /boot/grub2/grub.cfg
+  164  exit
+  165  systemctl set-default multi-user.target
+  166  systemctl isolate multi-user.target
+  167  exit
+  168  ls -ltr
+  169  exit
+  170  systemctl disable NetworkManager.service
+  171  exit
+  172  df
+  173  cd home/root/cuda-repo-8-0-local/
+  174  ls
+  175  dkms status
+  176  dkms 
+  177  dkms status
+  178  ls
+  179  yum install cuda-drivers-367.48-1.x86_64.rpm nvidia-kmod-367.48-2.el7.x86_64.rpm xorg-x11-drv-nvidia-gl-367.48-1.el7.x86_64.rpm xorg-x11-drv-nvidia-devel-367.48-1.el7.x86_64.rpm xorg-x11-drv-nvidia-libs-367.48-1.el7.x86_64.rpm  xorg-x11-drv-nvidia-367.48-1.el7.x86_64.rpm
+  180  find /var/ | grep nvi | grep ko
+  181  exit
+  182  rpm -qa |wc
+  183  rpm -qa |grep vnc
+  184  exit
+  185  rpm -qa |grep cuda
+  186  rpm -qa |grep nvidia
+  187  exit
+  188  ls
+  189  mount
+  190  mount /proc
+  191  mount
+  192  exit
+  193  which postInstall.sh
+  194  exit
+  195  cd
+  196  ls  /state/partition1
+  197  ls -ld  /state/partition1
+  198  exit
+  199  ls -ltr
+  200  rpm -qa |grep hwloc
+  201  yum history
+  202  exit
+  203  ls -ltr
+  204  yum install hwloc
+  205  ls /etc/profile.d/
+  206  ls -ltr /etc/profile.d
+  207  touch /etc/profile.d/prince.sh
+  208  touch /etc/profile.d/prince.csh
+  209  emacs -nw /etc/profile.d/prince.sh
+  210  ls -ltr /etc/profile.d
+  211  rm /etc/profile.d/prince.csh~
+  212  rm /etc/profile.d/prince.sh~
+  213  cat /etc/profile.d/prince.sh 
+  214  cat /etc/profile.d/prince.csh 
+  215  rpm -qa |grep hwloc
+  216  ls -ltr /etc/profile.d/
+  217  exit
+  218  cd
+  219  rpm -qa vim\*
+  220  rpm -qa vim\*|sed 's/-7.4.160-1.el7.x86_64//'
+  221  rpm -qa vim\*|sed 's/-7.4.160-1.el7.x86_64//'|xargs
+  222  rpm -qa vim\*|sed 's/-7.4.160-1.el7.x86_64//'|xargs yum update
+  223  host 128.122.215.12
+  224  host 128.122.215.13
+  225  rpm -qf /usr/bin/mailx
+  226  exit
+  227  ls -l /bin/mailx
+  228  exit
+  229  ls
+  230  emacs -nw /etc/logrotate.d/slurm
+  231  ls /etc
+  232  ls /etc/logrotate.d/
+  233  emacs -nw /etc/logrotate.d/slurm
+  234  cp /etc/logrotate.d/nhc /etc/logrotate.d/slurm
+  235   ls /etc/logrotate.d/
+  236  emacs -nw /etc/logrotate.d/slurm 
+  237  emacs -nw /etc/logrotate.d/nhc
+  238  cd /etc/logrotate.d/
+  239  ls -ltr
+  240  rm slurm 
+  241  ls -ltr
+  242  pwd
+  243  echo 'this is a test' > slurm
+  244  ls -ltr
+  245  cat slurm 
+  246  rm slurm 
+  247  ls -ltr
+  248  cat > slurm
+  249  cat slurm 
+  250  exit
+  251  cat /etc/logrotate.d/slurm 
+  252  ls -ltr
+  253  ls -ltr /etc/logrotate.d/
+  254  cat /etc/logrotate.d/slurm 
+  255  exit
+  256  cat /etc/logrotate.d/slurm
+  257  exit
+  258  md5sum /etc/logrotate.d/slurm
+  259  man cat
+  260  cat -A /etc/logrotate.d/slurm 
+  261  cat  /etc/logrotate.d/slurm 
+  262  exit
+  263  cat /etc/logrotate.d/slurm 
+  264  cat /etc/logrotate.d/nhc
+  265  cat -A /etc/logrotate.d/nhc
+  266  cat -A /etc/logrotate.d/slurm
+  267  cat -A /etc/logrotate.d/sssd 
+  268  exit
+  269  ls -ltr /etc/logrotate.d/
+  270  cat /etc/logrotate.d/slurm 
+  271  cat /var/lib/logrotate.status 
+  272  cat /etc/logrotate.d/sssd 
+  273  cat /etc/logrotate.d/munge 
+  274  exit
+  275  ls
+  276  mount
+  277  mount -t proc proc /proc
+  278  mount
+  279  rpm -U tmp/lua-5.1.4-15.el7.x86_64.rpm tmp/lua-devel-5.1.4-15.el7.x86_64.rpm 
+  280  rpm -qi | grep lua
+  281  rpm -ql | grep lua
+  282  rpm -qi lua
+  283  rm tmp/lua-*
+  284  exit
+  285  rpm -C
+  286  yum check
+  287  rpm -ql
+  288  yum list
+  289  rpm -qf /boot/vmlinuz-3.10.0-327.36.3.el7.x86_64
+  290  rpm -ql kernel
+  291  yum check kernel
+  292  rpm --help
+  293  rpm -V kernel
+  294  ls /boot
+  295  rpm -q | grep kernel
+  296  rpm -ql | grep kernel
+  297  rpm -qal | grep kernel
+  298  rpm -qa | grep kernel
+  299  cd /boot
+  300  ls -l
+  301  rm *-327.el7*
+  302  ls -l
+  303  cd ..
+  304  dracut
+  305  exit
+  306  ps -auxf
+  307  rpm -ql | grep kernel
+  308  rpm -qa | grep kernel
+  309  yum remove kernel-plus
+  310  yum remove kernel-plus hpervfcopyd hypervvssd ssh-keygen -t 
+  311  yum remove kernel-plus hpervfcopyd hypervvssd  hypervkvpd
+  312  yum remove hpervfcopyd 
+  313  yum remove hyperv-daemons
+  314  yum remove kernel-plus
+  315  yum remove hypervfcopyd
+  316  yum remove kernel-plus
+  317  yum remove hypervvssd
+  318  yum remove kernel-plus
+  319  yum remove hypervkvpd
+  320  yum remove kernel-plus
+  321  cd /boot
+  322  ls
+  323  ls -la
+  324  cd
+  325  cd /boot/grub2
+  326  ls
+  327  less grub.c
+  328  less grub.cfg 
+  329  cd /boot
+  330  ls -la
+  331  ls -l
+  332  exit
+  333  grep adopt /etc/pam.d/*
+  334  exit
+  335  ls -ltr /etc/pam.d
+  336  exit
+  337  cd
+  338  emacs /etc/pam.d/sshd 
+  339  emacs -nw /etc/pam.d/sshd 
+  340  exit
+  341  ls /etc/logrotate.d/
+  342  ls /etc/logrotate.d/slurm 
+  343  cat /etc/logrotate.d/slurm 
+  344  ls
+  345  exit
+  346  emacs /etc/systemd/system/lustre.service 
+  347  emacs -nw /etc/systemd/system/lustre.service 
+  348  exit
+  349  rpm -qa | sort > image.rpms
+  350  exit
+  351  rpm -q install kernel grub
+  352  exity
+  353  exit
+  354  yum history
+  355  yum history info 50
+  356  yum history info 51
+  357  yum history info 52
+  358  yum history
+  359  yum history info 53
+  360  yum history info 54
+  361  yum history info 55
+  362  yum history info 56
+  363  yum history info 57
+  364  yum history info 58
+  365  yum history
+  366  yum history info 59
+  367  yum history info 49
+  368  yum history
+  369  yum history info 48
+  370  rpm -qa |grep libcgroup
+  371  rpm -qi libcgroup
+  372  rpm -qi libcgroup-tools
+  373  yum history
+  374  exit
+  375  yum history
+  376  exit
+  377  pwd
+  378  ls
+  379  cd /
+  380  ls
+  381  cd ..
+  382  ls
+  383  file 1
+  384  cat 1 
+  385  ls -l 1
+  386  exit
+  387  ps
+  388  exit
+  389  cd
+  390  df -h
+  391  ls /proc/
+  392  df -h /proc
+  393  mount | grep /proc
+  394  ps
+  395  ls -ld /proc/165190
+  396  exit
+  397  cd
+  398  rpm -qa | sort > packages-sorted-centos7.2-3.10.0-327.36.3
+  399  exit
+  400  cd
+  401  yum update kernel{,-{debug,devel,headers,tools{,-libs}}}
+  402  more /boot/grub/grub.conf
+  403  ls /etc/grub
+  404  ls /etc/grub*
+  405  ls /boot/grub/
+  406  ls /boot/grub2/
+  407  ls /boot/grub2/grub.cfg 
+  408  more /boot/grub2/grub.cfg 
+  409       
+  410  logout
+  411  exit
+  412  cd boot
+  413  ls
+  414  cd grub2
+  415  ls
+  416  more grub.cfg 
+  417   
+  418  ssh c01-01
+  419  exit
+  420  cat /etc/redhat-release 
+  421  rpm -q kernel
+  422  exit
+  423  cd
+  424  cat /etc/redhat-release 
+  425  rpm -qf /etc/redhat-release 
+  426  grep centos-release /var/log/yum.log 
+  427  exit
+  428  cd
+  429  ls
+  430  rpm -qa lust\*
+  431  yum erase lust\*
+  432  sudo yum install ./lustre-client-*.rpm
+  433  exit
+  434  rpm -qa lust\*
+  435  exit
+  436  exit
+  437  ls -l
+  438  exit
+  439  cd
+  440  cd -
+  441  ls -l
+  442  find . -not -user root
+  443  find . -not -user root -ls
+  444  exit
+  445  rpm -q lust\*(
+  446  rpm -q lust\*
+  447  rpm -qa lust\*
+  448  exit
+  449  exit
+  450  cd
+  451  rpm -qa | grep ipa
+  452  rpm -qa | grep freeipa
+  453  exit
+  454  cd
+  455  rpm -qa | sort > rpms
+  456  more rpms 
+  457  pwd
+  458  exit
+  459  cd
+  460  ls
+  461  cd -
+  462  ls
+  463  cd etc/
+  464  ls
+  465  more nyu-hpc-release
+  466  pwd
+  467  cd
+  468  uname
+  469  uname -r
+  470  ssh c01-01
+  471  exit
+  472  cat /etc/nyu-hpc-release
+  473  cd
+  474  which wwbootstrap
+  475  exit
+  476  cd
+  477  rpm -q redhat-lsb
+  478  logout
+  479  exit
+  480  cd
+  481  yum install redhat-lsb
+  482  rpm --checkdb
+  483  man rpm
+  484  man rpm
+  485  rpm -Va
+  486  yum check
+  487  cd /var/bin
+  488  cd /var/lib
+  489  ls
+  490  cd rpm
+  491  ls
+  492  rm __db.001
+  493  rm __db.002
+  494  rm __db.003
+  495  ls
+  496  more Packages 
+  497  cd
+  498  rpm --rebuilddb
+  499  rpm -q redhat-lsb
+  500  cd -
+  501  rpmdb_verify Packages
+  502  man rpmdb
+  503  yum install redhat-lsb
+  504  exit
+  505  cd
+  506  rpm -q redhat-lsb
+  507  rpm -qa xorg-x11-drv-nvidia\*
+  508  yum erase xorg-x11-drv-nvidia\*
+  509  sudo yum erase xorg-x11-drv-nvidia-libs-367.48-1.el7.x86_64
+  510  sudo yum erase xorg-x11-drv-nvidia-devel-367.48-1.el7.x86_64
+  511  sudo yum erase xorg-x11-drv-nvidia-gl-367.48-1.el7.x86_64
+  512  rpm -ql xorg-x11-drv-nvidia-devel
+  513  rpm -ql glibc\*|sort
+  514  rpm -qa glibc\*|sort
+  515  rpm -q glibc{,-{common,devel,headers,static}}-2.17-157.el7_3.1
+  516  rpm -q glibc{,-{common,devel,headers,static}}-2.17-157.el7_3.1.x86_64
+  517  rpm -q glibc{,-{common,devel,headers,static}}-2.17-157.el7_3.1
+  518  rpm -q glibc{,-{common,devel,headers,static}}-2.17-157.el7_3.1.i686
+  519  yum install glibc{,-{common,devel,headers,static}}-2.17-157.el7_3.1.i686
+  520  rpm -qa | sort > myrpms
+  521  rpm -qa glibc\* | sort
+  522  rpm -q redhat-lsb
+  523  logout
+  524  exit
+  525  cd
+  526  rpm -qa slurm\*
+  527  rpm -qa slurm\*|wc
+  528  yum erase slurm\*
+  529  exit
+  530  cd
+  531  rpm -qa slurm\*
+  532  rpm -qa slurm\*|wc
+  533  exit
+  534  cd
+  535  cd /usr/lib64/nvidia
+  536  ls
+  537  mkdir save
+  538  ls /usr/lib64/nvidia/libGL.so* 
+  539  mv /usr/lib64/nvidia/libGL.so* /usr/lib64/nvidia/save/.
+  540  cd /usr/lib64/nvidia/save
+  541  ls
+  542  ls -l
+  543  ls -al
+  544  exit
+  545  rpm -q spice-server
+  546  exit
+  547  cd
+  548  yum update spice-server
+  549  rpm -qa spice\*
+  550  rpm -q spice-server-devel
+  551  rpm -q spice
+  552  rpm -q pam_slurm
+  553  exit
+  554  rpm -q slurm-pam_slurm
+  555  exit
+  556  id
+  557  ls -ltr
+  558  rpm -qa |grep blcr
+  559  uname -r
+  560  exit
+  561  uname -r
+  562  exit
+  563  pwd
+  564  ls -l
+  565  rpm -qa |grep slurm-pam_sluirm
+  566  rpm -qa |grep slurm-pam_slurm
+  567  rpm -qi slurm-pam_slurm
+  568  unamr -r
+  569  uname -r
+  570  ls /boot/
+  571  /sbin/lsmod
+  572  rpm -qi blcr
+  573  exit
+  574  uname -r
+  575  ls /boot/
+  576  ls -l /boot/
+  577  rpm -q kernel
+  578  cat /proc/version
+  579  ls /proc/
+  580  dmesg
+  581  exit
+  582  uname -r
+  583  ls -l /boot
+  584  rpm -qa |grep slurm
+  585  rpm -qa |grep slurm|wc
+  586  yum erase slurm-pam_slurm
+  587  rpm -qa |grep slurm
+  588  rpm -qa |grep slurm|wc
+  589  rpm -qa |grep blcr
+  590  rpm -qa |grep blcr | awk '{printf("%s ", $1)}'
+  591  yum erase blcr-0.8.6_b4-1.x86_64 blcr-libs-0.8.6_b4-1.x86_64 blcr-modules_3.10.0_327.36.1.el7.x86_64-0.8.6_b4-1.x86_64 blcr-devel-0.8.6_b4-1.x86_64 blcr-testsuite-0.8.6_b4-1.x86_64 blcr-modules_3.10.0_327.36.3.el7.x86_64-0.8.6_b4-1.x86_64 
+  592  rpm -qa |grep blcr | awk '{printf("%s ", $1)}'
+  593  rpm -e --nodeps blcr-0.8.6_b4-1.x86_64 blcr-libs-0.8.6_b4-1.x86_64 blcr-modules_3.10.0_327.36.1.el7.x86_64-0.8.6_b4-1.x86_64 blcr-devel-0.8.6_b4-1.x86_64 blcr-testsuite-0.8.6_b4-1.x86_64 blcr-modules_3.10.0_327.36.3.el7.x86_64-0.8.6_b4-1.x86_64 
+  594  rpm -qa |grep blcr
+  595  yum list slurm*
+  596  exit
+  597  rpm -qa |grep slurm-pam
+  598  rpm -qi slurm-pam_slurm
+  599  exit
+  600  rpm -qa |grep blcr
+  601  rpm -qi blcr
+  602  emacs -nw /etc/pam.d/sshd
+  603  vi /etc/pam.d/sshd
+  604  cat /etc/pam.d/sshd
+  605  ls -l /etc/pam.d/ss*
+  606  diff /etc/pam.d/sshd /etc/pam.d/sshd~
+  607  cat /etc/pam.d/sshd~
+  608  rm /etc/pam.d/sshd~
+  609  ls -l /etc/pam.d/sshd 
+  610  tail /etc/pam.d/sshd 
+  611  tail /etc/security/access.conf
+  612  vi /etc/security/access.conf
+  613  ls -l /etc/security/access.conf*
+  614  diff /etc/security/access.conf /etc/security/access.conf~
+  615  rm /etc/security/access.conf~
+  616  tail /etc/security/access.conf
+  617  tail /etc/pam.d/sshd 
+  618  ls -ltr /etc/pam.d
+  619  tail /etc/pam.d/hpc-auth.pam 
+  620  rpm -qi slurm-pam_slurm
+  621  rpm -qi blcr
+  622  tail /etc/pam.d/sshd 
+  623  tail /etc/security/access.conf 
+  624  rpm -qa |grep blcr
+  625  exit
+  626  cd
+  627  cd /etc/pam.d/
+  628  ls
+  629  more hpc-auth.pam 
+  630  exit
+  631  cd
+  632  cd /etc/pam.d/
+  633  emacs hpc-auth.pam 
+  634  logout
+  635  exit
+  636  cd
+  637  cd /etc/pam.d/
+  638  more hpc-auth.pam 
+  639  logout
+  640  exit
+  641  cd
+  642  sudo yum update firefox
+  643  sudo yum update nss
+  644  rpm -qa nss\*
+  645  rpm -qa nss\*|grep -v 3.28.4-1.0
+  646  sudo yum update nss-util
+  647  rpm -qa nss\*|grep -v 3.28.4-1.0
+  648  rpm -qa java\&
+  649  rpm -qa java\*
+  650  rpm -qa java-1.7.0-openjdk\*
+  651  rpm -qa java-1.7.0-openjdk\* | grep -v 1.7.0.131-2.6.9.0.el7_3.x86_64
+  652  rpm -qa java-1.8.0-openjdk\*
+  653  rpm -qa java-1.8.0-openjdk\*|grep -v 1.8.0.121-0.b13.el7_3
+  654  exit
+  655  cd
+  656  rpm -qa beegfs\*
+  657  logout
+  658  exit
+  659  rpm -q firefox
+  660  exit
+  661  cd
+  662  rpm -q firefox
+  663  exit
+  664  cd
+  665  yum repolist|grep base/7/x86_64
+  666  yum repolist|grep base/7/x86_64
+  667  yum repolist
+  668  logout
+  669  yum repolist
+  670  locate repo
+  671  cd /var/lib/yum/repos/
+  672  ls
+  673  cd x86_64/
+  674  ls
+  675  cd 7/
+  676  ls
+  677  cd base/
+  678  ls
+  679  cd ..
+  680  find .
+  681  find . -type f 
+  682  cd home/root/cuda-repo-8-0-local/
+  683  exit
+  684  cd
+  685  sudo yum update firefox
+  686  exit
+  687  cd
+  688  yum update nss\*
+  689  rpm -qa ns\*
+  690  yum update rpm -qa ns\*
+  691  yum update ns\*
+  692  rpm -q ns
+  693  rpm -q nspr
+  694  yum update nspr
+  695  exit
+  696  cd
+  697  exit
+  698  cd
+  699  rpm -q nsca nspr-devel nss_compat_ossl nss-devel nss-softokn-devel nss-softokn-freebl nss-softokn-freebl-devel nss-util-devel
+  700  yum update nss-softokn-freebl-3.16.2.3-14.4.el7.x86_64 nss-softokn-freebl-3.16.2.3-14.4.el7.i686
+  701  exit
+  702  racadm get NIC.NICConfig
+  703  racadm hwinventory nic
+  704  racadm get nic.nicconfig
+  705  racadm get BIOS
+  706  racadm get BIOS.SlotDisablement
+  707  racadm set BIOS.SlotDisablement Slot2 Enabled
+  708  racadm get BIOS.SlotDisablement Slot2
+  709  racadm help BIOS.SlotDisablement
+  710  racadm help BIOS.SlotDisablement GlobalSlotDriverDisable Enabled
+  711  racadm set BIOS.SlotDisablement GlobalSlotDriverDisable Enabled
+  712  racadm get BIOS
+  713  racadm get BIOS SlotDisablement
+  714  racadm get BIOS.SlotDisablement
+  715  racadm get BIOS.SlotDisablement Slot=Enabled
+  716  racadm set BIOS.SlotDisablement Slot2=Enabled
+  717  racadm get BIOS.SlotDisablement Slot2
+  718  racadm get NIC
+  719  omconfig chassis
+  720  omconfig chassis biossetup 
+  721  omconfig chassis biossetup  attribute=slot2 setting=Enabled
+  722  omconfig chassis biossetup  attribute=slot3 setting=Enabled
+  723  racadm get BIOS.SlotDisablement
+  724  omconfig chassis biossetup  attribute=GlobalSlotDriverDisable setting=Enabled
+  725  racadm get BIOS.SlotDisablement
+  726  omconfig chassis biossetup  -?
+  727  omconfig chassis biossetup  -? | more
+  728  racadm get BIOS
+  729  racadm get BIOS.IntegratedDevice 
+  730  racadm get BIOS.IntegratedDevices
+  731  omconfig chassis biossetup  attribute=IntegratedNetwork1 setting=Enabled
+  732  racadm get BIOS.IntegratedDevice 
+  733  racadm get BIOS.IntegratedDevices
+  734  ip a s
+  735  cd /etc/sysconfig/network-scripts/
+  736  ls
+  737  more ifcfg-eth0 
+  738  cd /etc/default/
+  739  ls
+  740  vi grub 
+  741  grub2-mkconfig -o /boot/grub2/grub.cfg
+  742  umount /scratch
+  743  cd 
+  744  mount
+  745  cd /
+  746  ls
+  747  ls /etc/sysconfig/network-scripts/
+  748  ip a s
+  749  df -k
+  750  ping soho.es.its.nyu.edu
+  751  cat /proc/net/bonding/bond0
+  752  history | less
+  753  history > racadm_princemaster1.txt

@@ -1,0 +1,21 @@
+  117  cd hpc-git-branch/
+  121  rm -r hpc-git-branch/
+  125  rm -rf hpc-git-branch/
+  144  history  | grep git 
+  160  history | grep git 
+  163   git clone https://v3.es.its.nyu.edu/hpc/ansible.git
+  207  git status 
+  208  git add Dell-Networking.dellos-acl Dell-Networking.dellos-bgp/ Dell-Networking.dellos-dcb/ Dell-Networking.dellos-interface/ Dell-Networking.dellos-lag/ Dell-Networking.dellos-system/ Dell-Networking.dellos-vlan/ Dell-Networking.dellos-vlt/ Dell-Networking.dellos-vrf/ Dell-Networking.dellos-xstp/ 
+  209  git commit -m "Dell networking ansible" 
+  211  git status 
+  212   git remote show origin
+  213  git log 
+  214  git push origin master
+  215  git status 
+  232  git status 
+  234  git log 
+ 1032  more git-repos 
+ 1033  grep git * 
+ 1034  grep git * | grep nyu 
+ 1038  history  | grep git 
+ 1039  history  | grep git  > git.junk 

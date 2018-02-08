@@ -1,0 +1,45 @@
+https://lonesysadmin.net/2015/08/13/interesting-dell-idrac-tricks/
+
+Deploying a bunch of machines all at once? Know your way around for loops in shell scripts, or Excel enough to do some basic text functions & autofill? You, too, can set up a few hundred servers in one shot. Here’s some interesting things I’ve done in the recent past using the Dell iDRAC out-of-band hardware management controllers.
+
+You need to install the racadm utility on your Windows or Linux host. I’ll leave this up to you, but you probably want to look in the Dell Downloads for your server, under “Systems Management.” I recently found it as “Dell OpenManage DRAC Tools, includes Racadm” in 32- and 64-bit flavors.
+
+Basic Command
+
+The basic racadm command I’ll represent with $racadm from now on is:
+
+racadm -r hostname.or.ip.com -u iDRACuser -p password
+Set a New Root Password
+
+I don’t know how many times I see people with iDRACs on a network and the root password is still ‘calvin.’ If you do nothing else change that crap right away:
+
+$racadm set iDRAC.Users.2.Password newpassword
+The number ‘2’ indicates the user ID on the iDRAC. The root user is 2 by default.
+
+If you have special characters in your password, and you should, you may need to escape them or put them in single quotes. You will want to test this on an iDRAC that has another admin user on it, or where you have console access or access through a blade chassis, for when you screw up the root password and lock yourself out. Not that I’ve ever done this, not even in the course of writing this post. Nope, not admitting anything.
+
+Dump & Restore Machine Configurations
+
+Once upon a time I embarked on a quest to configure a server solely with racadm ‘set’ commands. Want to know a secret? That was a complete waste of a few hours of my life. What I do now is take one server and run through all the BIOS, PERC, and iDRAC settings via the console and/or the web interface, then dump the configuration with a command:
+
+$racadm get -t xml -f idrac-r730xd.xml
+That’ll generate an XML file of all the settings, which you can then load back into the other servers with:
+
+$racadm set -t xml -f idrac-r730xd.xml -b graceful -w 600
+This tells it to gracefully shut the OS down, if there is one, before rebooting to reload the configurations. It also says to wait 600 seconds for the job to complete. The default is 300 seconds but with an OS shutdown, long reboot, memory check, etc. it gets tight. There are other reboot options, check out the help via:
+
+$racadm help set
+You can also edit the XML file to remove parts that you don’t want, such as when you want to preconfigure a new model of server with common iDRAC settings but do the BIOS & RAID configs on your own. That XML file will also give you clues to all the relevant configuration options, too, which you can then use via the normal iDRAC ‘get’ and ‘set’ methods.
+
+Upload New SSL Certificates
+
+I like knowing that the SSL certificates on my equipment aren’t the defaults (and I get tired of all the warnings). With access to a certificate authority you can issue some valid certs for your infrastructure. However, I don’t want to manage SSL certificates for hundreds of servers. Where I can I’ll get a wildcard certificate, or if that’s expensive or difficult I’ll abuse the Subject Alternate Name (SAN) features of SSL certificates to generate one with all my iDRAC names in it. Then I can upload new keys and certificates, and reset the iDRAC to make it effective:
+
+$racadm sslkeyupload -t 1 -f idrac.key
+$racadm sslcertupload –t 1 -f idrac.cer
+$racadm racreset
+Ta-dum, green valid certificates for a few years with only a bit of work. If you don’t have your own CA it’s probably worth creating one. You can load the CA certificate as a trusted root into your desktop OS and make the warnings go away, and you know that your SSL certs aren’t the vendor defaults. What’s the point of crypto when everybody has the same key as you?
+
+There are lots of cool things you can do with the iDRAC, so if you’re doing something manually via the console or iDRAC web interface you might think about looking it up in the Dell iDRAC RACADM Command Line Reference first.
+
+

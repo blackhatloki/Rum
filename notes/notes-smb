@@ -1,0 +1,2 @@
+sudo mount -t smbfs -o username=sam,uid=bob,gid=bob  //192.168.178.250/share /media/Maxtor_backup
+

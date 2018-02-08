@@ -1,0 +1,11 @@
+rince-master0.hpc.nyu.edu:teague -> : wwvnfs centos7.3 --chroot= /mnt/home/images/centos7.3
+centos7.3/      centos7.3-tony/
+prince-master0.hpc.nyu.edu:teague -> : wwvnfs centos7.3 --chroot=/mnt/home/images/centos7.3
+Creating VNFS image from centos7.3
+Building new chroot...
+Building and compressing the final image
+Cleaning temporary files
+leaning temporary files
+VNFS 'centos7.3' has been imported
+Done.
+Wrote a new configuration file at: /etc/warewulf/vnfs/centos7.3.conf

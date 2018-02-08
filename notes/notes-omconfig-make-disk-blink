@@ -1,0 +1,12 @@
+blink a disk
+Example to
+
+Blink physical disk 0 on connector 0 of controller 1. On a SAS controller, the physical disk resides in enclosure 2.
+
+Example for SCSI, SATA, and ATA controllers
+
+omconfig storage pdisk action=blink controller=1 pdisk=0:0
+
+Example for SAS controllers
+
+omconfig storage pdisk action=blink controller=1 pdisk=0:2:0

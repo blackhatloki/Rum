@@ -1,0 +1,47 @@
+UI SET APPEND_EVENT_SUMMARY=TRUE
+UI SET SEVERITY_MINIMUM=WARNING
+UI SET ENABLED=TRUE
+UI SET EMAIL_AGENT IP_ADDRESS=192.168.0.10 IP_PORT=25 FROM=“ddnbeegfs-0.hpc.nyu.edu” TO=”hpc-notify@nyu.edu” SUBJECT=”Help Requested” BACKUP_IP_ADDRESS=94.209.169.80 BACKUP_IP_PORT=93 SEVERITY=ERROR
+
+UI SET EMAIL_AGENT IP_ADDRESS=192.168.0.10 IP_PORT=25 FROM=“ ddnbeegfs-1.hpc.nyu.edu” TO=”support@ddn.com,hpc-staff@nyu.edu” SUBJECT=”Help Requested” BACKUP_IP_ADDRESS=192.168.3.254 BACKUP_IP_PORT=25 SEVERITY=ERROR
+
+UI SET EMAIL_AGENT APPEND_EVENT_SUMMARY=TRUE
+UI SET EMAIL_AGENT SEVERITY_MINIMUM=WARNING
+UI SET EMAIL_AGENT ENABLED=TRUE
+UI SET EMAIL_AGENT FROM=”hpc-notify@nyu.edu”
+UI SET EMAIL_AGENT IP_ADDRESS=216.165.47.33
+UI SET EMAIL_AGENT IP_PORT=25
+UI SET EMAIL_AGENT SUBJECT=”Message from DDN ddnbeegfs-0.hpc.nyu.edu"
+UI SET EMAIL_AGENT TO=”hpc-notify@nyu.edu”
+UI SET EMAIL_AGENT BACKUP_IP_ADDRESS=216.165.47.32
+UI SET EMAIL_AGENT BACKUP_IP_PORT=25 
+TEST CONTROLLER=[LOCAL|REMOTE|<idx>] [SNMP_TRAP|EMAIL]
+TEST CONTROLLER=LOCAL EMAIL
+
+
+ddnbeegfs-0.hpc.nyu.edu
+ddnbeegfs-1.hpc.nyu.edu
+UI SET EMAIL_AGENT TO=”<support@ddn.com>”
+
+Remote Syslog 
+* UI SHOW SYSLOG_AGENT [ALL] [COUNTERS]
+To set the syslog configuration, use these commands:
+UI SET SYSLOG_AGENT IP_ADDRESS=192.168.0.1
+UI SET SYSLOG_AGENT IP_PORT=514
+UI SET SYSLOG_AGENT SEVERITY_MINIMUM=WARNING|
+UI SET SYSLOG_AGENT ENABLED=TRUE
+
+
+TEST CONTROLLER=REMOTE EMAIL
+
+
+Enabled:                TRUE
+IP Address:             216.165.47.33
+IP Port:                25
+From:                   hpc-notify@nyu.edu
+To:                     hpc-notify@nyu.edu
+Filter:                 WARNING ERROR EMERGENCY
+Subject:                Message from DDN ddnbeegfs-0.hpc.nyu.edu
+Backup IP Address:      216.165.47.32
+Backup IP Port:         25
+Append Event:           TRUE

@@ -1,0 +1,97 @@
+Using omreport and omconfig for Dell servers
+Dell comes with their server utility scripts called omreport and omconfig. These tools allow you to view and modify your hardware configuration on the server.
+
+Dell tools information
+
+To see what version of the tools your running:
+
+[root@web01 ~]# omreport about details=true
+To see if there are updates available for the firmware:
+
+[root@web01 ~]# omreport system version
+To see what commands are available using omreport:
+
+[root@web01 ~]# omreport system -?
+General information
+
+To view information regarding the server model, cpu type, memory, service tags, etc, run:
+
+[root@web01 ~]# omreport system summary
+Hardware Health
+
+If you want to view the health of the system and chassis components, run:
+
+[root@web01 ~]# omreport system
+To only get the health information for the chassis:
+
+[root@web01 ~]# omreport chassis
+The chassis can also only return specific components, such as:
+
+[root@web01 ~]# omreport chassis fans
+[root@web01 ~]# omreport chassis memory
+[root@web01 ~]# omreport chassis nics
+[root@web01 ~]# omreport chassis processors
+[root@web01 ~]# omreport chassis temps
+[root@web01 ~]# omreport chassis batteries
+[root@web01 ~]# omreport chassis pwrsupplies
+Storage health
+
+To view the physical and virtual disks on the server:
+
+[root@web01 ~]# omreport storage pdisk controller=0
+[root@web01 ~]# omreport storage vdisk controller=0
+[root@web01 ~]# omreport storage pdisk controller=0 vdisk=0
+If you just wanted a quick listing of the relevant disk information to see the state of the drives, run:
+
+[root@web01 ~]# omreport storage pdisk controller=0 | grep -iE "^id|^status|name|state|Failure Predicted"
+ID                              : 0:0:0
+Status                          : Ok
+Name                            : Physical Disk 0:0:0
+State                           : Online
+Failure Predicted               : No
+ID                              : 0:0:1
+Status                          : Ok
+Name                            : Physical Disk 0:0:1
+State                           : Online
+Failure Predicted               : No
+To see if there are any empty drive bays on the server:
+
+[root@web01 ~]# omreport storage controller controller=0 info=pdslotreport | grep 'Empty Slots'
+To see the storage battery status:
+
+[root@web01 ~]# omreport storage battery controller=0
+Hardware Logs
+
+To display the hardware logs, run:
+
+[root@web01 ~]# omreport system esmlog
+If you need to view the alert logs:
+
+[root@web01 ~]# omreport system alertlog
+And if you needed to view the messages from the POST:
+
+[root@web01 ~]# omreport system postlog
+If you find you need to clear the logs, that can be performed by:
+
+[root@web01 ~]# omconfig system esmlog action=clear
+[root@web01 ~]# omconfig system alertlog action=clear
+[root@web01 ~]# omconfig system postlog action=clear
+CPU actions
+
+To see if hyperthreading is enabled on the CPUs:
+
+[root@web01 ~]# omreport chassis biossetup | grep -A 2 'HyperThreading'
+If you wanted to enable hyperthreading:
+
+# Dell R710
+[root@web01 ~]# omconfig chassis biossetup attribute=cpuht setting=enabled
+
+# Dell R720
+[root@web01 ~]# omconfig chassis biossetup attribute=ProcCores setting=All
+If you needed to enable or disable NUMA:
+
+# Disable NUMA:
+[root@web01 ~]# omconfig chassis biossetup attribute=numa setting=disabled
+
+# Enable NUMA:
+[root@web01 ~]# omconfig chassis biossetup attribute=numa setting=enabled

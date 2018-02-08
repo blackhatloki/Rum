@@ -1,0 +1,17 @@
+Enable Serial Console on CentOS/RHEL 7
+
+Edit “/etc/sysconfig/grub”
+Add to end of GRUB_CMD_LINELINUX, “console=ttyS0” Replace ttyS0 with your serial port.
+Mine looks like this:
+
+GRUB_TIMEOUT=5
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"
+GRUB_CMDLINE_LINUX="rd.lvm.lv=centos/root rd.lvm.lv=centos/swap crashkernel=auto rhgb quiet console=ttyS0"
+GRUB_DISABLE_RECOVERY="true"
+Run the following commands as root: Again replace ttyS0 with your serial port
+
+stty -F /dev/ttyS0 speed 9600
+grub2-mkconfig -o /boot/grub2/grub.cfg
+systemctl start getty@ttyS0

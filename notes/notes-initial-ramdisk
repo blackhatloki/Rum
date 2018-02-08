@@ -1,0 +1,32 @@
+RHEL: Rebuilding the initial ramdisk image
+# Tested on RHEL 5, 6 & 7
+
+# Sometimes it may be necessary to rebuild the initial ramdisk (also known as initrd or
+# initramfs) to include new kernel modules, files, etc.
+
+
+# RHEL 3, 4 & 5: Rebuilding the initrd
+# ------------------------------------------------------------------------------------------
+
+cp /boot/initrd-$(uname -r).img /boot/initrd-$(uname -r).img.bak
+
+mkinitrd -f -v /boot/initrd-$(uname -r).img $(uname -r)
+
+# If we are in a kernel version different to the initrd we are building we must specify
+# the full kernel version, without architecture:
+
+mkinitrd -f -v /boot/initrd-2.6.18-348.2.1.el5.img 2.6.18-348.2.1.el5
+
+
+
+# RHEL 6 & 7: Rebuilding the initramfs
+# ------------------------------------------------------------------------------------------
+
+cp /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r).img.bak
+
+dracut -f 
+
+# If we are in a kernel version different to the initrd we are building we must specify
+# the full kernel version, including architecture:
+
+dracut -f /boot/initramfs-2.6.32-220.7.1.el6.x86_64.img 2.6.32-220.7.1.el6.x86_64

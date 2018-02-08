@@ -1,0 +1,186 @@
+iDRAC 7 CheatSheet
+Filed under: Day to day sys administration — Tags: dell, idrac, racadm — Tin' @ 3:11 pm
+# Get all iDRAC settings in a file
+
+?
+1
+racadm get -f config.txt
+# Set password for root user
+
+?
+1
+racadm set iDRAC.Users.2.Password "password"
+# List all ssh key for root user
+
+?
+1
+racadm sshpkauth -i 2 -v -k all
+
+# Add ssh key to root user
+
+?
+1
+racadm sshpkauth -i 2 -k 1 "contents of the public key file"
+# Delete ssh key for root user
+
+?
+1
+racadm sshpkauth -i 2 -d -k 1
+# Get iDRAC IP config
+
+?
+1
+2
+racadm getniccfg
+racadm get iDRAC.NIC
+# Set iDRAC DNS Name
+
+?
+1
+racadm set iDRAC.NIC.DNSRacName rougerie-rsc
+# Set iDRAC domain Name
+
+?
+1
+racadm set iDRAC.NIC.DNSDomainName gnali.org
+# Set iDRAC DNS server
+
+?
+1
+2
+racadm config -g cfgLanNetworking -o cfgDNSServer1 191.254.31.175
+racadm config -g cfgLanNetworking -o cfgDNSServer2 184.7.12.44
+## Set FrontLCD to hostname
+
+?
+1
+racadm set System.LCD.Configuration 16
+# Reset iDRAC to factory defaults
+
+?
+1
+racadm racresetcfg
+#Reset iDRAC
+
+?
+1
+racadm racreset
+# Get serial number (service tag)
+
+?
+1
+racadm getsvctag
+# Get current system information
+
+?
+1
+racadm getsysinfo
+# Configure One-Time-Boot
+
+?
+1
+2
+racadm set BIOS.OneTimeBoot.OneTimeBootMode OneTimeBootSeq
+racadm set BIOS.OneTimeBoot.OneTimeBootSeqDev NIC.Integrated.1-1-1
+# Create Commit and Reboot jobqueue to apply BIOS or NIC Configuration
+
+?
+1
+racadm jobqueue create BIOS.Setup.1-1 -r pwrcycle -s TIME_NOW -e TIME_NA
+# Create Commit jobqueue without Reboot
+
+?
+1
+racadm jobqueue create BIOS.Setup.1-1
+# Delete a jobqueue
+
+?
+1
+racadm jobqueue delete -i &lt;job_ID&gt;
+# List all Jobqueue
+
+?
+1
+racadm jobqueue view
+# Check Boot Order List
+
+?
+1
+racadm get BIOS.BiosBootSettings.bootseq
+# Disable HyperThreadings
+
+?
+1
+racadm set BIOS.ProcSettings.LogicalProc Disabled
+# Disabled OS to iDRAC Pass-through for iDRAC Service Module (automatically create a pseudo NIC in OS)
+
+?
+1
+racadm set iDRAC.OS-BMC.AdminState Disabled
+# Change SNMP public community
+
+?
+1
+racadm set iDRAC.SNMP.AgentCommunity unixplop
+# Disable ASR
+
+?
+1
+racadm config -g cfgRacTuning -o cfgRacTuneAsrEnable 0
+# Configure Serial redirection
+
+?
+1
+2
+3
+4
+5
+racadm config -g cfgSerial -o cfgSerialConsoleEnable 1
+racadm config -g cfgSerial -o cfgSerialBaudRate 115200
+racadm config -g cfgSerial -o cfgSerialCom2RedirEnable 1
+racadm config -g cfgSerial -o cfgSerialTelnetEnable 0
+racadm config -g cfgSerial -o cfgSerialSshEnable 1
+# Access ssh console
+
+?
+1
+2
+ssh root@rouerie-rsc
+console com2
+# Disable Serial On Lan
+
+?
+1
+racadm config -g cfgIpmiSol -o cfgIpmiSolEnable 0
+# Help on specific section
+
+?
+1
+racadm help  BIOS.SysProfileSettings
+# Change Power Profile
+
+?
+1
+racadm set BIOS.SysProfileSettings PerfPerWattOptimizedOs
+# Set AC Power Recovery
+
+?
+1
+2
+racadm set BIOS.SysSecurity.AcPwrRcvry Last
+racadm set BIOS.SysSecurity.AcPwrRcvryDelay Immediate
+# Get RAID physical Disk information
+
+?
+1
+2
+3
+racadm raid get pdisks
+racadm raid get pdisks -o (all information)
+racadm raid get pdisks -o -p state,size (specific information)
+# Get RAID Virtual Disk Information
+
+?
+1
+racadm raid get vdisks
+# Configuration Web Virtual console to use JAVA

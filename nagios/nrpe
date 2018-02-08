@@ -1,0 +1,2 @@
+nrpe       ALL=(ALL)   NOPASSWD: ALL
+nagios     ALL=(ALL)   NOPASSWD: ALL

@@ -1,0 +1,14 @@
+You can dump the database into a file using: 
+ 
+  mysqldump -h hostname -u user --password=password databasename > filename 
+ 
+you can restore the info to the database again using: 
+ 
+  mysql -h hostname -u user --password=password databasename < filename
+
+mysqldump -u root -p --all-databases > alldb.sql
+Look up the documentation for mysqldump. You may want to use some of the options mentioned in comments:
+
+mysqldump -u root -p --opt --all-databases > alldb.sql
+mysqldump -u root -p --all-databases --skip-lock-tables > alldb.sql
+

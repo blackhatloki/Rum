@@ -1,0 +1,35 @@
+Tony,
+
+OK.  To get a different version we have to ask for it from DDN, probably through a ticket.
+We can do that, but just to double check:
+
+-- Are you installing from lustre-client-2.7.19.8.ddn5.g60f692f ?
+
+-- You might be doing it this way already, but I have had the best luck as follows:
+
+1)  Do a blanket yum update (probably includes the kernel) and a reboot before anything else.
+
+2)  Remove any older kernel packages so none of the other installations get confused.
+
+3)  Build OFED, and make sure it builds cleanly without warnings.
+
+4)  For Lustre (EXAScaler), I am attaching the manual closest to the version we have.  They have instructions at "6.1 Building Client Packages".  We start from there, BUT we need the --with-o2ib= option.  
+Would would seem to make sense is:
+
+./configure --with-linux=/lib/modules/`uname -r`/source --disable-server --with-o2ib=/usr/src/mlnx-ofa_kernel-3.4
+
+However, that never seems to work.  What has worked for me is:
+
+./configure --with-linux=/lib/modules/`uname -r`/source --disable-server --with-o2ib=/usr/src/ofa_kernel/default
+
+The latter directory comes from the same package anyway.
+
+5)  As in their document, the actual compilation step is.
+make rpms
+
+6)  Finally install the rpms.  Any warnings?
+
+Is this what you are doing?
+
+Eric
+

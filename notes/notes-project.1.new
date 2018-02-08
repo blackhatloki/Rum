@@ -1,0 +1,35 @@
+- Node Health Check 
+- Failover of BEEGFS 
+- Docs for zfs replication between home-0 and home-1 
+- Dev Cluster 
+- Fix hostname on the 1GE switches 
+- FIx hostname on the 10GE switches
+- Dell Inventory
+- Monitoring (Nagios)
+- Performance (Ganglia)
+- Ansible 
+     * automounter for archive
+     * Kernel
+     * Lustre 
+- Backup 
+     * SLURM 
+     * Warewulf 
+     1 GE switches
+     10 GE switches 
+
+
+
+23 servers 
+ 6 High/Med Memory 
+17 GPU 
+
+16 EDR cables 
+17 FDR cables 
+
+ibswspine18 RU40 Cabinet 12-009 
+10GE RU 41 1 free port  SLC 
+
+12-001  C28 R20-R11 
+12-001  C29 R10-R01 
+12-002  C30 R20-R11 
+12-002  C31 R10-R01 

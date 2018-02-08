@@ -1,0 +1,37 @@
+prince-master1.hpc.nyu.edu:teague -> : history  | egrep "racadm|omconfig"
+  702  racadm get NIC.NICConfig
+  703  racadm hwinventory nic
+  704  racadm get nic.nicconfig
+  705  racadm get BIOS
+  706  racadm get BIOS.SlotDisablement
+  707  racadm set BIOS.SlotDisablement Slot2 Enabled
+  708  racadm get BIOS.SlotDisablement Slot2
+  709  racadm help BIOS.SlotDisablement
+  710  racadm help BIOS.SlotDisablement GlobalSlotDriverDisable Enabled
+  711  racadm set BIOS.SlotDisablement GlobalSlotDriverDisable Enabled
+  712  racadm get BIOS
+  713  racadm get BIOS SlotDisablement
+  714  racadm get BIOS.SlotDisablement
+  715  racadm get BIOS.SlotDisablement Slot=Enabled
+  716  racadm set BIOS.SlotDisablement Slot2=Enabled
+  717  racadm get BIOS.SlotDisablement Slot2
+  718  racadm get NIC
+  719  omconfig chassis
+  720  omconfig chassis biossetup
+  721  omconfig chassis biossetup  attribute=slot2 setting=Enabled
+  722  omconfig chassis biossetup  attribute=slot3 setting=Enabled
+  723  racadm get BIOS.SlotDisablement
+  724  omconfig chassis biossetup  attribute=GlobalSlotDriverDisable setting=Enabled
+  725  racadm get BIOS.SlotDisablement
+  726  omconfig chassis biossetup  -?
+  727  omconfig chassis biossetup  -? | more
+  728  racadm get BIOS
+  729  racadm get BIOS.IntegratedDevice
+  730  racadm get BIOS.IntegratedDevices
+  731  omconfig chassis biossetup  attribute=IntegratedNetwork1 setting=Enabled
+  732  racadm get BIOS.IntegratedDevice
+  733  racadm get BIOS.IntegratedDevices
+  753  history > racadm_princemaster1.txt
+  755  cp racadm_princemaster1.txt /home/teague
+  758  omconfig chassis biossetup -?
+  761  history  | egrep "racadm|omconfig"

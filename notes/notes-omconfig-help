@@ -1,0 +1,119 @@
+
+Memory Settings
+-----------------------------------
+attribute=MemTest                   setting=<Enabled><Disabled>
+attribute=MemOpMode                 setting=<OptimizerMode><SpareMode><MirrorMode><AdvEccMode><SpareWithAdvEccMode><FaultResilientMode><NUMAFaultResilientMode>
+attribute=NodeInterleave            setting=<Enabled><Disabled>
+attribute=SnoopMode                 setting=<EarlySnoop><HomeSnoop><ClusterOnDie><OpportunisticSnoopBroadcast>
+attribute=CorrEccSmi                setting=<Enabled><Disabled>
+
+Processor Settings
+-----------------------------------
+attribute=LogicalProc               setting=<Enabled><Disabled>
+attribute=QpiSpeed                  setting=<MaxDataRate><9GTps><8GTps><6GTps>
+attribute=RtidSetting               setting=<Enabled><Disabled>
+attribute=ProcVirtualization        setting=<Enabled><Disabled>
+attribute=ProcAdjCacheLine          setting=<Enabled><Disabled>
+attribute=ProcHwPrefetcher          setting=<Enabled><Disabled>
+attribute=DcuStreamerPrefetcher     setting=<Enabled><Disabled>
+attribute=DcuIpPrefetcher           setting=<Enabled><Disabled>
+attribute=ProcExecuteDisable        setting=<Enabled><Disabled>
+attribute=DynamicCoreAllocation     setting=<Enabled><Disabled>
+attribute=ProcConfigTdp             setting=<Nominal><Level1>
+attribute=ControlledTurbo           setting=<Enabled><Disabled><ControlledTurboLimitMinus1><ControlledTurboLimitMinus2><ControlledTurboLimitMinus3>
+attribute=ProcCores                 setting=<All><1><2><4><6><8><10><12>
+
+SATA Settings
+-----------------------------------
+attribute=EmbSata                   setting=<AtaMode><AhciMode><RaidMode><Off>
+attribute=SecurityFreezeLock        setting=<Enabled><Disabled>
+attribute=WriteCache                setting=<Enabled><Disabled>
+
+Boot Settings
+-----------------------------------
+attribute=BootMode                  setting=<Bios><Uefi>
+attribute=BootSeqRetry              setting=<Enabled><Disabled>
+attribute=HddFailover               setting=<Enabled><Disabled>
+
+    BIOS Boot Settings
+    -----------------------------------
+    attribute=BootSeq                   sequence=<HardDisk.List.1-1>
+    attribute=HddSeq                    sequence=<RAID.Integrated.1-1>
+
+    One-Time Boot
+    -----------------------------------
+    attribute=OneTimeBootMode           setting=<Disabled><OneTimeBootSeq><OneTimeHddSeq>
+
+Integrated Devices
+-----------------------------------
+attribute=Usb3Setting               setting=<Disabled><Enabled>
+attribute=UsbPorts                  setting=<AllOn><OnlyBackPortsOn><AllOff>
+attribute=InternalUsb               setting=<On><Off>
+attribute=IntegratedRaid            setting=<Enabled><Disabled>
+attribute=IntegratedNetwork1        setting=<Enabled><DisabledOs>
+attribute=IntNic1Port1BootProto     setting=<Unknown><None><Pxe><Iscsi>
+attribute=IntNic1Port2BootProto     setting=<Unknown><None><Pxe><Iscsi>
+attribute=IntNic1Port3BootProto     setting=<Unknown><None><Pxe><Iscsi>
+attribute=IntNic1Port4BootProto     setting=<Unknown><None><Pxe><Iscsi>
+attribute=IoatEngine                setting=<Enabled><Disabled>
+attribute=IoNonPostedPrefetch       setting=<Enabled><Disabled>
+attribute=EmbVideo                  setting=<Enabled><Disabled>
+attribute=SriovGlobalEnable         setting=<Enabled><Disabled>
+attribute=OsWatchdogTimer           setting=<Enabled><Disabled>
+attribute=MmioAbove4Gb              setting=<Enabled><Disabled>
+
+    Slot Disablement
+    -----------------------------------
+    attribute=GlobalSlotDriverDisable   setting=<Enabled><Disabled>
+    attribute=Slot1                     setting=<Enabled><Disabled><BootDriverDisabled>
+    attribute=Slot2                     setting=<Enabled><Disabled><BootDriverDisabled>
+    attribute=Slot3                     setting=<Enabled><Disabled><BootDriverDisabled>
+
+    Slot Bifurcation
+    -----------------------------------
+    attribute=Slot1Bif                  setting=<DefaultBifurcation><x4x4x4x4><x8x8>
+    attribute=Slot2Bif                  setting=<DefaultBifurcation><x4x4>
+    attribute=Slot3Bif                  setting=<DefaultBifurcation><x4x4x4x4><x8x8>
+
+Serial Communication
+-----------------------------------
+attribute=SerialComm                setting=<OnNoConRedir><OnConRedirAuto><OnConRedirCom1><OnConRedirCom2><Off>
+attribute=SerialPortAddress         setting=<Serial1Com1Serial2Com2><Serial1Com2Serial2Com1>
+attribute=ExtSerialConnector        setting=<Serial1><Serial2><RemoteAccDevice>
+attribute=FailSafeBaud              setting=<115200><57600><19200><9600>
+attribute=ConTermType               setting=<Vt100Vt220><Ansi>
+attribute=RedirAfterBoot            setting=<Enabled><Disabled>
+
+System Profile Settings
+-----------------------------------
+attribute=SysProfile                setting=<PerfPerWattOptimizedDapc><PerfPerWattOptimizedOs><PerfOptimized><DenseCfgOptimized><Custom>
+attribute=WorkloadProfile           setting=<NotAvailable><HpcProfile><LowLatencyOptimizedProfile>
+attribute=PowerSaver                setting=<Enabled><Disabled>
+
+System Security
+-----------------------------------
+attribute=SysPassword               setting=<string value>
+attribute=SetupPassword             setting=<string value>
+attribute=PasswordStatus            setting=<Unlocked><Locked>
+attribute=TpmSecurity               setting=<Off><On>
+attribute=AcPwrRcvry                setting=<Last><On><Off>
+attribute=AcPwrRcvryDelay           setting=<Immediate><Random><User>
+attribute=UefiVariableAccess        setting=<Standard><Controlled>
+
+    TPM Advanced
+    -----------------------------------
+    No Properties
+
+Miscellaneous Settings
+-----------------------------------
+attribute=AssetTag                  setting=<string value>
+attribute=NumLock                   setting=<On><Off>
+attribute=ErrPrompt                 setting=<Enabled><Disabled>
+attribute=ForceInt10                setting=<Enabled><Disabled>
+attribute=InSystemCharacterization  setting=<Enabled><Disabled><FastBoot>
+
+-----------------------------------
+passwd=<string>            This parameter allows to provide the setup password.
+
+NOTE:To lock a System Password, after you set a System Password, reboot the system and then set Locked state for Password Status attribute.
+

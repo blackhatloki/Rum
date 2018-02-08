@@ -1,0 +1,1654 @@
+! Version 9.8(0.0P5)
+! Last configuration change at Sat Sep  9 05:56:19 2017 by admin
+! Startup-config last updated at Sat Sep  9 05:57:23 2017 by admin
+!
+boot system stack-unit 1 primary system: A:
+boot system stack-unit 1 secondary system: B:
+boot system stack-unit 5 primary system: A:
+boot system stack-unit 5 secondary system: B:
+!
+redundancy auto-synchronize full
+!
+hostname e-10-0
+!
+enable password 7 b125455cf679b208559bb8debb26f95d170ed51addf87550
+!
+username admin password 7 7c7d6a639cede92b0e5759990c631269 
+! 
+stack-unit 1 provision S4048-ON
+! 
+stack-unit 1 stack-group 12
+! 
+stack-unit 1 stack-group 13
+! 
+stack-unit 1 stack-group 14
+! 
+stack-unit 1 stack-group 15
+! 
+interface TenGigabitEthernet 1/1
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/2
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/3
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/4
+ no ip address
+!  
+ port-channel-protocol LACP 
+  port-channel 3 mode active 
+ no shutdown
+! 
+interface TenGigabitEthernet 1/5
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/6
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/7
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/8
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/9
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/10
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/11
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/12
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/13
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/14
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/15
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/16
+ no ip address
+ switchport
+ shutdown
+! 
+interface TenGigabitEthernet 1/17
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/18
+ no ip address
+ switchport
+ shutdown
+! 
+interface TenGigabitEthernet 1/19
+ no ip address
+ switchport
+ shutdown
+! 
+interface TenGigabitEthernet 1/20
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/21
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/22
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/23
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/24
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/25
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/26
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/27
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/28
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/29
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/30
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/31
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/32
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/33
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/34
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/35
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/36
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/37
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/38
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/39
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/40
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/41
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/42
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/43
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/44
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/45
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/46
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/47
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 1/48
+ no ip address
+ switchport
+ no shutdown
+! 
+interface fortyGigE 1/53
+ no ip address
+!  
+ port-channel-protocol LACP 
+  port-channel 2 mode active 
+ no shutdown
+! 
+interface fortyGigE 1/54
+ no ip address
+!  
+ port-channel-protocol LACP 
+  port-channel 1 mode active 
+ no shutdown
+! 
+stack-unit 2 provision S4048-ON
+! 
+stack-unit 2 stack-group 12
+! 
+stack-unit 2 stack-group 13
+! 
+stack-unit 2 stack-group 14
+! 
+stack-unit 2 stack-group 15
+! 
+interface TenGigabitEthernet 2/1
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/2
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/3
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/4
+ no ip address
+!  
+ port-channel-protocol LACP 
+  port-channel 3 mode active 
+ no shutdown
+! 
+interface TenGigabitEthernet 2/5
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/6
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/7
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/8
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/9
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/10
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/11
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/12
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/13
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/14
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/15
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/16
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/17
+ no ip address
+ switchport
+ shutdown
+! 
+interface TenGigabitEthernet 2/18
+ no ip address
+ switchport
+ shutdown
+! 
+interface TenGigabitEthernet 2/19
+ no ip address
+ switchport
+ shutdown
+! 
+interface TenGigabitEthernet 2/20
+ no ip address
+ switchport
+ shutdown
+! 
+interface TenGigabitEthernet 2/21
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/22
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/23
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/24
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/25
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/26
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/27
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/28
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/29
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/30
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/31
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/32
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/33
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/34
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/35
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/36
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/37
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/38
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/39
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/40
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/41
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/42
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/43
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/44
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/45
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/46
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/47
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 2/48
+ no ip address
+ switchport
+ no shutdown
+! 
+interface fortyGigE 2/53
+ no ip address
+!  
+ port-channel-protocol LACP 
+  port-channel 2 mode active 
+ no shutdown
+! 
+interface fortyGigE 2/54
+ no ip address
+!  
+ port-channel-protocol LACP 
+  port-channel 1 mode active 
+ no shutdown
+! 
+stack-unit 3 provision S4048-ON
+! 
+stack-unit 3 stack-group 12
+! 
+stack-unit 3 stack-group 13
+! 
+stack-unit 3 stack-group 14
+! 
+stack-unit 3 stack-group 15
+! 
+stack-unit 3 stack-group 16
+! 
+stack-unit 3 stack-group 17
+! 
+interface TenGigabitEthernet 3/1
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/2
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/3
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/4
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/5
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/6
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/7
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/8
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/9
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/10
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/11
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/12
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/13
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/14
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/15
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/16
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/17
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/18
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/19
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/20
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/21
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/22
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/23
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/24
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/25
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/26
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/27
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/28
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/29
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/30
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/31
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/32
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/33
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/34
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/35
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/36
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/37
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/38
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/39
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/40
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/41
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/42
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/43
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/44
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/45
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/46
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/47
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 3/48
+ no ip address
+ switchport
+ no shutdown
+! 
+stack-unit 4 provision S4048-ON
+! 
+stack-unit 4 stack-group 12
+! 
+stack-unit 4 stack-group 13
+! 
+stack-unit 4 stack-group 14
+! 
+stack-unit 4 stack-group 15
+! 
+stack-unit 4 stack-group 16
+! 
+stack-unit 4 stack-group 17
+! 
+interface TenGigabitEthernet 4/1
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/2
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/3
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/4
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/5
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/6
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/7
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/8
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/9
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/10
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/11
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/12
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/13
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/14
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/15
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/16
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/17
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/18
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/19
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/20
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/21
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/22
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/23
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/24
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/25
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/26
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/27
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/28
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/29
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/30
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/31
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/32
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/33
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/34
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/35
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/36
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/37
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/38
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/39
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/40
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/41
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/42
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/43
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/44
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/45
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/46
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/47
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 4/48
+ no ip address
+ switchport
+ no shutdown
+! 
+stack-unit 5 provision S4048-ON
+! 
+stack-unit 5 stack-group 12
+! 
+stack-unit 5 stack-group 13
+! 
+stack-unit 5 stack-group 14
+! 
+stack-unit 5 stack-group 15
+! 
+stack-unit 5 stack-group 16
+! 
+stack-unit 5 stack-group 17
+! 
+interface TenGigabitEthernet 5/1
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/2
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/3
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/4
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/5
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/6
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/7
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/8
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/9
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/10
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/11
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/12
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/13
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/14
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/15
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/16
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/17
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/18
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/19
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/20
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/21
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/22
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/23
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/24
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/25
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/26
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/27
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/28
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/29
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/30
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/31
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/32
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/33
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/34
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/35
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/36
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/37
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/38
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/39
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/40
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/41
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/42
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/43
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/44
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/45
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/46
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/47
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 5/48
+ no ip address
+ switchport
+ no shutdown
+! 
+stack-unit 6 provision S4048-ON
+! 
+stack-unit 6 stack-group 12
+! 
+stack-unit 6 stack-group 13
+! 
+stack-unit 6 stack-group 14
+! 
+stack-unit 6 stack-group 15
+! 
+stack-unit 6 stack-group 16
+! 
+stack-unit 6 stack-group 17
+! 
+interface TenGigabitEthernet 6/1
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/2
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/3
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/4
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/5
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/6
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/7
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/8
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/9
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/10
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/11
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/12
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/13
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/14
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/15
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/16
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/17
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/18
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/19
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/20
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/21
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/22
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/23
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/24
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/25
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/26
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/27
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/28
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/29
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/30
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/31
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/32
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/33
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/34
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/35
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/36
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/37
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/38
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/39
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/40
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/41
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/42
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/43
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/44
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/45
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/46
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/47
+ no ip address
+ switchport
+ no shutdown
+! 
+interface TenGigabitEthernet 6/48
+ no ip address
+ switchport
+ no shutdown
+! 
+interface ManagementEthernet 1/1
+ ip address 192.168.0.28/22
+ no shutdown
+! 
+interface ManagementEthernet 2/1
+ ip address 192.168.0.17/22
+ no shutdown
+! 
+interface ManagementEthernet 3/1
+ ip address 192.168.0.18/22
+ no shutdown
+! 
+interface ManagementEthernet 4/1
+ ip address 192.168.0.19/22
+ no shutdown
+! 
+interface ManagementEthernet 5/1
+ ip address 192.168.0.25/22
+ no shutdown
+! 
+interface ManagementEthernet 6/1
+ ip address 192.168.0.27/22
+ no shutdown
+! 
+interface Port-channel 1
+ no ip address
+ switchport
+ no shutdown
+! 
+interface Port-channel 2
+ no ip address
+ switchport
+ no shutdown
+! 
+interface Port-channel 3
+ no ip address
+ switchport
+ no shutdown
+! 
+interface Port-channel 4
+ no ip address
+ shutdown
+! 
+interface Vlan 1
+!untagged TenGigabitEthernet 1/1-1/3,1/5-1/48
+!untagged TenGigabitEthernet 2/1-2/3,2/5-2/48
+!untagged TenGigabitEthernet 3/1-3/48
+!untagged TenGigabitEthernet 4/1-4/48
+!untagged TenGigabitEthernet 5/1-5/48
+!untagged TenGigabitEthernet 6/1-6/48
+!untagged Port-channel 1-3
+! 
+interface Vlan 101
+ description default vlan for provisioning
+ no ip address
+ shutdown
+!
+management route 0.0.0.0/0 192.168.0.1 
+!
+snmp-server community HPCNYU10ASTOR ro 
+!
+stack-unit 1 priority 1
+stack-unit 2 priority 1
+stack-unit 3 priority 1
+stack-unit 4 priority 1
+stack-unit 5 priority 1
+stack-unit 6 priority 1
+!
+ip ssh server enable
+! 
+protocol lldp 
+!
+line console 0
+line vty 0
+line vty 1
+line vty 2
+line vty 3
+line vty 4
+line vty 5
+line vty 6
+line vty 7
+line vty 8
+line vty 9
+! 
+reload-type
+ boot-type normal-reload
+ config-scr-download enable
+! 
+end

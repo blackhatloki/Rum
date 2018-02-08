@@ -1,0 +1,7 @@
+ib-3-1 [1: master] # configure terminal
+ib-3-1 [1: master] (config) # snmp-server location "United States,New York City,NY"
+ib-3-1 [1: master] (config) # snmp-server contact  hp-staff@nyu.edu
+ib-3-1 [1: master] (config) # snmp-server community HPCNYU10ASTOR ro
+ib-3-1 [1: master] (config) # configuration write
+ib-3-1 [1: master] (config) # show running
+

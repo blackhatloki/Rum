@@ -1,0 +1,63 @@
+
+down vote
+Luckily, I was able to come up with a way to do that.
+
+Step 1: Add a group for chrooted users
+
+groupadd chrootusers
+Step 2: Configure SSH
+
+nano /etc/ssh/sshd_config
+Replace
+
+Subsystem     sftp    /usr/libexec/openssh/sftp-server
+With
+
+Subsystem     sftp    internal-sftp
+Paste at the End
+
+Match Group chrootusers
+  ChrootDirectory /home/%u
+Run
+
+systemctl restart sshd
+systemctl status sshd
+Step 3: Add a user
+
+Change peter to your desired user name.
+
+export NEW_USER_NAME=peter
+
+useradd ${NEW_USER_NAME}
+usermod -G chrootusers -d / ${NEW_USER_NAME}
+passwd ${NEW_USER_NAME}
+Step 4: Install packages and create the necessary directory structure
+
+yum --installroot=/home/${NEW_USER_NAME} --releasever=7 --nogpg --disablerepo='*' --enablerepo=base install centos-release openssh-clients wget vi nano zip unzip tar mariadb findutils iputils bind-utils rsync
+Step 5: Mount proc and dev
+
+echo "none /home/${NEW_USER_NAME}/proc proc defaults 0 0" >> /etc/fstab
+echo "/dev /home/${NEW_USER_NAME}/dev none bind 0 0" >> /etc/fstab
+Run
+
+mount -a
+Step 6: Configure the DNS servers
+
+echo "nameserver 8.8.8.8" >> /home/${NEW_USER_NAME}/etc/resolv.conf
+echo "nameserver 8.8.4.4" >> /home/${NEW_USER_NAME}/etc/resolv.conf
+That's all.
+
+Keep in mind that $NEW_USER_NAME is bound to the current session!
+
+Start from Step 3 when adding another user.
+
+To install more packages later use the same command as in Step 4.
+
+When logging in using SSH you will get messages like cannot find name for user ID x. They are safe to ignore, but if you'd like to get rid of them, you will need to duplicate the user in chroot:
+
+export NEW_USER_ID=$(id -u ${NEW_USER_NAME})
+export NEW_USER_GROUP_ID=$(id -g ${NEW_USER_NAME})
+
+chroot /home/${NEW_USER_NAME} /bin/bash -c 'useradd -u ${NEW_USER_ID} ${NEW_USER_NAME}'
+chroot /home/${NEW_USER_NAME} /bin/bash -c 'groupadd -g ${NEW_USER_GROUP_ID} chrootusers'
+

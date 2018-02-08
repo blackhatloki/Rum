@@ -1,0 +1,13 @@
+
+Monday, September 02, 2013
+Configure Force10 S4810 for SNMP
+Enable SNMP in Force10 S4810 switches is straight forward. Bellow is configuration sample.
+
+conf
+
+! Enable SNMP for read only access
+snmp-server community public ro
+
+! Enable SNMP traps and send it to SNMP receiver 192.168.12.70
+snmp-server host 192.168.12.70 version 1
+snmp-server enable

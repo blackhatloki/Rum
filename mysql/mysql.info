@@ -1,0 +1,17 @@
+
+1
+down vote
+Try this (from the mysql documentation):
+
+first create a config file for mysql and make sure that only your account has access to it:
+
+touch ~/.my.cnf
+chmod 600 ~/.my.cnf
+add the username password combinations in the config file:
+
+[mysqldump]
+user=databseuser12
+password=otFRD?17*<8X0G
+You can then run the mysqldump command without a password:
+
+mysqldump --user=databseuser12 --host=mysql.example.com forumsalpha 

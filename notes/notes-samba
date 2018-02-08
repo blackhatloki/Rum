@@ -1,0 +1,2 @@
+./configure --without-ad-dc --without-acl-support --without-ldap --without-ads
+

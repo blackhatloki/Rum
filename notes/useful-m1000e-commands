@@ -1,0 +1,53 @@
+Useful commands for Dell servers M1000E CMC
+BY ADMIN · PUBLISHED JULY 5, 2016 · UPDATED JULY 5, 2016
+
+Here are some commands that may come in handy for Dell systems.  
+
+Diagnostic log-gathering commands for an M1000e enclosure
+
+racadm dumplogs – Hidden command. Useful but VERY verbose logs
+racadm racdump – Less verbose than dumplogs
+racadm getsel – Grab the SEL (System Event Log) from the chassis
+racadm getraclog – Similar to getting syslog output
+racadm clrsel / clrraclog –  Clear SEL or raclog. They do fill up
+To capture the output of these commands, do something like:
+
+ssh mym1000ehostname dumplogs > /tmp/thelogfile
+Current M1000e status
+
+racadm getmodinfo – Health, presence, service tags of chassis, blades, switches, etc.
+racadm getmacaddress – Grab MAC addresses for every ethernet interface on the blades and chassis
+racadm getsensorinfo – Fan speeds, chassis ambient temperature, power supply status
+racadm getpbinfo / getpminfo – Power status
+racadm getversion – Get blade iDRAC versions and blade types
+racadm getversion -c – Get blade CPLD versions
+racadm getversion -b – Get blade BIOS versions
+(Just type “?” for more information and look at the get commands.  These are the ones I use frequently or ones that are very useful yet may not be well-known)
+
+Powerful M1000e commands
+
+racadm racreset -m server-12 – Reset the iDRAC on blade 12 from the CMC (safe for the OS).  If the iDRAC is still alive, it can also be done with ipmitool -H remote-idrac.example.com -I lan mc reset cold
+racadm serveraction -m server-3 powerdown – Hard power off server 3
+racadm ? serveraction – Get list of other actions to control power to blades
+racadm serveraction -m server-4 -f reseat – Virtual reseat a blade. Not safe to do with the OS up since it’s the same as suddenly pulling the power plug.  This fixes many problems.
+racadm serveraction -a powerup – Power up all blades. (Power up is staggered by the CMC)
+racadm racreset – Reboot the CMC. Safe operation for the blades. Wear ear plugs.
+racadm chassisaction -m switch-2 reset –  reset switch 2 from the CMC command line.
+Change BIOS settings on Dell servers
+The Dell Deployment Toolkit can do all sorts of fun things.  The syscfg command queries and changes BIOS settings such as C-states, C1E, turbo mode, virtualization, hyperthreading/SMT, power loss/recovery boot action, boot order, USB port accessibility, memory node interleaving, and much more.
+
+For desktops and laptops, try Dell’s Client Configuration Toolkit (CCTK) which works in Windows and Linux.
+
+There is an unfortunate bug in Dell’s software depending on how you install it.  For us, running dsetchanges /etc/omreg.cfg to something that then breaks syscfg.  Keep a backup copy and change it back after running dset.  I’m sure we can change the installation paths to make it work… Maybe one of these days.
+
+A few examples (changes usually require a reboot):
+
+racadm syscfg -h – List all the options for syscfg
+racadm syscfg -h –somecommandname – Description of a command
+racadm syscfg –cstates=enable – Enable C-states
+racadm syscfg –virtualization – Query current virtualization setting
+racadm syscfg –bootseq=usbfloppy.slot.1,usbcdrom.slot.1,nic.emb.1,hdd.emb.0 – Change bootorder
+ 
+
+Source: http://tech.ryancox.net/2010/12/useful-commands-for-dell-servers.ht
+http://kennethdalbjerg.dk/2016/07/05/useful-commands-for-dell-servers-m1000e-cmc

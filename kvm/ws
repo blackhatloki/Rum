@@ -1,0 +1,3 @@
+
+virsh attach-disk guest image.iso hdc --driver file --type cdrom --mode readonly
+virsh attach-disk balki rhel-server-6.5-x86_64-dvd.iso  vdc  --driver file --type cdrom --mode readonly

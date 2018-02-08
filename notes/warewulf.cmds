@@ -1,0 +1,253 @@
+Script started on Wed 01 Mar 2017 01:17:56 PM EST
+[?1034hprince-master0.hpc.nyu.edu-> : exitcat /etc/redhat-release [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Ksudo wwsh 
+[sudo] password for teague: 
+[?1034hWarewulf> exithelp?[Kwwsh listobject modify -s IPMI_IPADDR="192.168.0.60" gpu-10[C[C[C[C[C[C[C[C[C[C[13Pprovision set gpu-10 --bootlocal=exit1[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C3[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[20Pnode list  gpu-13
+NAME                GROUPS              IPADDR              HWADDR             
+================================================================================
+gpu-13              gpu                 172.16.0.63,10.0.0.63 90:e2:ba:ca:90:0c  
+Warewulf> node list  gpu-13[C[1P[1P[1P[1P[1@p[1@r[1@i[1@n[1@t[C[C gpu-13
+#### gpu-13 ###################################################################
+         gpu-13: ID               = 366
+         gpu-13: NAME             = gpu-13
+         gpu-13: NODENAME         = gpu-13
+         gpu-13: CLUSTER          = UNDEF
+         gpu-13: DOMAIN           = UNDEF
+         gpu-13: GROUPS           = gpu
+         gpu-13: ENABLED          = TRUE
+         gpu-13: eno1.HWADDR      = 90:e2:ba:ca:90:0c
+         gpu-13: eno1.HWPREFIX    = UNDEF
+         gpu-13: eno1.IPADDR      = 172.16.0.63
+         gpu-13: eno1.NETMASK     = 255.255.252.0
+         gpu-13: eno1.NETWORK     = UNDEF
+         gpu-13: eno1.GATEWAY     = 172.16.0.1
+         gpu-13: eno1.MTU         = UNDEF
+         gpu-13: eno1.FQDN        = UNDEF
+         gpu-13: ib0.HWADDR       = UNDEF
+         gpu-13: ib0.HWPREFIX     = UNDEF
+         gpu-13: ib0.IPADDR       = 10.0.0.63
+         gpu-13: ib0.NETMASK      = 255.255.252.0
+         gpu-13: ib0.NETWORK      = UNDEF
+         gpu-13: ib0.GATEWAY      = UNDEF
+         gpu-13: ib0.MTU          = UNDEF
+         gpu-13: ib0.FQDN         = UNDEF
+Warewulf> node print   gpu-13[2Plist[C[C[C[C[C[C[C[C[1P[1P[1P[1P[C[1Pgpu-13[1P[1P[1P[1P[1@p[1@r[1@i[1@v[1@i[1P[1P[1P[1@o[1@v[1@i[1@s[1@i[1@o[1@n[C[C gpu-13[1@p[1@r[1@i[1@n[1@t[C[C gpu-13
+#### gpu-13 ###################################################################
+         gpu-13: BOOTSTRAP        = 3.10.0-327.36.3.el7.x86_64
+         gpu-13: VNFS             = centos7.2
+         gpu-13: FILES            = cgroup.conf,dynamic_hosts,gres.conf,group,ifcfg-ib0,job_submit.lua,munge.key,network,passwd,plugstack.conf,prolog.sh,shadow,slurm.conf,slurm.epilog.clean,srunprolog.sh,taskprolog.sh,topology.conf
+         gpu-13: PRESHELL         = FALSE
+         gpu-13: POSTSHELL        = FALSE
+         gpu-13: CONSOLE          = UNDEF
+         gpu-13: PXELINUX         = UNDEF
+         gpu-13: SELINUX          = DISABLED
+         gpu-13: KARGS            = "quiet"
+         gpu-13: FILESYSTEMS      = mountpoint=/boot:dev=sda1:type=ext4:size=512,dev=sda2:type=swap:size=2048,mountpoint=/:dev=sda3:type=ext4:size=65536,mountpoint=/state/partition1:dev=sda4:type=ext4:size=fill
+         gpu-13: DISKFORMAT       = sda1,sda2,sda3,sda4
+         gpu-13: DISKPARTITION    = sda
+         gpu-13: BOOTLOADER       = sda
+         gpu-13: BOOTLOCAL        = TRUE
+Warewulf> provision print   gpu-13[C[C[C[C[C[C[C[C[C[C[5Pnode[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2Plist[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Khelp?[Kwwsh listobject modify -s IPMI_IPADDR="192.168.0.60" gpu-10[K3[1P[1@3[C[C[C[C[C[C[C[C
+NAME                       IPMI_IPADDR                
+======================================================
+gpu-13                     192.168.0.63               
+
+About to apply 1 action(s) to 1 object(s):
+
+     SET: IPMI_IPADDR          = 192.168.0.63 -> "192.168.0.63"
+
+Proceed?
+Yes/No [no]> yes
+Warewulf> object modify -s IPMI_IPADDR="192.168.0.63" gpu-13[C[C[C[C[C[C[C[C[C[C[26Pprovision print  [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5Pnode[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2Plist[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Khelp?[Kwwsh listobject modify -s IPMI_IPADDR="192.168.0.60" gpu-10[C[C[C[C[C[C[C[C[C[C[13Pprovision set gpu-10 --bootlocal=exit[1P --bootlocal=exit3 --bootlocal=exit
+Are you sure you want to make the following changes to 1 node(s):
+
+     SET: BOOTLOCAL            = EXIT
+
+Yes/No> Yes
+Warewulf> provision set gpu-13 --bootlocal=exit[K[K[K[Knormail[K[Kl
+Are you sure you want to make the following changes to 1 node(s):
+
+     SET: BOOTLOCAL            = NORMAL
+
+Yes/No> Yes
+Warewulf> provision set gpu-13 --bootlocal=normal[2Pexit
+Are you sure you want to make the following changes to 1 node(s):
+
+     SET: BOOTLOCAL            = EXIT
+
+Yes/No> Yes
+Warewulf> provision set gpu-13 --bootlocal=exitnormal[2Pexit[C[C[C[C[C[C[C[C[C[Cobject modify -s IPMI_IPADDR="192.168.0.63" gpu-13[C[C[C[C[C[C[C[C[C[C[26Pprovision print  [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5Pnode[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2Plist[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Khelp?[Kwwsh listobject modify -s IPMI_IPADDR="192.168.0.60" gpu-10[C[C[C[C[C[C[C[C[C[C[13Pprovision set gpu-10 --bootlocal=exit1[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C3[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[20Pnode list  gpu-13[C[C[C[C[C[C[C[C[C[Cprovision print gpu-10[C[C[C[C[C[C[C[C[C[Cfc -l[Khistoryobject dump gpu-13
+Object #0:  OBJECT REF Warewulf::Node=HASH(0x189c328) {
+    "BOOTLOADER" (10) => "sda" (3)
+    "BOOTLOCAL" (9) => "-1" (2)
+    "BOOTSTRAPID" (11) => 175
+    "DISKFORMAT" (10) => ARRAY REF ARRAY(0x191aea0) {
+        0:  "sda1" (4)
+        1:  "sda2" (4)
+        2:  "sda3" (4)
+        3:  "sda4" (4)
+    }
+    "DISKPARTITION" (13) => "sda" (3)
+    "FILEIDS" (7) => ARRAY REF ARRAY(0x1a2e7e0) {
+        0:  9
+        1:  1
+        2:  2
+        3:  3
+        4:  7
+        5:  174
+        6:  4
+        7:  180
+        8:  181
+        9:  182
+        10:  183
+        11:  187
+        12:  355
+        13:  356
+        14:  361
+        15:  353
+        16:  354
+    }
+    "FILESYSTEMS" (11) => ARRAY REF ARRAY(0x189c2c8) {
+        0:  "mountpoint=/boot:dev=sda1:type=ext4:size=512" (44)
+        1:  "dev=sda2:type=swap:size=2048" (28)
+        2:  "mountpoint=/:dev=sda3:type=ext4:size=65536" (42)
+        3:  "mountpoint=/state/partition1:dev=sda4:type=ext4:size=fill" (57)
+    }
+    "GROUPS" (6) => ARRAY REF ARRAY(0x1a343a0) {
+        0:  "gpu" (3)
+    }
+    "IPMI_AUTOCONFIG" (15) => 1
+    "IPMI_IPADDR" (11) => "192.168.0.63" (12)
+    "IPMI_NETMASK" (12) => "255.255.252.0" (13)
+    "IPMI_PASSWORD" (13) => "Hapy123" (7)
+    "IPMI_USERNAME" (13) => "root" (4)
+    "NAME" (4) => ARRAY REF ARRAY(0x189c6a0) {
+        0:  "gpu-13" (6)
+    }
+    "NETDEVS" (7) => OBJECT REF Warewulf::ObjectSet=HASH(0x191ad38) {
+        "ARRAY" (5) => ARRAY REF ARRAY(0x1a33fe0) {
+            0:  OBJECT REF Warewulf::Object=HASH(0x1a66620) {
+                "GATEWAY" (7) => "172.16.0.1" (10)
+                "HWADDR" (6) => "90:e2:ba:ca:90:0c" (17)
+                "IPADDR" (6) => "172.16.0.63" (11)
+                "NAME" (4) => "eno1" (4)
+                "NETMASK" (7) => "255.255.252.0" (13)
+            }
+            1:  OBJECT REF Warewulf::Object=HASH(0x1a2a188) {
+                "IPADDR" (6) => "10.0.0.63" (9)
+                "NAME" (4) => "ib0" (3)
+                "NETMASK" (7) => "255.255.252.0" (13)
+            }
+        }
+    }
+    "NODENAME" (8) => "gpu-13" (6)
+    "VNFSID" (6) => 6
+    "_HWADDR" (7) => ARRAY REF ARRAY(0x19035d8) {
+        0:  "90:e2:ba:ca:90:0c" (17)
+    }
+    "_ID" (3) => 366
+    "_IPADDR" (7) => ARRAY REF ARRAY(0x190e908) {
+        0:  "172.16.0.63" (11)
+        1:  "10.0.0.63" (9)
+    }
+    "_TIMESTAMP" (10) => 1488392400
+    "_TYPE" (5) => "node" (4)
+}
+
+Warewulf> object dump gpu-13[C[C[C[C[C[C[C[C[C[Cprovision set gpu-13 --bootlocal=exitnormal[2Pexit[C[C[C[C[C[C[C[C[C[Cobject modify -s IPMI_IPADDR="192.168.0.63" gpu-13[C[C[C[C[C[C[C[C[C[C[26Pprovision print  [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5Pnode[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2Plist[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Khelp?[Kwwsh listobject modify -s IPMI_IPADDR="192.168.0.60" gpu-10[C[C[C[C[C[C[C[C[C[C[13Pprovision set gpu-10 --bootlocal=exit1[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C3[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[20Pnode list  gpu-13[C[C[C[C[C[C[C[C[C[Cprovision print gpu-10[C[C[C[C[C[C[C[C[C[Cfc -l[Khistoryobject dump gpu-13210modify -s IPMI_IPADDR="192.168.0.62" gpu-121" gpu-110" gpu-10[7PAUTOCONFIG="1[C[C[C[C[C[C[C[C1[K3
+NAME                       IPMI_AUTOCONFIG            
+======================================================
+gpu-13                     1                          
+
+About to apply 1 action(s) to 1 object(s):
+
+     SET: IPMI_AUTOCONFIG      = 1 -> "1"
+
+Proceed?
+Yes/No [no]> Yes
+Warewulf> object modify -s IPMI_AUTOCONFIG="1" gpu-13[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[K[C[C[C[C[C[C[C[C[C[Cprovision set gpu-13 --bootlocal=exitnormal[2Pexit[C[C[C[C[C[C[C[C[C[Cobject modify -s IPMI_IPADDR="192.168.0.63" gpu-13[C[C[C[C[C[C[C[C[C[C[26Pprovision print  [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5Pnode[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2Plist[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Khelp?[Kwwsh listobject modify -s IPMI_IPADDR="192.168.0.60" gpu-10[C[C[C[C[C[C[C[C[C[C[13Pprovision set gpu-10 --bootlocal=exit1[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C3[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[20Pnode list  gpu-13[C[C[C[C[C[C[C[C[C[Cprovision print gpu-10[C[C[C[C[C[C[C[C[C[Cfc -l[Khistoryobject dump gpu-13210modify -s IPMI_IPADDR="192.168.0.62" gpu-121" gpu-110" gpu-10[7PAUTOCONFIG="1[C[C[C[C[C[C[C[C12[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[K[25@modify -s IPMI_AUTOCONFIG="1"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-01[K130113[32@modify -s IPMI_IPADDR="192.168.0.63"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[Kmodify -d IPMI_AUTOCONFIG="IPMI_IPADDR=192.168.0.63,IPMI_NETMASK=255.255.252.0,IPMI_PASSWORD=Hapy123,IPMI_USERNAME=root" gpu-133[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C dump gpu-13[K dump gpu-10modify -s IPMI_AUTOCONFIG="IPMI_IPADDR=192.168.0.63,IPMI_NETMASK=255.255.252.0,IPMI_PASSWORD=Hapy123,IPMI_USERNAME=root" gpu-133[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2
+2[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C1
+1[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C0
+0[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C dump gpu-10[K print -p 363[K dump gpu-10[C[C[C[C[C[C[C[C[C[Cnode  print gpu-13210[C[C[C[C[C[C[C[C[C[C[4@provision[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cobject[K dump gpu-10[K
+ERROR:  You must provide a command!
+
+USAGE:
+     object <command> [options] [targets]
+
+SUMMARY:
+     The object command provides an interface for generically manipulating all
+     object types within the Warewulf data store.
+
+COMMANDS:
+     modify          Add, delete, and/or set object member variables
+     print           Display object(s) and their members
+     delete          Completely remove object(s) from the data store
+     dump            Recursively dump objects in internal format
+     canonicalize    Check and update objects to current standard format
+     help            Show usage information
+
+OPTIONS:
+     -l, --lookup    Identify objects by specified property (default: "name")
+     -t, --type      Only operate on objects of the specified type
+     -p, --print     Specify which fields are printed (":all" for all)
+     -s, --set       Set a member variable (or "field")
+     -a, --add       Add value(s) to specified member array variable
+     -D, --del       Delete value(s) from specified member variable
+
+EXAMPLES:
+     Warewulf> object print -p :all
+     Warewulf> object print -p _id,name,_type
+
+WARNING:  This command is VERY POWERFUL.  It is primarily intended for
+developers and power users.  Please use CAREFULLY, if at all.  Data
+stores which are corrupted by misuse of this command may not be
+recoverable.  USE AT YOUR OWN RISK!
+
+Warewulf> object modify -s IPMI_AUTOCONFIG="1" gpu-13[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[K[C[C[C[C[C[C[C[C[C[Cprovision set gpu-13 --bootlocal=exitnormal[2Pexit[C[C[C[C[C[C[C[C[C[Cobject modify -s IPMI_IPADDR="192.168.0.63" gpu-13[C[C[C[C[C[C[C[C[C[C[26Pprovision print  [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5Pnode[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2Plist[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Khelp?[Kwwsh listobject modify -s IPMI_IPADDR="192.168.0.60" gpu-10[C[C[C[C[C[C[C[C[C[C[13Pprovision set gpu-10 --bootlocal=exit1[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C3[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[20Pnode list  gpu-13[C[C[C[C[C[C[C[C[C[Cprovision print gpu-10[C[C[C[C[C[C[C[C[C[Cfc -l[Khistoryobject dump gpu-13210modify -s IPMI_IPADDR="192.168.0.62" gpu-121" gpu-110" gpu-10[7PAUTOCONFIG="1[C[C[C[C[C[C[C[C12[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[K[25@modify -s IPMI_AUTOCONFIG="1"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-01[K130113[32@modify -s IPMI_IPADDR="192.168.0.63"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[Kmodify -d IPMI_AUTOCONFIG="IPMI_IPADDR=192.168.0.63,IPMI_NETMASK=255.255.252.0,IPMI_PASSWORD=Hapy123,IPMI_USERNAME=root" gpu-133[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C dump gpu-13[K dump gpu-10modify -s IPMI_AUTOCONFIG="IPMI_IPADDR=192.168.0.63,IPMI_NETMASK=255.255.252.0,IPMI_PASSWORD=Hapy123,IPMI_USERNAME=root" gpu-133[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2
+2[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C1
+1[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C0
+0[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C dump gpu-10[K print -p 363[K dump gpu-10[C[C[C[C[C[C[C[C[C[Cnode  print gpu-13210[C[C[C[C[C[C[C[C[C[C[4@provision[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cobject[K dump gpu-10[C[C[C[C[C[C[C[C[C[Chelp[Knode print --lookup=gpu-13[1P13[1Pipmi[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[12@list 192.168.0.60[C[C[C[C[C[C[C[C[C[C[C[C[C[C51[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[19Pprint gpu-13[K list  gpu-13[C[C[C[C[C[C[C[C[C[C[5@provision print[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cnode set gpu-13 --netdev=eno1 --hwaddr=90:e2:ba:ca:90:0c
+Are you sure you want to make the following 1 change(s) to 1 node(s):
+
+     SET: eno1.HWADDR          = 90:e2:ba:ca:90:0c
+
+Yes/No [no]> yes
+Warewulf> node set gpu-13 --netdev=eno1 --hwaddr=90:e2:ba:ca:90:0c[C[C[C[C[C[C[C[C[C[Cobject[K modify -s IPMI_AUTOCONFIG="1" gpu-13[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[K[C[C[C[C[C[C[C[C[C[Cprovision set gpu-13 --bootlocal=exitnormal[2Pexit[C[C[C[C[C[C[C[C[C[Cobject modify -s IPMI_IPADDR="192.168.0.63" gpu-13[C[C[C[C[C[C[C[C[C[C[26Pprovision print  [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5Pnode[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2Plist[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Khelp?[Kwwsh listobject modify -s IPMI_IPADDR="192.168.0.60" gpu-10[C[C[C[C[C[C[C[C[C[C[13Pprovision set gpu-10 --bootlocal=exit1[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C3[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[20Pnode list  gpu-13[C[C[C[C[C[C[C[C[C[Cprovision print gpu-10[C[C[C[C[C[C[C[C[C[Cfc -l[Khistoryobject dump gpu-13210modify -s IPMI_IPADDR="192.168.0.62" gpu-121" gpu-110" gpu-10[7PAUTOCONFIG="1[C[C[C[C[C[C[C[C12[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[K[25@modify -s IPMI_AUTOCONFIG="1"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-01[K130113[32@modify -s IPMI_IPADDR="192.168.0.63"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[Kmodify -d IPMI_AUTOCONFIG="IPMI_IPADDR=192.168.0.63,IPMI_NETMASK=255.255.252.0,IPMI_PASSWORD=Hapy123,IPMI_USERNAME=root" gpu-133[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C dump gpu-13[K dump gpu-10modify -s IPMI_AUTOCONFIG="IPMI_IPADDR=192.168.0.63,IPMI_NETMASK=255.255.252.0,IPMI_PASSWORD=Hapy123,IPMI_USERNAME=root" gpu-133[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2
+2[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C1
+1[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C0
+0[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C dump gpu-10[K print -p 363[K dump gpu-10[C[C[C[C[C[C[C[C[C[Cnode  print gpu-13210[C[C[C[C[C[C[C[C[C[C[4@provision[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cobject[K dump gpu-10[C[C[C[C[C[C[C[C[C[Chelp[Knode print --lookup=gpu-13[1P13[1Pipmi[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[12@list 192.168.0.60[C[C[C[C[C[C[C[C[C[C[C[C[C[C51[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[19Pprint gpu-13[K list  gpu-13[C[C[C[C[C[C[C[C[C[C[5@provision print[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cnode set gpu-13 --netdev=eno1 --hwaddr=90:e2:ba:ca:90:0c[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2 --netdev=eno1 --hwaddr=90:e2:ba:ca:8e:78[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C1 --netdev=eno1 --hwaddr=90:e2:ba:ca:8c:c8[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[20P3 -D ib0 -I 10.0.00.63
+Are you sure you want to make the following 1 change(s) to 1 node(s):
+
+     SET: ib0.IPADDR           = 10.0.00.63
+
+Yes/No [no]> Yes
+Warewulf> node set gpu-13 -D ib0 -I 10.0.00.63-netdev=eno1 --hwaddr=90:e2:ba:ca:90:0c[C[C[C[C[C[C[C[C[C[Cobject[K modify -s IPMI_AUTOCONFIG="1" gpu-13[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[K[C[C[C[C[C[C[C[C[C[Cprovision set gpu-13 --bootlocal=exitnormal[2Pexit[C[C[C[C[C[C[C[C[C[Cobject modify -s IPMI_IPADDR="192.168.0.63" gpu-13[C[C[C[C[C[C[C[C[C[C[26Pprovision print  [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5Pnode[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2Plist[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Khelp?[Kwwsh listobject modify -s IPMI_IPADDR="192.168.0.60" gpu-10[C[C[C[C[C[C[C[C[C[C[13Pprovision set gpu-10 --bootlocal=exit1[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C3[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[20Pnode list  gpu-13[C[C[C[C[C[C[C[C[C[Cprovision print gpu-10[C[C[C[C[C[C[C[C[C[Cfc -l[Khistoryobject dump gpu-13210modify -s IPMI_IPADDR="192.168.0.62" gpu-121" gpu-110" gpu-10[7PAUTOCONFIG="1[C[C[C[C[C[C[C[C12[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[K[25@modify -s IPMI_AUTOCONFIG="1"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-01[K130113[32@modify -s IPMI_IPADDR="192.168.0.63"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[Kmodify -d IPMI_AUTOCONFIG="IPMI_IPADDR=192.168.0.63,IPMI_NETMASK=255.255.252.0,IPMI_PASSWORD=Hapy123,IPMI_USERNAME=root" gpu-133[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C dump gpu-13[K dump gpu-10modify -s IPMI_AUTOCONFIG="IPMI_IPADDR=192.168.0.63,IPMI_NETMASK=255.255.252.0,IPMI_PASSWORD=Hapy123,IPMI_USERNAME=root" gpu-133[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2
+2[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C1
+1[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C0
+0[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C dump gpu-10[K print -p 363[K dump gpu-10[C[C[C[C[C[C[C[C[C[Cnode  print gpu-13210[C[C[C[C[C[C[C[C[C[C[4@provision[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cobject[K dump gpu-10[C[C[C[C[C[C[C[C[C[Chelp[Knode print --lookup=gpu-13[1P13[1Pipmi[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[12@list 192.168.0.60[C[C[C[C[C[C[C[C[C[C[C[C[C[C51[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[19Pprint gpu-13[K list  gpu-13[C[C[C[C[C[C[C[C[C[C[5@provision print[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cnode set gpu-13 --netdev=eno1 --hwaddr=90:e2:ba:ca:90:0c[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2 --netdev=eno1 --hwaddr=90:e2:ba:ca:8e:78[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C1 --netdev=eno1 --hwaddr=90:e2:ba:ca:8c:c8[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[20P3 -D ib0 -I 10.0.00.632 -D ib0 -I 10.0.00.621 -D ib0 -I 10.0.00.613 -D eno1 -I 172.16.0.632 -D eno1 -I 172.16.0.621 -D eno1 -I 172.16.0.61[C[C[C[C[C[C[C[C[C[Cprovision set gpu-13 --bootlocal=normal2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C1[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[21Pnode print  gpu-110[1P10[2Plist[C[C[C[C[C[C clone gpu-01 gpu-13[K4
+Are you sure you want to clone node gpu-01 to 1 node(s):
+
+Yes/No [no]> yes
+Warewulf> node  clone gpu-01 gpu-14[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cset gpu-13 -D ib0 -I 10.0.00.63-netdev=eno1 --hwaddr=90:e2:ba:ca:90:0c[C[C[C[C[C[C[C[C[C[Cobject[K modify -s IPMI_AUTOCONFIG="1" gpu-13[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[K[C[C[C[C[C[C[C[C[C[Cprovision set gpu-13 --bootlocal=exitnormal[2Pexit[C[C[C[C[C[C[C[C[C[Cobject modify -s IPMI_IPADDR="192.168.0.63" gpu-13[C[C[C[C[C[C[C[C[C[C[26Pprovision print  [C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[5Pnode[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[2Plist[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cexit[Khelp?[Kwwsh listobject modify -s IPMI_IPADDR="192.168.0.60" gpu-10[C[C[C[C[C[C[C[C[C[C[13Pprovision set gpu-10 --bootlocal=exit1[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C3[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[20Pnode list  gpu-13[C[C[C[C[C[C[C[C[C[Cprovision print gpu-10[C[C[C[C[C[C[C[C[C[Cfc -l[Khistoryobject dump gpu-13210modify -s IPMI_IPADDR="192.168.0.62" gpu-121" gpu-110" gpu-10[7PAUTOCONFIG="1[C[C[C[C[C[C[C[C12[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[K[25@modify -s IPMI_AUTOCONFIG="1"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-01[K130113[32@modify -s IPMI_IPADDR="192.168.0.63"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cdump gpu-13[Kmodify -d IPMI_AUTOCONFIG="IPMI_IPADDR=192.168.0.63,IPMI_NETMASK=255.255.252.0,IPMI_PASSWORD=Hapy123,IPMI_USERNAME=root" gpu-133[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C dump gpu-13[K dump gpu-10modify -s IPMI_AUTOCONFIG="IPMI_IPADDR=192.168.0.63,IPMI_NETMASK=255.255.252.0,IPMI_PASSWORD=Hapy123,IPMI_USERNAME=root" gpu-133[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2
+2[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C1
+1[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C0
+0[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K
+[K[A[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C dump gpu-10[K print -p 363[K dump gpu-10[C[C[C[C[C[C[C[C[C[Cnode  print gpu-13210[C[C[C[C[C[C[C[C[C[C[4@provision[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cobject[K dump gpu-10[C[C[C[C[C[C[C[C[C[Chelp[Knode print --lookup=gpu-13[1P13[1Pipmi[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[12@list 192.168.0.60[C[C[C[C[C[C[C[C[C[C[C[C[C[C51[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[19Pprint gpu-13[K list  gpu-13[C[C[C[C[C[C[C[C[C[C[5@provision print[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cnode set gpu-13 --netdev=eno1 --hwaddr=90:e2:ba:ca:90:0c[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C2 --netdev=eno1 --hwaddr=90:e2:ba:ca:8e:78[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C1 --netdev=eno1 --hwaddr=90:e2:ba:ca:8c:c8[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[20P3 -D ib0 -I 10.0.00.632 -D ib0 -I 10.0.00.621 -D ib0 -I 10.0.00.613 -D eno1 -I 172.16.0.632 -D eno1 -I 172.16.0.621 -D eno1 -I 172.16.0.61[C[C[C[C[C[C[C[C[C[Cprovision set gpu-13 --bootlocal=normal2[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C1[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[21Pnode print  gpu-110[1P10[2Plist[C[C[C[C[C[C clone gpu-01 gpu-1321[C[C[C[C[C[C[C[C[C[C[4@provision[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cset gpu-10 --bootlocal=normal[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K[5Pnodeprovision[2Phistoryprovision print gpu-10[C[C[C[C[C[C[C[C[C[C[5Pnode[C[C[C[C[C[C[C[C[C[C[C[C[Cset gpu-10 -D ib0 -I 10.0.00.60[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[19Pprint gpu-0110set gpu-10 --netdev=eno1 --hwaddr=90:e2:ba:ca:a8:6c[C[C[C[C[C[C[C[C[C[C[C[C[C[C[K print gpu-10set gpu-10 -D eno1 -I 172.16.0.60
+Are you sure you want to make the following 1 change(s) to 1 node(s):
+
+     SET: eno1.IPADDR          = 172.16.0.60
+
+Yes/No [no]> yes
+Warewulf> quit 
+prince-master0.hpc.nyu.edu-> : exit
+exit
+
+Script done on Wed 01 Mar 2017 01:26:51 PM EST

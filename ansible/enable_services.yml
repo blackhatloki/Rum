@@ -1,0 +1,9 @@
+---
+  - hosts: all
+    tasks:
+      - name: "enable services"
+        service: name={{item}} state=start enabled=yes
+        with_items:
+        - crond
+        - postfix
+        - chronyd

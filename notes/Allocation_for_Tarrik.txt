@@ -1,0 +1,15 @@
+wnl06a-8801a  1 filesystem 5T lpfc0 0x10000000c9857b2d lpfc1 0x10000000c9857b21
+wnl06a-8801b                  lpfc0 0x10000000c98541ae lpfc1 0x10000000c9857a68
+
+wns06a-6601a  3 filesystem 72G lpfc0 10000000c97ea290 lpfc1 10000000c97ea214
+wns06d-6601b                   lpfc0 10000000c996adb8 lpfc1 10000000c996acfb
+
+wnlcrlxms     1 filesystem  4T lpfc0 0x10000000c9868173  lpfc1 0x10000000c9867e8a
+
+
+wnlcrlxag1a
+wnlcrlxag1b                    lpfc0  0x10000000c9867e24 lpfc1 0x10000000c9868133
+
+
+wnlcrlxin1a   1 filesystem  6T lpfc0  0x10000000c9867e72 lpfc1 0x10000000c9868172
+wnlcrlxin1b                    lpfc0  0x10000000c9867de9 lpfc1 0x10000000c9867c5b

@@ -1,0 +1,55 @@
+# dumpe2fs /dev/sda2 | grep superblock
+
+Sample output:
+
+  Primary superblock at 0, Group descriptors at 1-6
+  Backup superblock at 32768, Group descriptors at 32769-32774
+  Backup superblock at 98304, Group descriptors at 98305-98310
+  Backup superblock at 163840, Group descriptors at 163841-163846
+  Backup superblock at 229376, Group descriptors at 229377-229382
+  Backup superblock at 294912, Group descriptors at 294913-294918
+  Backup superblock at 819200, Group descriptors at 819201-819206
+  Backup superblock at 884736, Group descriptors at 884737-884742
+  Backup superblock at 1605632, Group descriptors at 1605633-1605638
+  Backup superblock at 2654208, Group descriptors at 2654209-2654214
+  Backup superblock at 4096000, Group descriptors at 4096001-4096006
+  Backup superblock at 7962624, Group descriptors at 7962625-7962630
+  Backup superblock at 11239424, Group descriptors at 11239425-11239430
+  Backup superblock at 20480000, Group descriptors at 20480001-20480006
+  Backup superblock at 23887872, Group descriptors at 23887873-23887878
+Now check and repair a Linux file system using alternate superblock # 32768:
+# fsck -b 32768 /dev/sda2
+
+Sample output:
+
+fsck 1.40.2 (12-Jul-2007)
+e2fsck 1.40.2 (12-Jul-2007)
+/dev/sda2 was not cleanly unmounted, check forced.
+Pass 1: Checking inodes, blocks, and sizes
+Pass 2: Checking directory structure
+Pass 3: Checking directory connectivity
+Pass 4: Checking reference counts
+Pass 5: Checking group summary information
+Free blocks count wrong for group #241 (32254, counted=32253).
+Fix? yes
+
+Free blocks count wrong for group #362 (32254, counted=32248).
+Fix? yes
+
+Free blocks count wrong for group #368 (32254, counted=27774).
+Fix? yes
+..........
+/dev/sda2: ***** FILE SYSTEM WAS MODIFIED *****
+/dev/sda2: 59586/30539776 files (0.6% non-contiguous), 3604682/61059048 blocks
+Now try to mount file system using mount command:
+# mount /dev/sda2 /mnt
+
+You can also use superblock stored at 32768 to mount partition, enter:
+# mount sb={alternative-superblock} /dev/device /mnt
+# mount sb=32768 /dev/sda2 /mnt
+
+Try to browse and access file system:
+# cd /mnt
+# mkdir test
+# ls -l
+# cp file /path/to/safe/location

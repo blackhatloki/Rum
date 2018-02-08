@@ -1,0 +1,50 @@
+Configuring the M1000e CMC CheatSheet 3.0 
+
+racadm setchassisname c26-cmc
+racadm setassettag -m chassis 11SBS52
+racadm setsysinfo -c chassislocation SDC-F12-R24-004-U1
+
+racadm config -g cfgLocation -o cfgLocationDataCenter "South DataCenter"
+racadm config -g cfgLocation -o cfgLocationAisle " "
+racadm config -g cfgLocation -o cfgLocationRack " " 
+
+
+racadm config -g cfgOobSnmp -o cfgOobSnmpAgentEnable 1 
+racadm config -g cfgOobSnmp -o cfgOobSnmpAgentCommunity public
+
+racadm config -g cfgAlerting -o cfgAlertingEnable 1
+racadm config -g cfgAlerting -o cfgAlertingFilterMask 0xffffffff
+racadm config -g cfgTraps -o cfgTrapsEnable 1 -i 1
+racadm config -g cfgTraps -o cfgTrapsEnable 1 -i 2
+racadm config -g cfgTraps -o cfgTrapsAlertDestIPAddr 192.168.0.1 -i 1
+racadm config -g cfgTraps -o cfgTrapsCommunityName public -i 1
+racadm config -g cfgTraps -o cfgTrapsCommunityName HPC -i 2
+racadm testtrap -i 1
+
+
+racadm config -g cfgAlerting -o cfgAlertingSourceEmailName c26-cmc-Root-Account
+racadm config -g cfgAlerting -o cfgAlertingEnable 1
+racadm config -g cfgAlerting -o cfgAlertingFilterMask  0xffffffff
+racadm config -g cfgEmailAlert -o cfgEmailAlertEnable 1 -i 1
+racadm config -g cfgEmailAlert -o cfgEmailAlertEnable 1 -i 2
+racadm config -g cfgEmailAlert -o cfgEmailAlertAddress hpc-staff@nyu.edu -i 1
+racadm config -g cfgEmailAlert -o cfgEmailAlertEmailName "HPC Staff Support" -i 1 
+
+racadm config -g cfgEmailAlert -o cfgEmailAlertAddress tst722@nyu.edu -i 2
+racadm config -g cfgEmailAlert -o cfgEmailAlertEmailName  "Tony Teague" -i -2 
+ 
+racadm config -g cfgRemoteHosts -o cfgRhostsSmtpServerIpAddr 192.168.0.1
+racadm config -g cfgLanNetworking -o cfgDNSDomainName hpc.nyu.edu 
+racadm config -g cfgLanNetworking -o cfg DNSServer1 128.122.253.79
+racadm config -g cfgLanNetworking -o cfg DNSServer2 128.122.253.24
+racadm testemail -i -1 
+
+
+racadm config -g cfgRemoteHosts -o cfgRhostsNtpEnable 1
+racadm config -g cfgRemoteHosts -o cfgRhostsNtpServer1 1.centos.pool.ntp.org
+racadm config -g cfgRemoteHosts -o cfgRhostsNtpServer2 2.centos.pool.ntp.org
+racadm config -g cfgRemoteHosts -o cfgRhostsNtpServer3 3.centos.pool.ntp.org
+
+racadm config –g cfgRemoteHosts –o cfgRhostsSyslogEnable 1
+racadm config -g cfgRemoteHosts -o cfgRhostsSyslogServer1  192.168.0.1 
+

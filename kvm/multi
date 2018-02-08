@@ -1,0 +1,2 @@
+set -x
+virt-install --name $1 --ram 2048 --vcpus=2 --disk pool=VMs,size=$2 --network bridge=ovsbr0 --network bridge=ovsbr1 --cdrom /home/kvm/CentOS-5.8-x86_64-bin-DVD-1of2.iso --noautoconsole --vnc --hvm --os-variant rhel5

@@ -1,0 +1,5 @@
+---
+- hosts: all
+  tasks:
+  - name : Copy  /etc/resolv.conf 
+    copy : 'src=/etc/resolv.conf  dest=/etc/resolv.conf  owner=root group=root mode=644'

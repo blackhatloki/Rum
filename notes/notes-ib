@@ -1,0 +1,8 @@
+1. Execute "mst start" from any host in the fabric
+2. Execute "mst ib add"
+3. Execute "mst status" to identify the switch device name
+4. Execute "flint -d <device name> q" to identify the firmware version
+ 
+The "mst" and "flint" commands are part of the Mellanox Firmware Tools (MFT)
+
+ibdev2netdev -v

@@ -1,0 +1,3 @@
+copy running-config tftp://{hostip or hostname}/ filepath/filename
+copy running-config scp://{hostip or hostname}/ filepath/filename
+copy running-config ftp:// username:password@{hostip or hostname}/filepath/ filename

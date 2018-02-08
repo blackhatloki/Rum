@@ -1,0 +1,1 @@
+ ansible-playbook disable_servcies.yml  -i inventory --limit hpcansible -k -u root

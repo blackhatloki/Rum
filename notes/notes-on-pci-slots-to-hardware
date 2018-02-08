@@ -1,0 +1,45 @@
+prince-master0.hpc.nyu.edu:teague -> : dmidecode -t 9
+# dmidecode 2.12-dmifs
+SMBIOS 2.8 present.
+
+Handle 0x0900, DMI type 9, 17 bytes
+System Slot Information
+	Designation: PCIe Slot 1
+	Type: x8 PCI Express 3 x16
+	Current Usage: In Use
+	Length: Long
+	Characteristics:
+		3.3 V is provided
+		PME signal is supported
+	Bus Address: 0000:84:00.0
+
+Handle 0x0901, DMI type 9, 17 bytes
+System Slot Information
+	Designation: PCIe Slot 2
+	Type: x8 PCI Express 3 x16
+	Current Usage: In Use
+	Length: Long
+	Characteristics:
+		3.3 V is provided
+		PME signal is supported
+	Bus Address: 0000:82:00.0
+
+Handle 0x0902, DMI type 9, 17 bytes
+System Slot Information
+	Designation: PCIe Slot 3
+	Type: x16 PCI Express 3
+	Current Usage: In Use
+	Length: Long
+	Characteristics:
+		3.3 V is provided
+		PME signal is supported
+	Bus Address: 0000:03:00.0
+
+prince-master0.hpc.nyu.edu:teague -> : lspci -vvvvv | grep 84:00.0
+84:00.0 Ethernet controller: Intel Corporation Ethernet 10G 2P X520 Adapter (rev 01)
+prince-master0.hpc.nyu.edu:teague -> : lspci -vvvvv | egrep "84:00.0|82:00.0|03:00.0"
+03:00.0 Infiniband controller: Mellanox Technologies MT27700 Family [ConnectX-4]
+82:00.0 Ethernet controller: Intel Corporation Ethernet 10G 2P X520 Adapter (rev 01)
+84:00.0 Ethernet controller: Intel Corporation Ethernet 10G 2P X520 Adapter (rev 01)
+prince-master0.hpc.nyu.edu:teague -> : dmidecode -t 9 | ^C
+prince-master0.hpc.nyu.edu:teague -> :

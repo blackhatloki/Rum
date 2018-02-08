@@ -1,0 +1,45 @@
+Nagios    IP 172.16.0.34
+Ganglia   IP 172.16.0.35
+Observium IP 172.16.0.36
+
+observium
+Listen 100
+Listen 101
+Listen 102
+Listen 103
+Listen 104
+Listen 105
+Listen 106
+Listen 107
+Listen 108
+Listen 109
+
+ganglia
+Listen 80
+Listen 81
+Listen 82
+Listen 83
+Listen 84
+Listen 85
+Listen 86
+Listen 87
+Listen 88
+Listen 89
+
+nagios
+Listen 90
+Listen 91
+Listen 92
+Listen 93
+Listen 94
+Listen 95
+Listen 96
+Listen 97
+Listen 98
+Listen 99
+
+sudo ssh -L port:localhost:port  lastname_account@prince.hpc.nyu.edu -t sudo ssh -L port:172.16.0.35:82  lastname_account@prince-master0
+local browser on your machine 
+                              http://localhost:port/ganglia
+                              http://localhost:port/nagios    login: nagiosadmin password: nagiosadmin 
+                              http://localhost                Observium 

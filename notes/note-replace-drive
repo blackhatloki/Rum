@@ -1,0 +1,295 @@
+http://cavepopo.hd.free.fr/wordpress/how-to/how-to-replace-dead-faulty-drive-in-dell-perc-raid-array/
+
+1) Checking the current state of your newly added drive
+Once your new drive is set up in your server it might be seen either as “Foreign” or “Ready“. The “Ready” state is the one we are aiming at.
+
+See the following the command in order to check the current state of the new drive :
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+[root@server ~]# omreport storage pdisk controller=0
+List of Physical Disks on Controller PERC 5/i Integrated (Embedded)
+ 
+Controller PERC 5/i Integrated (Embedded)
+ 
+[ output stripped ... ]
+ 
+ID : 0:0:1
+Status : Non-Critical
+Name : Physical Disk 0:0:1
+State : Foreign
+Failure Predicted : No
+Progress : Not Applicable
+Type : SATA
+Capacity : 931.00 GB (999653638144 bytes)
+Used RAID Disk Space : 0.00 GB (0 bytes)
+Available RAID Disk Space : 931.00 GB (999653638144 bytes)
+Hot Spare : No
+Vendor ID : DELL
+Product ID : ST31000340NS
+Revision : MA98MA08
+Serial No. : 9QJ4F4G4
+Negotiated Speed : Not Available
+Capable Speed : Not Available
+Manufacture Day : Not Available
+Manufacture Week : Not Available
+Manufacture Year : Not Available
+SAS Address : 1221000001000000
+ 
+ID : 0:0:2
+Status : Ok
+Name : Physical Disk 0:0:2
+State : Online
+Failure Predicted : No
+Progress : Not Applicable
+Type : SAS
+Capacity : 931.00 GB (999653638144 bytes)
+Used RAID Disk Space : 931.00 GB (999653638144 bytes)
+Available RAID Disk Space : 0.00 GB (0 bytes)
+Hot Spare : No
+Vendor ID : DELL
+Product ID : ST31000640SS
+Revision : MS04
+Serial No. : 9QJ71332
+Negotiated Speed : Not Available
+Capable Speed : Not Available
+Manufacture Day : 07
+Manufacture Week : 03
+Manufacture Year : 2010
+SAS Address : 5000C5001033CD3D
+[ output stripped ... ]
+As you can see in the above output excerpt our new drive is seen as “Foreign” (line #11), which means it might has been a part of another RAID array before and it already has RAID meta-data written somewhere.
+
+ 
+
+ 
+
+2) Changing the drive status from Foreign to Ready
+We need to get rid of these meta-data before we can add it to the existing array, in the DELL terminology it is called “clearing the foreign config“, here is the command that allows you to do that :
+
+[root@server ~]# omconfig storage controller action=clearforeignconfig controller=0
+Command successful!
+In the above command you need to know the controller ID, which can be found using the information given here and / or here.
+
+Check the new status :
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+[root@server ~]# omreport storage pdisk controller=0
+List of Physical Disks on Controller PERC 5/i Integrated (Embedded)
+ 
+Controller PERC 5/i Integrated (Embedded)
+ 
+[ output stripped ... ]
+ 
+ID                        : 0:0:1
+Status                    : Ok
+Name                      : Physical Disk 0:0:1
+State                     : Ready
+Failure Predicted         : No
+Progress                  : Not Applicable
+Type                      : SATA
+Capacity                  : 931.00 GB (999653638144 bytes)
+Used RAID Disk Space      : 0.00 GB (0 bytes)
+Available RAID Disk Space : 931.00 GB (999653638144 bytes)
+Hot Spare                 : No
+Vendor ID                 : DELL
+Product ID                : ST31000340NS
+Revision                  : MA08MA08
+Serial No.                : 9QJ4F4G4
+Negotiated Speed          : Not Available
+Capable Speed             : Not Available
+Manufacture Day           : Not Available
+Manufacture Week          : Not Available
+Manufacture Year          : Not Available
+SAS Address               : 1221000001000000
+ 
+ID                        : 0:0:2
+Status                    : Ok
+Name                      : Physical Disk 0:0:2
+State                     : Online
+Failure Predicted         : No
+Progress                  : Not Applicable
+Type                      : SAS
+Capacity                  : 931.00 GB (999653638144 bytes)
+Used RAID Disk Space      : 931.00 GB (999653638144 bytes)
+Available RAID Disk Space : 0.00 GB (0 bytes)
+Hot Spare                 : No
+Vendor ID                 : DELL
+Product ID                : ST31000640SS
+Revision                  : MS04
+Serial No.                : 9QJ71332
+Negotiated Speed : Not Available
+Capable Speed : Not Available
+Manufacture Day : 07
+Manufacture Week : 03
+Manufacture Year : 2010
+SAS Address : 5000C5001033CD3D
+[ output stripped ... ]
+We can see the drive has become “Ready” (line #11), it is now ready to be added to the existing array.
+
+ 
+
+ 
+
+3) Adding the “ready” drive to the existing array
+Most PERC controller will automatically rebuild a “degraded” array when a proper Hdd is plugged in, but in the case you do have to handle this manually the Dell recommended way (as stated by the Dell official support) is to assign the new Hdd as a “Global Hot spare“.
+
+Once it is assigned as a global hot spare the PERC controller should automatically start the rebuilding process…
+
+The command to assign a new disk as “Global Hot Spare” is :
+
+[root@server ~]# omconfig storage pdisk action=assignglobalhotspare controller=0 pdisk=0:0:1 assign=yes
+Command successful!
+Check the resulting state of the 0:0:1 physical disk (line #12) :
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+[ output stripped ... ]
+ID                        : 0:0:1
+Status                    : Ok   
+Name                      : Physical Disk 0:0:1
+State                     : Ready
+Failure Predicted         : No
+Progress                  : Not Applicable
+Type                      : SAS
+Capacity                  : 1,862.50 GB (1999844147200 bytes)
+Used RAID Disk Space      : 1,862.50 GB (1999844147200 bytes)
+Available RAID Disk Space : 0.00 GB (0 bytes)
+Hot Spare                 : Global
+[ output stripped ... ]
+ 
+
+Note :
+
+You can check the correct physical address for your new drive by using the “blink” action as :
+
+[root@server ~]# omconfig storage pdisk action=blink controller=0 pdisk=0:0:1
+Command successful!
+Then stop the blinking :
+
+[root@server ~]# omconfig storage pdisk action=unblink controller=0 pdisk=0:0:1
+Command successful!
+ 
+
+ 
+
+ 
+
+4) Dell RAID related definitions
+Here is some details about the Dell terminology you may encounter in the physical disk “State” section.
+
+Online : This means a drive is already a part of a RAID array
+
+Ready : Ready to be used (either in a RAID array or as a HotSpare etc)
+
+Foreign : This means the drive contains some RAID meta-data (coming from an old RAID array the disk used to be a part of), this does not allow the use of this disk, you may firts clean the foreign config (see this section)

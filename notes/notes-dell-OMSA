@@ -1,0 +1,6 @@
+How to setup Dell OMSA tools on RedHat/CentOS Linux
+Setup Dell OMSA repository
+# wget -q -O - http://linux.dell.com/repo/hardware/dsu/bootstrap.cgi | bash
+Install OMSA/racadm tools
+# yum -y install srvadmin-all dell-system-update
+

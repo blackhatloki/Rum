@@ -1,0 +1,29 @@
+#!/bin/bash 
+yum install  tftp tftp-server syslinux dnsmasq vsftpd xinetd -y 
+
+cp -v /usr/share/syslinux/pxelinux.0 /var/lib/tftpboot
+cp -v /usr/share/syslinux/menu.c32 /var/lib/tftpboot
+cp -v /usr/share/syslinux/memdisk /var/lib/tftpboot
+cp -v /usr/share/syslinux/mboot.c32 /var/lib/tftpboot
+cp -v /usr/share/syslinux/chain.c32 /var/lib/tftpboot
+mkdir /var/lib/tftpboot/pxelinux.cfg
+mkdir /var/lib/tftpboot/networkboot
+
+# mount -o loop CentOS-7-x86_64-DVD-1511.iso /mnt/
+# mount: /dev/loop0 is write-protected, mounting read-only
+# cd /mnt/
+# cp -av * /var/ftp/pub/
+
+cp /mnt/images/pxeboot/vmlinuz /var/lib/tftpboot/networkboot/
+cp /mnt/images/pxeboot/initrd.img /var/lib/tftpboot/networkboot/
+
+# openssl passwd -1 Pxe@123#
+cp default /var/lib/tftpboot/pxelinux.cfg/default
+cp centos7.cfg /var/ftp/pub
+
+systemctl start xinetd
+systemctl enable xinetd
+systemctl start vsftpd
+systemctl enable vsftpd
+systemctl start dnsmasq
+systemctl enable dnsmasq

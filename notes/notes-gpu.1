@@ -1,0 +1,462 @@
+nvidia-smi: Control Your GPUs
+
+Posted on December 5, 2011 by Eliot Eshelman
+Most users know how to check the status of their CPUs, see how much memory is free or find out how much disk space is free. In contrast, keeping tabs on the health and status of GPUs has historically been more difficult. If you don’t know where to look, it can even be difficult to determine the type and capabilities of the GPUs in a system. Thankfully, NVIDIA’s latest hardware and software tools have made good improvements in this respect.
+
+The tool is NVIDIA’s System Management Interface (nvidia-smi). Depending on the generation of your card, various levels of information can be gathered. Additionally, GPU configuration options (such as ECC memory capability) may be enabled and disabled.
+
+As an aside, if you find that you’re having trouble getting your NVIDIA GPUs to run GPGPU code, nvidia-smi can be handy. For example, on some systems the proper NVIDIA devices in /dev are not created at boot. Running a simple nvidia-smi query as root will initialize all the cards and create the proper devices in /dev. Other times, it’s just useful to make sure all the GPU cards are visible and communicating properly. Here’s the default output from a recent version with one Tesla K80 GPU card:
+
+Tue Apr  7 12:56:41 2015       
++------------------------------------------------------+                       
+| NVIDIA-SMI 346.46     Driver Version: 346.46         |                       
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  Tesla K80           On   | 0000:05:00.0     Off |                  Off |
+| N/A   32C    P8    26W / 149W |     56MiB / 12287MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+|   1  Tesla K80           On   | 0000:06:00.0     Off |                  Off |
+| N/A   29C    P8    29W / 149W |     56MiB / 12287MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID  Type  Process name                               Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+Persistence Mode
+
+On Linux, you can set GPUs to persistence mode to keep the NVIDIA driver loaded even when no applications are accessing the cards. This is particularly useful when you have a series of short jobs running. Persistence mode uses more power, but prevents the fairly long delays that occur each time a GPU application is started. It is also necessary if you’ve assigned specific clock speeds or power limits to the GPUs (as those changes are lost when the NVIDIA driver is unloaded). Enable persistence mode on all GPUS by running:
+nvidia-smi -pm 1
+
+On Windows, nvidia-smi is not able to set persistence mode. Instead, you need to set your computational GPUs to TCC mode. This should be done through NVIDIA’s graphical GPU device management panel.
+
+GPUs supported by nvidia-smi
+
+NVIDIA’s SMI tool supports essentially any NVIDIA GPU released since the year 2011. These include the Tesla, Quadro, GRID and GeForce devices from Fermi and higher architecture families (Kepler, Maxwell, etc).
+
+Supported products include:
+Tesla: S1070, S2050, C1060, C2050/70, M2050/70/90, X2070/90, K10, K20, K20X, K40, K80
+Quadro: 4000, 5000, 6000, 7000, M2070-Q, K-series, M-series
+GeForce: varying levels of support, with fewer metrics available than on the Tesla and Quadro products
+
+Querying GPU Status
+
+Microway’s GPU Test Drive cluster, which we provide as a benchmarking service to our customers, contains a group of NVIDIA’s latest Tesla GPUs. These are NVIDIA’s high-performance compute GPUs and provide a good deal of health and status information. The examples below are taken from this internal cluster.
+
+To list all available NVIDIA devices, run:
+
+[root@md ~]# nvidia-smi -L
+GPU 0: Tesla K40m (UUID: GPU-d0e093a0-c3b3-f458-5a55-6eb69fxxxxxx)
+GPU 1: Tesla K40m (UUID: GPU-d105b085-7239-3871-43ef-975ecaxxxxxx)
+To list certain details about each GPU, try:
+
+[root@md ~]# nvidia-smi --query-gpu=index,name,uuid,serial --format=csv
+0, Tesla K40m, GPU-d0e093a0-c3b3-f458-5a55-6eb69fxxxxxx, 0323913xxxxxx
+1, Tesla K40m, GPU-d105b085-7239-3871-43ef-975ecaxxxxxx, 0324214xxxxxx
+Monitoring and Managing GPU Boost
+
+The GPU Boost feature which NVIDIA has included with more recent GPUs allows the GPU clocks to vary depending upon load (achieving maximum performance so long as power and thermal headroom are available). However, the amount of available headroom will vary by application (and even by input file!) so users and administrators should keep their eyes on the status of the GPUs.
+
+A listing of available clock speeds can be shown for each GPU (in this case, the Tesla K80):
+
+nvidia-smi -q -d SUPPORTED_CLOCKS
+
+GPU 0000:04:00.0
+    Supported Clocks
+        Memory                      : 2505 MHz
+            Graphics                : 875 MHz
+            Graphics                : 862 MHz
+            Graphics                : 849 MHz
+            Graphics                : 836 MHz
+            Graphics                : 823 MHz
+            Graphics                : 810 MHz
+            Graphics                : 797 MHz
+            Graphics                : 784 MHz
+            Graphics                : 771 MHz
+            Graphics                : 758 MHz
+            Graphics                : 745 MHz
+            Graphics                : 732 MHz
+            Graphics                : 719 MHz
+            Graphics                : 705 MHz
+            Graphics                : 692 MHz
+            Graphics                : 679 MHz
+            Graphics                : 666 MHz
+            Graphics                : 653 MHz
+            Graphics                : 640 MHz
+            Graphics                : 627 MHz
+            Graphics                : 614 MHz
+            Graphics                : 601 MHz
+            Graphics                : 588 MHz
+            Graphics                : 575 MHz
+            Graphics                : 562 MHz
+        Memory                      : 324 MHz
+            Graphics                : 324 MHz
+The above output indicates that only two memory clock speeds are supported (2505 MHz and 324 MHz). With the memory running at 2505 MHz, there are 25 supported GPU clock speeds. With the memory running at 324 MHz, only a single GPU clock speed is supported (which is the idle GPU state). On the Tesla K80, GPU Boost automatically manages these speeds and runs as fast as possible. On other models, such as Tesla K40, the administrator must specifically select the desired GPU clock speed.
+
+To review the current GPU clock speed, default clock speed, and maximum possible clock speed, run:
+
+nvidia-smi -q -d CLOCK
+
+GPU 0000:04:00.0
+    Clocks
+        Graphics                    : 875 MHz
+        SM                          : 875 MHz
+        Memory                      : 2505 MHz
+    Applications Clocks
+        Graphics                    : 875 MHz
+        Memory                      : 2505 MHz
+    Default Applications Clocks
+        Graphics                    : 562 MHz
+        Memory                      : 2505 MHz
+    Max Clocks
+        Graphics                    : 875 MHz
+        SM                          : 875 MHz
+        Memory                      : 2505 MHz
+    SM Clock Samples
+        Duration                    : 3730.56 sec
+        Number of Samples           : 8
+        Max                         : 875 MHz
+        Min                         : 324 MHz
+        Avg                         : 873 MHz
+    Memory Clock Samples
+        Duration                    : 3730.56 sec
+        Number of Samples           : 8
+        Max                         : 2505 MHz
+        Min                         : 324 MHz
+        Avg                         : 2500 MHz
+    Clock Policy
+        Auto Boost                  : On
+        Auto Boost Default          : On
+Ideally, you’d like all clocks to be running at the highest speed all the time. However, this will not be possible for all applications. To review the current state of each GPU and any reasons for clock slowdowns, use the PERFORMANCE flag:
+
+nvidia-smi -q -d PERFORMANCE
+
+GPU 0000:04:00.0
+    Performance State               : P0
+    Clocks Throttle Reasons
+        Idle                        : Not Active
+        Applications Clocks Setting : Not Active
+        SW Power Cap                : Not Active
+        HW Slowdown                 : Not Active
+        Unknown                     : Not Active
+If any of the GPU clocks is running at a slower speed, one or more of the above Clocks Throttle Reasons will be marked as active. The most concerning condition would be if HW Slowdown or Unknown are active, as these would most likely indicate a power or cooling issue. The remaining conditions typically indicate that the card is idle or has been manually set into a slower mode by a system administrator.
+
+Reviewing System Topology
+
+To properly take advantage of more advanced NVIDIA GPU features (such as GPU Direct), it is often vital that the system topology be properly configured. The topology refers to how the PCI-Express devices (GPUs, InfiniBand HCAs, storage controllers, etc.) connect to each other and to the system’s CPUs. If not correct, it is possible that certain features will slow down or even stop working altogether. To help tackle such questions, recent versions of nvidia-smi include an experimental system topology view:
+
+nvidia-smi topo --matrix
+
+        GPU0    GPU1    GPU2    GPU3    mlx4_0  CPU Affinity
+GPU0     X      PIX     PHB     PHB     PHB     0-11
+GPU1    PIX      X      PHB     PHB     PHB     0-11
+GPU2    PHB     PHB      X      PIX     PHB     0-11
+GPU3    PHB     PHB     PIX      X      PHB     0-11
+mlx4_0  PHB     PHB     PHB     PHB      X 
+
+Legend:
+
+  X   = Self
+  SOC = Path traverses a socket-level link (e.g. QPI)
+  PHB = Path traverses a PCIe host bridge
+  PXB = Path traverses multiple PCIe internal switches
+  PIX = Path traverses a PCIe internal switch
+Reviewing this section will take some getting used to, but can be very valuable. The above configuration shows two Tesla K80 GPUs and one Mellanox FDR InfiniBand HCA all connected to the first CPU of a server. Because the CPUs are 12-core Xeons, the topology tool recommends that jobs be assigned to the first 12 CPU cores (although this will vary by application). Get in touch with one of our HPC GPU experts if you have questions on this topic.
+
+Printing all GPU Details
+
+To list all available data on a particular GPU, specify the ID of the card with -i. Here’s the output from an older Tesla GPU card:
+
+nvidia-smi -i 0 -q
+
+==============NVSMI LOG==============
+
+Timestamp                       : Mon Dec  5 22:05:49 2011
+
+Driver Version                  : 270.41.19
+
+Attached GPUs                   : 2
+
+GPU 0:2:0
+    Product Name                : Tesla M2090
+    Display Mode                : Disabled
+    Persistence Mode            : Disabled
+    Driver Model
+        Current                 : N/A
+        Pending                 : N/A
+    Serial Number               : 032251100xxxx
+    GPU UUID                    : GPU-2b1486407f70xxxx-98bdxxxx-660cxxxx-1d6cxxxx-9fbd7e7cd9bf55a7cfb2xxxx
+    Inforom Version
+        OEM Object              : 1.1
+        ECC Object              : 2.0
+        Power Management Object : 4.0
+    PCI
+        Bus                     : 2
+        Device                  : 0
+        Domain                  : 0
+        Device Id               : 109110DE
+        Bus Id                  : 0:2:0
+    Fan Speed                   : N/A
+    Memory Usage
+        Total                   : 5375 Mb
+        Used                    : 9 Mb
+        Free                    : 5365 Mb
+    Compute Mode                : Default
+    Utilization
+        Gpu                     : 0 %
+        Memory                  : 0 %
+    Ecc Mode
+        Current                 : Enabled
+        Pending                 : Enabled
+    ECC Errors
+        Volatile
+            Single Bit            
+                Device Memory   : 0
+                Register File   : 0
+                L1 Cache        : 0
+                L2 Cache        : 0
+                Total           : 0
+            Double Bit            
+                Device Memory   : 0
+                Register File   : 0
+                L1 Cache        : 0
+                L2 Cache        : 0
+                Total           : 0
+        Aggregate
+            Single Bit            
+                Device Memory   : 0
+                Register File   : 0
+                L1 Cache        : 0
+                L2 Cache        : 0
+                Total           : 0
+            Double Bit            
+                Device Memory   : 0
+                Register File   : 0
+                L1 Cache        : 0
+                L2 Cache        : 0
+                Total           : 0
+    Temperature
+        Gpu                     : N/A
+    Power Readings
+        Power State             : P12
+        Power Management        : Supported
+        Power Draw              : 31.57 W
+        Power Limit             : 225 W
+    Clocks
+        Graphics                : 50 MHz
+        SM                      : 100 MHz
+        Memory                  : 135 MHz
+The above example shows an idle card. Here is an excerpt for a card running GPU-accelerated AMBER:
+
+nvidia-smi -i 0 -q -d MEMORY,UTILIZATION,POWER,CLOCK,COMPUTE
+
+==============NVSMI LOG==============
+
+Timestamp                       : Mon Dec  5 22:32:00 2011
+
+Driver Version                  : 270.41.19
+
+Attached GPUs                   : 2
+
+GPU 0:2:0
+    Memory Usage
+        Total                   : 5375 Mb
+        Used                    : 1904 Mb
+        Free                    : 3470 Mb
+    Compute Mode                : Default
+    Utilization
+        Gpu                     : 67 %
+        Memory                  : 42 %
+    Power Readings
+        Power State             : P0
+        Power Management        : Supported
+        Power Draw              : 109.83 W
+        Power Limit             : 225 W
+    Clocks
+        Graphics                : 650 MHz
+        SM                      : 1301 MHz
+        Memory                  : 1848 MHz
+You’ll notice that unfortunately the earlier M-series passively-cooled Tesla GPUs do not report temperatures to nvidia-smi. More recent Quadro and Tesla GPUs support a greater quantity of metrics data:
+
+==============NVSMI LOG==============
+
+Timestamp                           : Tue Apr  7 13:01:34 2015
+Driver Version                      : 346.46
+
+Attached GPUs                       : 2
+GPU 0000:05:00.0
+    Product Name                    : Tesla K80
+    Product Brand                   : Tesla
+    Display Mode                    : Disabled
+    Display Active                  : Disabled
+    Persistence Mode                : Enabled
+    Accounting Mode                 : Enabled
+    Accounting Mode Buffer Size     : 128
+    Driver Model
+        Current                     : N/A
+        Pending                     : N/A
+    Serial Number                   : 0324614xxxxxx
+    GPU UUID                        : GPU-81dexxxx-87xx-4axx-79xx-3ddf4dxxxxxx
+    Minor Number                    : 0
+    VBIOS Version                   : 80.21.1B.00.01
+    MultiGPU Board                  : Yes
+    Board ID                        : 0x300
+    Inforom Version
+        Image Version               : 2080.0200.00.04
+        OEM Object                  : 1.1
+        ECC Object                  : 3.0
+        Power Management Object     : N/A
+    GPU Operation Mode
+        Current                     : N/A
+        Pending                     : N/A
+    PCI
+        Bus                         : 0x05
+        Device                      : 0x00
+        Domain                      : 0x0000
+        Device Id                   : 0x102D10DE
+        Bus Id                      : 0000:05:00.0
+        Sub System Id               : 0x106C10DE
+        GPU Link Info
+            PCIe Generation
+                Max                 : 3
+                Current             : 1
+            Link Width
+                Max                 : 16x
+                Current             : 16x
+        Bridge Chip
+            Type                    : PLX
+            Firmware                : 0xF0472900
+        Replays since reset         : 0
+        Tx Throughput               : N/A
+        Rx Throughput               : N/A
+    Fan Speed                       : N/A
+    Performance State               : P8
+    Clocks Throttle Reasons
+        Idle                        : Active
+        Applications Clocks Setting : Not Active
+        SW Power Cap                : Not Active
+        HW Slowdown                 : Not Active
+        Unknown                     : Not Active
+    FB Memory Usage
+        Total                       : 12287 MiB
+        Used                        : 56 MiB
+        Free                        : 12231 MiB
+    BAR1 Memory Usage
+        Total                       : 16384 MiB
+        Used                        : 2 MiB
+        Free                        : 16382 MiB
+    Compute Mode                    : Default
+    Utilization
+        Gpu                         : 0 %
+        Memory                      : 0 %
+        Encoder                     : 0 %
+        Decoder                     : 0 %
+    Ecc Mode
+        Current                     : Disabled
+        Pending                     : Disabled
+    ECC Errors
+        Volatile
+            Single Bit            
+                Device Memory       : N/A
+                Register File       : N/A
+                L1 Cache            : N/A
+                L2 Cache            : N/A
+                Texture Memory      : N/A
+                Total               : N/A
+            Double Bit            
+                Device Memory       : N/A
+                Register File       : N/A
+                L1 Cache            : N/A
+                L2 Cache            : N/A
+                Texture Memory      : N/A
+                Total               : N/A
+        Aggregate
+            Single Bit            
+                Device Memory       : N/A
+                Register File       : N/A
+                L1 Cache            : N/A
+                L2 Cache            : N/A
+                Texture Memory      : N/A
+                Total               : N/A
+            Double Bit            
+                Device Memory       : N/A
+                Register File       : N/A
+                L1 Cache            : N/A
+                L2 Cache            : N/A
+                Texture Memory      : N/A
+                Total               : N/A
+    Retired Pages
+        Single Bit ECC              : 0
+        Double Bit ECC              : 0
+        Pending                     : No
+    Temperature
+        GPU Current Temp            : 34 C
+        GPU Shutdown Temp           : 93 C
+        GPU Slowdown Temp           : 88 C
+    Power Readings
+        Power Management            : Supported
+        Power Draw                  : 25.65 W
+        Power Limit                 : 149.00 W
+        Default Power Limit         : 149.00 W
+        Enforced Power Limit        : 149.00 W
+        Min Power Limit             : 100.00 W
+        Max Power Limit             : 175.00 W
+    Clocks
+        Graphics                    : 324 MHz
+        SM                          : 324 MHz
+        Memory                      : 324 MHz
+    Applications Clocks
+        Graphics                    : 875 MHz
+        Memory                      : 2505 MHz
+    Default Applications Clocks
+        Graphics                    : 562 MHz
+        Memory                      : 2505 MHz
+    Max Clocks
+        Graphics                    : 875 MHz
+        SM                          : 875 MHz
+        Memory                      : 2505 MHz
+    Clock Policy
+        Auto Boost                  : On
+        Auto Boost Default          : On
+    Processes                       : None
+Of course, we haven’t covered all the possible uses of the nvidia-smi tool. To read the full list of options, run nvidia-smi -h (it’s fairly lengthy). If you need to change settings on your cards, you’ll want to look at the device modification section:
+
+    -pm,  --persistence-mode=   Set persistence mode: 0/DISABLED, 1/ENABLED
+    -e,   --ecc-config=         Toggle ECC support: 0/DISABLED, 1/ENABLED
+    -p,   --reset-ecc-errors=   Reset ECC error counts: 0/VOLATILE, 1/AGGREGATE
+    -c,   --compute-mode=       Set MODE for compute applications:
+                                0/DEFAULT, 1/EXCLUSIVE_THREAD,
+                                2/PROHIBITED, 3/EXCLUSIVE_PROCESS
+          --gom=                Set GPU Operation Mode:
+                                    0/ALL_ON, 1/COMPUTE, 2/LOW_DP
+    -r    --gpu-reset           Trigger reset of the GPU.
+                                Can be used to reset the GPU HW state in situations
+                                that would otherwise require a machine reboot.
+                                Typically useful if a double bit ECC error has
+                                occurred.
+                                Reset operations are not guarenteed to work in
+                                all cases and should be used with caution.
+                                --id= switch is mandatory for this switch
+    -ac   --applications-clocks= Specifies  clocks as a
+                                    pair (e.g. 2000,800) that defines GPU's
+                                    speed in MHz while running applications on a GPU.
+    -rac  --reset-applications-clocks
+                                Resets the applications clocks to the default values.
+    -acp  --applications-clocks-permission=
+                                Toggles permission requirements for -ac and -rac commands:
+                                0/UNRESTRICTED, 1/RESTRICTED
+    -pl   --power-limit=        Specifies maximum power management limit in watts.
+    -am   --accounting-mode=    Enable or disable Accounting Mode: 0/DISABLED, 1/ENABLED
+    -caa  --clear-accounted-apps
+                                Clears all the accounted PIDs in the buffer.
+          --auto-boost-default= Set the default auto boost policy to 0/DISABLED
+                                or 1/ENABLED, enforcing the change only after the
+                                last boost client has exited.
+          --auto-boost-permission=
+                                Allow non-admin/root control over auto boost mode:
+                                0/UNRESTRICTED, 1/RESTRICTED
+With this tool, checking the status and health of NVIDIA GPUs is simple. If you’re looking to monitor the cards over time, then nvidia-smi might be more resource-intensive than you’d like. For that, have a look at NVIDIA’s GPU Management Library (NVML), which offers C, Perl and Python bindings. Commonly-used cluster tools, such as Ganglia, use these bindings to query GPU status.`

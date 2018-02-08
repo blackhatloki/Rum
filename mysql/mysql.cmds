@@ -1,0 +1,33 @@
+set password for 'root'@'localhost; = password('root123')
+
+adding user 
+CREATE user 'new_user'@'target_host' IDENTIFIED BY 'new_password';
+CREATE USER 'toymaster'@'% IDENTIFIED BY 'toymastermaster'; 
+
+Remove user
+DROP USER 'toymaster'@'localhost'; 
+
+Granting privileges
+GRANT ALL privileges ON targetxi_db.target_table to 'target_user'@'target_host'; 
+GRANT SELECT privileges ON target_db.target_table to 'target_user'@'target_host'; 
+GRANT INSERT privileges ON target_db.target_table to 'target_user'@'target_host'; 
+GRANT DELETE  privileges ON target_db.target_table to 'target_user'@'target_host'; 
+GRANT OPTION  privileges ON target_db.target_table to 'target_user'@'target_host'; 
+REVOKE privieges on target_db.target_table from 'target_user'@'target_host' 
+
+
+show databases; 
+ backing database
+
+mysqldump -u user database [ more options[ 
+
+mysql -u toymaster toys -p > toys.mysql 
+
+mysqldump --all-databases -p > all.databases.mysql 
+
+
+
+
+
+
+

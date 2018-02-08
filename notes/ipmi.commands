@@ -1,0 +1,93 @@
+# IPMI commands
+ipmitool help
+man ipmitool
+
+# To check firmware version
+ipmitool mc info
+# To reset the management controller
+ipmitool mc reset [ warm | cold ]
+
+# Show field-replaceable-unit details
+ipmitool fru print
+
+# Show sensor output
+ipmitool sdr list
+ipmitool sdr type list
+ipmitool sdr type Temperature
+ipmitool sdr type Fan
+ipmitool sdr type 'Power Supply'
+
+# Chassis commands
+ipmitool chassis status
+ipmitool chassis identify [<interval>]   # turn on front panel identify light (default 15s)
+ipmitool [chassis] power soft            # initiate a soft-shutdown via acpi
+ipmitool [chassis] power cycle           # issue a hard power off, wait 1s, power on
+ipmitool [chassis] power off             # issue a hard power off
+ipmitool [chassis] power on              # issue a hard power on
+ipmitool [chassis] power reset           # issue a hard reset
+
+# Modify boot device for next reboot
+ipmitool chassis bootdev pxe
+ipmitool chassis bootdev cdrom
+ipmitool chassis bootdev bios
+
+# Logging
+ipmitool sel info
+ipmitool sel list
+ipmitool sel elist                       # extended list (see manpage)
+ipmitool sel clear
+For remote access, you need to setup user and network settings, either at boot time on the DRAC card itself, or from the OS via ipmitool:
+
+# Display/reset password for default root user (userid '2')
+ipmitool user list 1
+ipmitool user set password 2 <new_password>
+
+# Display/configure lan settings
+ipmitool lan print 1
+ipmitool lan set 1 ipsrc [ static | dhcp ]
+ipmitool lan set 1 ipaddr 192.168.1.101
+ipmitool lan set 1 netmask 255.255.255.0
+ipmitool lan set 1 defgw ipaddr 192.168.1.254
+Once this is configured you should be able to connect using the 'lan' interface to ipmitool, like this:
+
+ipmitool -I lan -U root -H 192.168.1.101 chassis status
+which will prompt you for your ipmi root password, or you can do the following:
+
+echo <new_password> > ~/.racpasswd
+chmod 600 ~/.racpasswd
+and then use that password file instead of manually entering it each time:
+
+ipmitool -I lan -U root -f ~/.racpasswd -H 192.168.1.101 chassis status
+I'm using an 'ipmi' alias that looks like this:
+
+alias ipmi='ipmitool -I lan -U root -f ~/.racpasswd -H'
+
+# which then allows you to do the much shorter:
+ipmi 192.168.1.101 chassis status
+# OR
+ipmi <hostname> chassis status
+Finally, if you configure serial console redirection in the bios as follows:
+
+Serial Communication -> Serial Communication:       On with Console Redirection via COM2
+Serial Communication -> External Serial Connector:  COM2
+Serial Communication -> Redirection After Boot:     Disabled
+then you can setup standard serial access in grub.conf and inittab on com2/ttyS1 and get serial console access via IPMI serial-over-lan using the 'lanplus' interface:
+
+ipmitool -I lanplus -U root -f ~/.racpasswd -H 192.168.1.101 sol activate
+which I typically use via a shell function:
+
+# ipmi serial-over-lan function
+isol() {
+   if [ -n "$1" ]; then
+       ipmitool -I lanplus -U root -f ~/.racpasswd -H $1 sol activate
+   else
+       echo "usage: sol <sol_ip>"
+   fi
+}
+
+# used like:
+isol 192.168.1.101
+isol <hostname>
+
+
+http://www.openfusion.net/linux/ipmi_on_centos

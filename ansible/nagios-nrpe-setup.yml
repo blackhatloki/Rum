@@ -1,0 +1,23 @@
+---
+- hosts: all 
+  tasks:
+  - name: Install nrpe
+    yum:
+      name: nrpe
+      state: present
+  - name: Install nagios-plugins
+    yum:
+      name: nagios-plugins-all
+      state: present
+  - name :  copy  /etc/nrpe.cfg 
+    copy : 'src=nrpe.cfg.new  dest=/etc/nagios/nrpe.cfg  owner=root group=root mode=644'
+  - command: /bin/systemctl enable nrpe 
+  - command: /bin/systemctl restart nrpe
+  - name : Copy nrpe sudoers files 
+    copy : 'src=nrpe  dest=/etc/sudoers.d/nrpe  owner=root group=root mode=400'
+  - name : Copy check_openmanage
+    copy : 'src=check_openmanage  dest=/usr/lib64/nagios/plugins/check_openmanage  owner=root group=root mode=744'
+  - name : Copy check_dell_bladechassis
+    copy : 'src=check_dell_bladechassis  dest=/usr/lib64/nagios/plugins/check_dell_bladechassis  owner=root group=root mode=744'
+  - name : Copy 
+    copy : 'src=check_openmanage_storage  dest=/usr/lib64/nagios/plugins/check_openmanage_storage  owner=root group=root mode=755'

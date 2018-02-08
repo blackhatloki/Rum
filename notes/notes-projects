@@ -1,0 +1,16 @@
+Monitoring (Nagios)  (Med) 
+Ansible  (Med) 
+    * automounter for archive
+
+Backup 
+     * SLURM 
+     * Warewulf 
+     1 GE switches
+     10 GE switches 
+
+- Node Health Check (Low) 
+- Docs for zfs replication between home-0 and home-1  (Low)
+- Fix hostname on the 1GE switches(Low) 
+- FIx hostname on the 10GE switches
+- Dell Inventory
+- Performance (Ganglia)

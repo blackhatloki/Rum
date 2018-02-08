@@ -1,0 +1,33 @@
+ansible testserver -i deployhosts -m ping
+ansible testserver  -m ping
+ansible c29 -m command -a "tail /var/log/messages"
+ansible c28 -m ping
+ansible c28 -s -m service -a "name=httpd state=restarted"
+ansible all -a "hostname"
+ansible c28 -a "hostname"
+ansible c28 -a "date"
+ansible c28 -m -stat -a "path=/etc/environment"
+ansible c28 -m copy -a "src=/etc/files dest=/tmp/files" 
+ansible c28 -s -m fetch -a "src=/etc/hosts dest=/tmp" 
+ansible c28 -m file -a "dest=/tmp/test mode=644 state=directory" 
+ansible c28 -m file -a "src=src/syslink dest=/dest/symlin owner=root group=root state=link" 
+ansible c28 -s -a "/opt/myapp/update.sh"
+
+591  ansible-galaxy install Dell-Networking.dellos-lag
+  592  ansible-galaxy install Dell-Networking.dellos
+  593  ansible-galaxy install Dell-Networking.dellos-lag
+  594  ansible-galaxy install Dell-Networking.dellos-interface
+  595  ansible-galaxy install Dell-Networking.dellos-bgp
+  596  ansible-galaxy install Dell-Networking.dellos-system
+  597  ansible-galaxy install Dell-Networking.dellos-vlan
+  598  ansible-galaxy install Dell-Networking.dellos-bgp
+  599  ansible-galaxy install Dell-Networking.dellos-lag
+  600  ansible-galaxy install Dell-Networking.dellos-system
+  601  ansible-galaxy install Dell-Networking.dellos-xstp
+
+
+prince-master0.hpc.nyu.edu:teague -> : ansible-galaxy install Dell-Networking.dellos-interface
+- downloading role 'dellos-interface', owned by Dell-Networking
+- downloading role from https://github.com/Dell-Networking/ansible-role-dellos-interface/archive/v1.0.6.tar.gz
+- extracting Dell-Networking.dellos-interface to /etc/ansible/roles/Dell-Networking.dellos-interface
+- Dell-Networking.dellos-interface was installed successfully

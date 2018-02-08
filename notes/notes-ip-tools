@@ -1,0 +1,128 @@
+How do i Configure Static IP Address Internet Protocol (IPv4)
+To configure static IP Address, you need to update or edit network configuration file to assign an Static IP Address to a system. You must be superuser with su (switch user) command from terminal or command prompt.
+
+For RHEL/CentOS/Fedora
+
+Open and edit network configuration file for (eth0 or eth1) using your favorite editor. For example, to assigning IP Address to eth0 interface as follows.
+
+[root@tecmint ~]# vi /etc/sysconfig/network-scripts/ifcfg-eth0
+Simple output:
+
+DEVICE="eth0"
+BOOTPROTO=static
+ONBOOT=yes
+TYPE="Ethernet"
+IPADDR=192.168.50.2
+NAME="System eth0"
+HWADDR=00:0C:29:28:FD:4C
+GATEWAY=192.168.50.1
+For Ubuntu/Debian/Linux Mint
+
+
+ 
+Assign Static IP Address to eth0 interface editing configuration file /etc/network/interfaces to make permanent changes as shown below.
+
+auto eth0
+iface eth0 inet static
+address 192.168.50.2
+netmask 255.255.255.0
+gateway 192.168.50.1
+Next, restart network services after entering all the details using the following command.
+
+# /etc/init.d/networking restart
+$ sudo /etc/init.d/networking restart
+1. How to Assign a IP Address to Specific Interface
+The following command used to assign IP Address to a specific interface (eth1) on the fly.
+
+# ip addr add 192.168.50.5 dev eth1
+$ sudo ip addr add 192.168.50.5 dev eth1
+Note: Unfortunately all these settings will be lost after a system restart.
+
+2. How to Check an IP Address
+To get the depth information of your network interfaces like IP Address, MAC Address information, use the following command as shown below.
+
+# ip addr show
+$ sudo ip addr show
+Sample Output
+
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 16436 qdisc noqueue state UNKNOWN
+link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+inet 127.0.0.1/8 scope host lo
+inet6 ::1/128 scope host
+valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN qlen 1000
+link/ether 00:0c:29:28:fd:4c brd ff:ff:ff:ff:ff:ff
+inet 192.168.50.2/24 brd 192.168.50.255 scope global eth0
+inet6 fe80::20c:29ff:fe28:fd4c/64 scope link
+valid_lft forever preferred_lft forever
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN qlen 1000
+link/ether 00:0c:29:28:fd:56 brd ff:ff:ff:ff:ff:ff
+inet 192.168.50.5/24 scope global eth1
+inet6 fe80::20c:29ff:fe28:fd56/64 scope link
+valid_lft forever preferred_lft forever
+3. How to Remove an IP Address
+The following command will remove an assigned IP address from the given interface (eth1).
+
+# ip addr del 192.168.50.5/24 dev eth1
+$ sudo ip addr del 192.168.50.5/24 dev eth1
+4. How to Enable Network Interface
+The “up” flag with interface name (eth1) enables a network interface. For example, the following command will activates the eth1 network interface.
+
+# ip link set eth1 up
+$ sudo ip link set eth1 up
+5. How to Disable Network Interface
+The “down” flag with interface name (eth1) disables a network interface. For example, the following command will De-activates the eth1 network interface.
+
+# ip link set eth1 down
+$ sudo ip link set eth1 down
+6. How do I Check Route Table?
+Type the following command to check the routing table information of system.
+
+# ip route show
+$ sudo ip route show
+Sample Output
+
+10.10.20.0/24 via 192.168.50.100 dev eth0
+192.168.160.0/24 dev eth1  proto kernel  scope link  src 192.168.160.130  metric 1
+192.168.50.0/24 dev eth0  proto kernel  scope link  src 192.168.50.2
+169.254.0.0/16 dev eth0  scope link  metric 1002
+default via 192.168.50.1 dev eth0  proto static
+7. How do I Add Static Route
+Why you need to add Static routes or Manual routes, because that the traffic must not pass through the default gateway. We need to add Static routes to pass traffic from best way to reach the destination.
+
+# ip route add 10.10.20.0/24 via 192.168.50.100 dev eth0
+$ sudo ip route add 10.10.20.0/24 via 192.168.50.100 dev eth0
+8. How to Remove Static Route
+To remove assigned static route, simply type the following command.
+
+# ip route del 10.10.20.0/24
+$ sudo ip route del 10.10.20.0/24
+9. How do I Add Persistence Static Routes
+All the above route will be lost after a system restart. To add permanent Static route, edit file /etc/sysconfig/network-scripts/route-eth0 (We are storing static route for (eth0) and add the following lines and save and exist. By default route-eth0 file will not be there, need to be created.
+
+For RHEL/CentOS/Fedora
+
+# vi /etc/sysconfig/network-scripts/route-eth0
+10.10.20.0/24 via 192.168.50.100 dev eth0
+For Ubuntu/Debian/Linux Mint
+
+Open the file /etc/network/interfaces and at the end add the persistence Static routes. IP Addresses may differ in your environment.
+
+$ sudo vi /etc/network/interfaces
+auto eth0
+iface eth0 inet static
+address 192.168.50.2
+netmask 255.255.255.0
+gateway 192.168.50.100
+#########{Static Route}###########
+up ip route add 10.10.20.0/24 via 192.168.50.100 dev eth0
+Next, restart network services after entering all the details using the following command.
+
+# /etc/init.d/network restart
+$ sudo /etc/init.d/network restart
+10. How do I Add Default Gateway
+Default gateway can be specified globally or for in interface-specific config file. Advantage of default gateway is If we have more than one NIC is present in the system. You can add default gateway on the fly as shown below command.
+
+# ip route add default via 192.168.50.100
+$ sudo ip route add default via 192.168.50.100
+Kindly correct me if i missed out. Please refer manual page doing man ip from terminal/command prompt to know more about IP Command.

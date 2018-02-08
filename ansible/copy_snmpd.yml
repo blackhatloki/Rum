@@ -1,0 +1,7 @@
+---
+- hosts: all
+  tasks:
+  - name :  copy_snmpd
+    copy : 'src=snmpd.conf  dest=/etc/snmp/snmpd.conf  owner=root group=root mode=600'
+  - command: /bin/systemctl enable snmpd
+  - command: /bin/systemctl restart snmpd

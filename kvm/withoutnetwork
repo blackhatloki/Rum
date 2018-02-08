@@ -1,0 +1,9 @@
+# virt-install \
+--name foreman \
+--ram 1024 \
+--vcpus=1 \
+--disk size=20,format=qcow2,pool=VMs-pool \
+--nonetworks \
+--cdrom /home/VMs/ISOs/CentOS-6.5-x86_64-bin-DVD1.iso \
+--graphics vnc,listen=0.0.0.0,keymap=en_gb --noautoconsole --hvm \
+--os-variant rhel6

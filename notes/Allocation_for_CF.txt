@@ -1,0 +1,41 @@
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-5 wns06d-6611_CF1_data_u11 1000g
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-5 wns06d-6611_CF1_data_u12 1000g
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-5 wns06d-6611_CF2_data_u5 1000g
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-5 wns06d-6611_CF2_data_u6 1000g
+createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-5 wns06d-6611_CF1_archive3  1000g 
+createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-5 wns06d-6611_CF1_dbdumps6  1000g 
+createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-5 wns06d-6611_CF2_archive3  1000g 
+createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-5 wns06d-6611_CF2_dbdumps2  1000g 
+
+createvlun    wns06d-6611_CF1_archive3 170 wns06d-6611a 
+createvlun -f wns06d-6611_CF1_archive3 170 wns06d-6611b 
+createvlun -f wns06d-6611_CF1_archive3 170 wns06d-6611c 
+
+createvlun    wns06d-6611_CF2_archive3 171 wns06d-6611a 
+createvlun -f wns06d-6611_CF2_archive3 171 wns06d-6611b 
+createvlun -f wns06d-6611_CF2_archive3 171 wns06d-6611c 
+
+createvlun    wns06d-6611_CF1_dbdumps6 172 wns06d-6611a 
+createvlun -f wns06d-6611_CF1_dbdumps6 172 wns06d-6611b 
+createvlun -f wns06d-6611_CF1_dbdumps6 172 wns06d-6611c 
+vxassist
+createvlun    wns06d-6611_CF2_dbdumps2 173 wns06d-6611a 
+createvlun -f wns06d-6611_CF2_dbdumps2 173 wns06d-6611b 
+createvlun -f wns06d-6611_CF2_dbdumps2 173 wns06d-6611c
+
+createvlun    wns06d-6611_CF1_data_u11 174 wns06d-6611a 
+createvlun -f wns06d-6611_CF1_data_u11 174 wns06d-6611b 
+createvlun -f wns06d-6611_CF1_data_u11 174 wns06d-6611c
+
+createvlun    wns06d-6611_CF1_data_u12 175 wns06d-6611a 
+createvlun -f wns06d-6611_CF1_data_u12 175 wns06d-6611b 
+createvlun -f wns06d-6611_CF1_data_u12 175 wns06d-6611c
+
+createvlun    wns06d-6611_CF2_data_u5 176 wns06d-6611a 
+createvlun -f wns06d-6611_CF2_data_u5 176 wns06d-6611b 
+createvlun -f wns06d-6611_CF2_data_u5 176 wns06d-6611c 
+
+createvlun    wns06d-6611_CF2_data_u6 177 wns06d-6611a 
+createvlun -f wns06d-6611_CF2_data_u6 177 wns06d-6611b 
+createvlun -f wns06d-6611_CF2_data_u6 177 wns06d-6611c
+

@@ -1,0 +1,15 @@
+---
+  - hosts: localhost
+    tasks:
+    - name: Install common software requirements
+      yum: pkg={{ item }} state=installed
+      with_items:
+      - git
+      - htop
+      - vim
+      - xterm
+      - epel* 
+      - perl* 
+      - tcpdump
+      - nmap 
+      - gcc

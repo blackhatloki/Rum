@@ -1,0 +1,21 @@
+---
+  - hosts: all
+    tasks:
+    - name: Install EPEL Software
+      yum: pkg={{ item }} state=installed
+      with_items:
+      - epel-release
+    - name: Install common software requirements
+      yum: pkg={{ item }} state=installed
+      with_items:
+      - httpd
+      - nagios
+      - nagios-common
+      - nagios-plugins-all
+    - name: "Enable nagios services"
+      service: name={{item}} state=started
+      with_items:
+      -  httpd
+      -  nagios
+    - command: /bin/systemctl enable httpd 
+    - command: /bin/systemctl enable nagios

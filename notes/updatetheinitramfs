@@ -1,0 +1,22 @@
+Installing the driver on Red Hat Linux 6/7 or CentOS 6/7
+Note: You must have root privilege to complete this task.
+To install the DKMS driver on Red Hat Linux 6/7 or CentOS 6/7:
+
+Become the root user:
+$sudo su
+Install the prerequisite packages:
+# yum install kernel kernel-devel kernel-headers gcc
+Reboot the system.
+Become root:
+$sudo su
+Extract the driver source code:
+# tar –xvf aacraid_src.tgz
+Compile the driver:
+# make –C /lib/modules/`uname -r`/build M=`pwd` modules
+Copy the kernel driver file to /lib/modules for inclusion in initramfs (Linux Initial RAM File System):
+# cp ./aacraid.ko /lib/modules/`uname -r`/kernel/drivers/scsi/aacraid
+Note: Delete the old driver (if any), before copying the new one.
+Update initramfs to include the driver in the new kernel:
+# dracut -v -f --drivers aacraid
+Reboot the system.
+

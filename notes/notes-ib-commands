@@ -1,0 +1,19 @@
+ibhosts 
+ibswitch
+ibstatus 
+ibv_devinfo
+iblinkinfo
+
+
+Once you have the LID, use flint to program the firmware.
+For example:
+flint -d lid-<lid> -i <path to firmware> b
+ 
+eyals:~ # ibswitches
+Switch  : 0x0002c9020040fc28 ports 36 "Infiniscale-IV Mellanox Technologies" base port 0 lid 44 lmc 0
+flint -d lid-44 -i /tmp/firmware.bin b
+ 
+don't forget to reboot the switch after the new firmware is programmed.
+ 
+Good luck!
+`

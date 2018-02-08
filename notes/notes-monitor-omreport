@@ -1,0 +1,6 @@
+omreport chassis
+omreport chassis bmc
+omreport chassis batteries
+omreport storage vdisk
+omreport storage battery
+omreport system summary

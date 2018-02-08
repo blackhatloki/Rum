@@ -1,0 +1,21 @@
+Tony,
+
+Here are the names for the chassis in the back and their blades.  They are reachable from soho:
+
+Chassis CMCs:
+cmcmercer14.es.its.nyu.edu ... cmcmercer23.es.its.nyu.edu
+
+Blade iDRACs:
+spmercer-14-0.es.its.nyu.edu ... spmercer-23-15.es.its.nyu.edu
+
+Blade OS ethernet:
+compute-14-0.local ... compute-23-15.local
+
+Blade OS IB:
+compute-14-0-ib.ibnet ... compute-23-15-ib.ibnet
+
+I have shutdown the blades at the OS level.  Please check with hpc-staff before doing anything at the chassis level.  If you plan to shutdown the whole chassis, also let eSys know ahead of time to stop monitoring cmcmercer14.es.its.nyu.edu ... cmcmercer23.es.its.nyu.edu.
+
+Thanks,
+
+Eric

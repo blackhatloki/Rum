@@ -1,0 +1,165 @@
+ want test my Linux, OpenBSD, FreeBSD and Unix-like server entirely for high load and monitoring the health under stress. How can I stress out my CPU, memory, I/O, and disk stress and more with stress test tool on a Linux or Unix-like systems?
+
+A sysadmin can try out any one of the following tool to put given subsytems under a specified load. Instances in which this is useful include those in which a system administrator wishes to perform tuning activities, a kernel or libc programmer wishes to evaluate denial of service possibilities, test your systems entirely on high load and monitoring the health, etc. This is also useful for sysadmin, system builders, and overclockers who want to test their hardware under high load and monitor stability and thermal environment.
+
+stress : It is a simple workload generator for POSIX systems. It imposes a configurable amount of CPU, memory, I/O, and disk stress on the system. It is written in C, and is free software licensed under the GPLv2. It is not a benchmark, but is rather a tool designed
+stress-ng : It is an updated version of stress tool and it will stress test a server for the following features:
+CPU compute
+Cache thrashing
+Drive stress
+I/O syncs
+VM stress
+Socket stressing
+Context switching
+Process creation and termination
+It includes over 60 different stress tests, over 50 CPU specific stress tests that exercise floating point, integer, bit manipulation and control flow, over 20 virtual memory stress tests.
+Warning: Running the following tools with root privileges is recommended to avoid out of memory and other errors. Also, note that tools will stress out your server resources quickly so use the following command judiciously.
+
+Tool#1: Getting started with stress tool
+
+This program is supposed to be easy to use and recommended for new sysadmins. The tool is known to work on x86 Linux and FreeBSD/OpenBSD, powerpc AIX and Linux, SPARC Solaris, Compaq Alpha Tru64 UNIX, and many others.
+
+Install stress package
+
+You can install stress as part of the distribution.
+
+Install stress on a CentOS, RHEL, and Fedora Linux
+
+First, turn on EPEL repo and then type the following yum command to install the same:
+
+sudo yum install stress
+Sample outputs:
+
+Fig.01: Installing stress on a RHEL/CentOS/Fedora Linux
+
+Install stress on a Debian and Ubuntu Linux
+
+Type the following apt-get command to install the same:
+
+apt-get install stress
+Sample outputs:
+
+Fig.02: Install stress tool on a Debian/Ubuntu Linux
+
+Install stress on a FreeBSD
+
+Type the following pkg command to install the stress tool using binary method:
+
+pkg install stress
+## OR ##
+pkg install sysutils/stress
+Sample outputs:
+
+Fig.03: FreeBSD installing stress tool 
+
+Install stress on a OpenBSD
+
+Type the following pkg_add command to install the stress tool using binary method:
+
+ 
+export PKG_PATH=http://ftp.usa.openbsd.org/pub/OpenBSD/`uname -r`/packages/`arch -s`
+pkg_add stress
+How do I use stress tool?
+
+First, note down the current system load averages by typing the following command:
+# uptime
+Next, run any one of the following command to see load on screen:
+# watch uptime
+OR use tload command:
+# tload
+The syntax is as follows:
+
+stress [OPTION]
+## Stress using CPU-bound task
+stress -c 4
+## Stress using IO-bound task 
+stress -i 2
+For example, a load average of four is imposed on the system by specifying two CPU-bound processes, one I/O-bound process, and one memory allocator process as follows:
+# uptime
+# stress -c 2 -i 1 -m 1 --vm-bytes 128M -t 10s
+# uptime
+
+Sample outputs:
+
+Fig.04: A load average of four is imposed on the system
+
+Where,
+
+-c 2 : Spawn two workers spinning on sqrt()
+-i 1 : Spawn one worker spinning on sync()
+-m 1 : Spawn one worker spinning on malloc()/free()
+--vm-bytes 128M : Malloc 128MB per vm worker (default is 256MB)
+-t 10s : Timeout after ten seconds
+-v : Be verbose
+Tool #2: Getting started with stress-ng
+
+The stress-ng tool will stress test a computer system in various selectable ways.
+
+Install stress-ng on a Linux or Unix-like systems
+
+Type the following command to download stress-ng tarball using the wget command:
+$ cd /tmp
+$ wget http://kernel.ubuntu.com/~cking/tarballs/stress-ng/stress-ng-0.03.11.tar.gz
+Untar tar ball, enter:
+$ tar zxvf stress-ng-0.03.11.tar.gz
+Compile stress-ng, run:
+$ cd stress-ng-0.03.11
+$ make
+Sample outputs:
+
+cc -Wall -Wextra -DVERSION='"0.03.11"' -O2 -c -o stress-affinity.o stress-affinity.c
+cc -Wall -Wextra -DVERSION='"0.03.11"' -O2 -c -o stress-aio.o stress-aio.c
+cc -Wall -Wextra -DVERSION='"0.03.11"' -O2 -c -o stress-bigheap.o stress-bigheap.c
+cc -Wall -Wextra -DVERSION='"0.03.11"' -O2 -c -o stress-brk.o stress-brk.c
+cc -Wall -Wextra -DVERSION='"0.03.11"' -O2 -c -o stress-bsearch.o stress-bsearch.c
+cc -Wall -Wextra -DVERSION='"0.03.11"' -O2 -c -o stress-cache.o stress-cache.c
+cc -Wall -Wextra -DVERSION='"0.03.11"' -O2 -c -o stress-chmod.o stress-chmod.c
+....
+..
+cc -Wall -Wextra -DVERSION='"0.03.11"' -O2 -c -o stress-ng.o stress-ng.c
+cc  -Wall -Wextra -DVERSION='"0.03.11"' -O2 stress-affinity.o stress-aio.o stress-bigheap.o stress-brk.o stress-bsearch.o stress-cache.o stress-chmod.o stress-clock.o stress-cpu.o stress-dentry.o stress-dir.o stress-dup.o stress-epoll.o stress-eventfd.o stress-fallocate.o stress-fault.o stress-fifo.o stress-flock.o stress-fork.o stress-fstat.o stress-futex.o stress-get.o stress-hdd.o stress-hsearch.o stress-inotify.o stress-iosync.o stress-kill.o stress-lease.o stress-lsearch.o stress-link.o stress-lockf.o stress-memcpy.o stress-mincore.o stress-mmap.o stress-msg.o stress-mq.o stress-nice.o stress-noop.o stress-null.o stress-open.o stress-pipe.o stress-poll.o stress-procfs.o stress-pthread.o stress-qsort.o stress-rdrand.o stress-rename.o stress-seek.o stress-sem.o stress-sendfile.o stress-sigfd.o stress-sigfpe.o stress-sigsegv.o stress-sigq.o stress-socket.o stress-stack.o stress-switch.o stress-sysinfo.o stress-timer.o stress-tsearch.o stress-urandom.o stress-utime.o stress-vm.o stress-wait.o stress-yield.o stress-zero.o coredump.o helper.o io-priority.o lock-mem.o log.o madvise.o mincore.o mounts.o mwc.o out-of-memory.o parse-opts.o proc-name.o sched.o time.o stress-ng.o -lm -lpthread -lrt -o stress-ng
+How do I use the stress-ng tool?
+
+The syntax is:
+
+stress-ng [options]
+stress-ng -c 2
+stress-ng -c 4 -t 10 -v
+stress-ng -c 4 --metrics-brief
+Examples
+
+To run for 60 seconds with 4 cpu stressors, 2 io stressors and 1 vm stressor using 1GB of virtual memory, enter:
+
+stress-ng --cpu 4 --io 2 --vm 1 --vm-bytes 1G --timeout 60s --metrics-brief
+Sample outputs:
+
+Fig.05: stress-ng in action
+
+In this example, run 16 cpu stressors and stops after 900000 bogo operations:
+
+stress-ng --cpu 16 --cpu-ops 900000
+To run 4 simultaneous instances of all the stressors sequentially one by one, each for 6 minutes and summaries with performance metrics at the end:
+
+stress-ng --sequential 4 --timeout 6m --metrics
+To run 2 FFT cpu stressors, stop after 5000 bogo operations and produce a summary just for the FFT results:
+
+stress-ng --cpu 2 --cpu-method fft --cpu-ops 5000 --metrics−brief
+To run cpu stressors on all online CPUs working through all the available CPU stressors for 2 hour:
+
+stress−ng --cpu 0 --cpu-method all -t 2h
+To run 2 instances of all the stressors for 10 minutes:
+
+stress-ng --all 2 --timeout 10m
+To run 128 stressors that are randomly chosen from all the available stressors:
+
+stress-ng --random 128
+To run 64 instances of all the different cpu stressors and verify that the computations are correct for 5 minutes with a bogo operations summary at the end:
+
+stress-ng --cpu 64 --cpu−method all --verify -t 5m --metrics−brief
+To run all the stressors one by one for 5 minutes, with the number of instances of each stressor matching the number of online CPUs:
+
+stress-ng --sequential 0 -t 5m
+To run all the stressors in the io class one by one for 1 minutes each, with 8 instances of each stressor running concurrently and show overall time utilisation statistics at the end of the run:
+
+stress-ng --sequential 8 --class io -t 1m --times
+

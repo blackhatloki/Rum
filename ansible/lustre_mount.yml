@@ -1,0 +1,20 @@
+---
+- hosts: c26-05
+  tasks:
+  - name: Backup fstab 
+    command: > 
+      cp -p /etc/fstab /etc/fstab.orig 
+  - name: Generate new fstab 
+    template:
+      src: "templates/fstab.j2"
+      dest: "/etc/fstab"
+      owner: root 
+      group: root 
+      mode: 0644 
+  - name : Copy odd-even.py script
+    copy : 'src=odd-even.py dest=/var/tmp/odd-even.py owner=root group=root mode=744'
+  - name : Copy bash script to excute odd-even.py script
+    copy : 'src=execute-odd-even.sh dest=/var/tmp/execute-odd-even.sh owner=root group=root mode=744'
+  - name : Execute script
+    command : '/var/tmp/execute-odd-even.sh '
+

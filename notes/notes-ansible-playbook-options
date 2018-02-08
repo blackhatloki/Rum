@@ -1,0 +1,7 @@
+Do I say this right? – Syntax checking - ansible-playbook --syntax-check playbook.yml 
+Whom am I talking to? – Listing affected hosts - ansible-playbook --list-hosts playbook.yml 
+What’s going on here? – List tasks - ansible-playbook --list-tasks playbook.yml
+What’s that thing? – List all tags -  ansible-playbook --list-tags
+Are you sure? – Running in test mode -  ansible-playbook --check  playbook.yml
+Let me have a look at that… – Going through tasks step by step - ansible-playbook --step
+ansible-playbook webserver.yml -i 10.10.10.10,

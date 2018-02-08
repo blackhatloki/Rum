@@ -1,0 +1,5 @@
+---
+- hosts: all
+  tasks:
+  - name : Copy Root ssh 
+    copy : 'src=/root/.ssh/cluster.pub dest=/root/.ssh/authorized_keys owner=root group=root mode=600'

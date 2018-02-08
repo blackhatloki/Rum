@@ -1,0 +1,80 @@
+$ help
+
+ help            -- list racadm subcommand description
+ help <subcommand> -- display usage summary for a subcommand
+ ?               -- list racadm subcommand description
+ ? <subcommand>  -- display usage summary for a subcommand
+ arp             -- display the networking arp table
+ chassisaction   -- execute power-up/down/cycle or reset operation
+ chassislog      -- display the chassislog
+ closessn        -- close a session
+ clrraclog       -- clear the CMC log
+ clrsel          -- clear the System Event Log (SEL)
+ cmcchangeover   -- changes the redundant state of the CMC from active to standby and vice versa
+ config          -- modify CMC configuration properties
+ connect         -- connect to switch or blade serial console
+ deploy          -- deploy blade or IOM by specifying required properties
+ eventfilters    -- configure alerts for chassis events
+ feature         -- display features active on the chassis / feature deactivation
+ featurecard     -- feature card status and list the available features
+ fwupdate        -- update the firmware on a CMC, server, IOM inf or KVM
+ get             -- save CMC configuration properties to a file
+ getactiveerrors -- display CMC active errors
+ getassettag     -- display asset tag
+ getchassisname  -- get the chassisname
+ getconfig       -- display CMC configuration properties
+ getdcinfo       -- display general I/O module and DC configuration information
+ getfanreqinfo   -- display fan request information for Servers and Switches
+ getflexaddr     -- display Flexaddress enablement status for all slots and fabrics.
+ getioinfo       -- display general IO information and stack information
+ getkvminfo      -- display the KVM module information
+ getled          -- display the LED settings on a module
+ getmacaddress   -- get MAC/WWN addresses
+ getmodinfo      -- get module configuration and status information
+ getniccfg       -- display network settings for modules
+ getpbinfo       -- get power budget status information
+ getpminfo       -- get power management status information
+ getraclog       -- display the CMC log
+ getractime      -- display the current CMC time
+ getredundancymode -- gets the redundancy mode of the CMC
+ getsel          -- display records from the System Event Log (SEL)
+ getsensorinfo   -- display system sensors
+ getslotname     -- gets the name of the slot in the chassis
+ getssninfo      -- display session information
+ getsvctag       -- display service tag information
+ getsysinfo      -- display general CMC and system information
+ gettracelog     -- display the CMC diagnostic trace log
+ getversion      -- display version information for modules
+ getarraycfg     -- display's storage array properties
+ ifconfig        -- display network interface information
+ jobqueue        -- Jobqueue of the jobs currently scheduled
+ krbkeytabupload -- upload an Kerberos Keytab to the CMC
+ netstat         -- display routing table and network statistics
+ ping            -- send ICMP echo packets on the network
+ ping6           -- send ICMP echo packets on the network
+ racdump         -- display CMC diagnostic information
+ racreset        -- perform a CMC or RAC reset operation
+ racresetcfg     -- restore the CMC configuration to factory defaults
+ remoteimage     -- connect, disconnect or deploy a media file on a remote server
+ serveraction    -- perform system power management operations
+ set             -- import saved CMC configuration from a file
+ setassettag     -- set the asset tag for the specified module
+ setchassisname  -- sets the name of the chassis
+ setflexaddr     -- enable/disable the Flexaddress feature on a per fabric, per slot basis.
+ setled          -- set state of the LEDs on a module
+ setniccfg       -- modify network configuration properties
+ setractime      -- set the time on the CMC
+ setslotname     -- sets the name of the slot in the chassis
+ setsysinfo      -- set the chassis name and chassis location
+ setarraycfg     -- configure's storage array properties
+ sshpkauth       -- manage PK Authentication keys and accounts
+ sslcertdownload -- download an SSL certificate from the CMC
+ sslcertupload   -- upload an SSL certificate to the CMC
+ sslcertview     -- display a CA/server certificate in the CMC
+ sslcsrgen       -- generate a certificate CSR from the CMC
+ sslresetcfg     -- generate a new self-signed certificate
+ testemail       -- test CMC e-mail notifications
+ testfeature     -- test CMC feature x
+ testtrap        -- test CMC SNMP trap notifications
+ traceroute      -- determine the route of a packet
+ traceroute6     -- determine the route of a packet

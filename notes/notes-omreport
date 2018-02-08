@@ -1,0 +1,134 @@
+omreport system summary
+omreport system version
+I will not be listing all possible commands and their output, but from what i found useful was:
+Display the Hardware logs
+  omreport system esmlog         # the first line of this report reflect the general health status of your system BUT the storage domain
+
+The alert log
+omreport system alertlog
+
+The postlog (messages from the POST: Power On Self Test)
+omreport system postlog
+
+# omreport chassis
+
+Change NIC settings (turn on PXE on NIC1)
+omconfig chassis biossetup attribute=nic1 setting=enabledwithpxe
+
+
+omreport storage controller |grep ID
+omreport storage pdisk controller=0
+
+omreport storage pdisk controller=0 |grep -w "^ID"
+
+
+Retrieve the RAID configuration
+The RAID configuration is actually nothing but the virtual disk architecture, this is why we can use the following command to retrieve it :
+omreport storage vdisk controller=0
+Note : To achieve this you need to know the controller(s) ID, see the previous item (Retrieve the list of physical HDDs) to find it out.
+This should print something like :
+
+List of Virtual Disks on Controller PERC 5/i Integrated (Embedded)
+ 
+Controller PERC 5/i Integrated (Embedded)
+ID                  : 0
+Status              : Ok
+Name                : system
+State               : Ready
+Encrypted           : Not Applicable
+Layout              : RAID-1
+Size                : 931.00 GB (999653638144 bytes)
+Device Name         : /dev/sda
+Bus Protocol        : SATA
+Media               : HDD
+Read Policy         : No Read Ahead
+Write Policy        : Write Through
+Cache Policy        : Not Applicable
+Stripe Element Size : 64 KB
+Disk Cache Policy   : Enabled
+ 
+ID                  : 1
+Status              : Ok
+Name                : Seances
+State               : Ready
+Encrypted           : Not Applicable
+Layout              : RAID-0
+Size                : 1,862.00 GB (1999307276288 bytes)
+Device Name         : /dev/sdb
+Bus Protocol        : SATA
+Media               : HDD
+Read Policy         : No Read Ahead
+Write Policy        : Write Through
+Cache Policy        : Not Applicable
+Stripe Element Size : 64 KB
+Disk Cache Policy   : Enabled
+Retrieve the physical disk(s) comprised within a RAID array (virtual disk)
+From the omreport command line tool it is possible to do that for a given virtual disk.
+We first need to get the ID of each available virtual disk(s) for each controller ID of our system, which has already been shown in the “Retrieve the RAID configuration“.
+Once we got this list of virtual disk, we can just use those information to get the full list of physical disk(s) for a given virtual disk, as :
+omreport storage pdisk controller=0 vdisk=0
+Which print something like :
+
+List of Physical Disks belonging to system
+ 
+Controller PERC 5/i Integrated (Embedded)
+ID                        : 0:0:0
+Status                    : Ok
+Name                      : Physical Disk 0:0:0
+State                     : Online
+Power Status              : Not Applicable
+Bus Protocol              : SATA
+Media                     : HDD
+Revision                  : 51.0AB51
+Failure Predicted         : No
+Certified                 : Not Applicable
+Encryption Capable        : No
+Encrypted                 : Not Applicable
+Progress                  : Not Applicable
+Mirror Set ID             : Not Applicable
+Capacity                  : 931.00 GB (999653638144 bytes)
+Used RAID Disk Space      : 931.00 GB (999653638144 bytes)
+Available RAID Disk Space : 0.00 GB (0 bytes)
+Hot Spare                 : No
+Vendor ID                 : ATA
+Product ID                : WDC WD10EARS-00MVWB0
+Serial No.                : WD-WCAZA904698846988
+Part Number               : Not Available
+Negotiated Speed          : Not Available
+Capable Speed             : Not Available
+Manufacture Day           : Not Available
+Manufacture Week          : Not Available
+Manufacture Year          : Not Available
+SAS Address               : 1221000000000000
+ 
+ID                        : 0:0:1
+Status                    : Ok
+Name                      : Physical Disk 0:0:1
+State                     : Online
+Power Status              : Not Applicable
+Bus Protocol              : SATA
+Media                     : HDD
+Revision                  : 51.0AB51
+Failure Predicted         : No
+Certified                 : Not Applicable
+Encryption Capable        : No
+Encrypted                 : Not Applicable
+Progress                  : Not Applicable
+Mirror Set ID             : Not Applicable
+Capacity                  : 931.00 GB (999653638144 bytes)
+Used RAID Disk Space      : 931.00 GB (999653638144 bytes)
+Available RAID Disk Space : 0.00 GB (0 bytes)
+Hot Spare                 : No
+Vendor ID                 : ATA
+Product ID                : WDC WD10EARS-00MVWB0
+Serial No.                : WD-WCAZA948818988189
+Part Number               : Not Available
+Negotiated Speed          : Not Available
+Capable Speed             : Not Available
+Manufacture Day           : Not Available
+Manufacture Week          : Not Available
+Manufacture Year          : Not Available
+SAS Address               : 1221000001000000
+
+
+

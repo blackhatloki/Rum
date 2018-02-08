@@ -1,0 +1,5 @@
+---
+- hosts: all
+  tasks:
+  - name : Copy check_dell_bladechassis
+    copy : 'src=check_dell_bladechassis  dest=/usr/lib64/nagios/plugins/check_dell_bladechassis  owner=root group=root mode=744'

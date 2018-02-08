@@ -1,0 +1,13 @@
+As root, in a shell prompt, run dsmc
+
+Then you will be prompted for the "USERID", that is the TSM node name, in this case it should be prince-master0.hpc.nyu.edu (case no sensitive).  You can hit return key to take the default.
+
+Then you will be prompted for the password, it should be the TSM node name prefixed with tsm: tsmprince-master0.hpc.nyu.edu
+
+Then you can start the daemon "dsmc sched" in the background.  There should be no error in the dsmerror.log, and the next scheduled backup in the dsmsched.log.
+
+To start the daemon "dsmc sched" in the background, in a shell script:
+nohup /usr/bin/dsmc sched </dev/null > /dev/null 2>&1 &
+
+your dsmc link could be in a different path such as /usr/dsmc
+

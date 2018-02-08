@@ -1,0 +1,102 @@
+createhost -persona 2 wns06d-6611d 10000000C992F578 10000000C992F579 10000000C98C14F4 10000000C98C14F5 10000000C992E714 10000000C992E715
+
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_app 36G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_u01 1100G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_u02 1100G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_u03 1100G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_u04 1100G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_u05 1000G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_u06 1000G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_u07 1000G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_u08 1000G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_u09 1000G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_u10 1000G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_u11 1000G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_arch1 2000G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_arch2 2000G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_arch3 2000G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_r01 256G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_r02 256G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_r03 256G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_CF2_r04 256G
+#createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-7 wns06d-6611_1203903_dbdumps1 2000g
+#createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-7 wns06d-6611_1203903_dbdumps2 2000g
+#createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-7 wns06d-6611_1203903_dbdumps3 2000g
+createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-7 wns06d-6611_1203903_dbdumps4 2000g
+createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-7 wns06d-6611_1203903_dbdumps5 2000g
+createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-7 wns06d-6611_1203903_dbdumps6 2000g
+createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-7 wns06d-6611_1203903_dbdumps7 2000g
+createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-7 wns06d-6611_1203903_dbdumps8 2000g
+createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-7 wns06d-6611_1203903_dbdumps9 1000g
+
+createvlun wns06d-6611_1203903_CF2_app 1  wns06d-6611d
+createvlun wns06d-6611_1203903_CF2_u01 2  wns06d-6611d 
+createvlun wns06d-6611_1203903_CF2_u02 3  wns06d-6611d 
+createvlun wns06d-6611_1203903_CF2_u03 4  wns06d-6611d 
+createvlun wns06d-6611_1203903_CF2_u04 5  wns06d-6611d 
+createvlun wns06d-6611_1203903_CF2_u05 6  wns06d-6611d 
+createvlun wns06d-6611_1203903_CF2_u06 7  wns06d-6611d 
+createvlun wns06d-6611_1203903_CF2_u07 8  wns06d-6611d 
+createvlun wns06d-6611_1203903_CF2_u08 9  wns06d-6611d 
+createvlun wns06d-6611_1203903_CF2_u09 10 wns06d-6611d 
+createvlun wns06d-6611_1203903_CF2_u10 11 wns06d-6611d
+createvlun wns06d-6611_1203903_CF2_u11 36 wns06d-6611d
+createvlun wns06d-6611_1203903_CF2_arch1 12 wns06d-6611d 
+createvlun wns06d-6611_1203903_CF2_arch2 13 wns06d-6611d 
+createvlun wns06d-6611_1203903_CF2_arch3 14 wns06d-6611d
+createvlun wns06d-6611_1203903_CF2_r01 15 wns06d-6611d
+createvlun wns06d-6611_1203903_CF2_r02 16 wns06d-6611d
+createvlun wns06d-6611_1203903_CF2_r03 17 wns06d-6611d
+createvlun wns06d-6611_1203903_CF2_r04 18 wns06d-6611d
+#createvlun wns06d-6611_1203903_CF2_dbdumps1 19 wns06d-6611d
+#createvlun wns06d-6611_1203903_CF2_dbdumps2 20 wns06d-6611d
+# createvlun wns06d-6611_1203903_CF2_dbdumps3 21 wns06d-6611d
+
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_OMG2_app 36g 
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_OMG2_u01 200g
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_OMG2_r01 36g 
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_OMG2_r02 36g 
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_OMG2_arch1 150g 
+createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-7 wns06d-6611_1203903_OMG2_dbd1 200G 
+createvlun  wns06d-6611_1203903_OMG2_app 22  wns06d-6611d
+createvlun  wns06d-6611_1203903_OMG2_u01 23  wns06d-6611d
+createvlun  wns06d-6611_1203903_OMG2_r01 24  wns06d-6611d
+createvlun  wns06d-6611_1203903_OMG2_r02 25  wns06d-6611d
+createvlun  wns06d-6611_1203903_OMG2_dbd1 26 wns06d-6611d
+createvlun  wns06d-6611_1203903_OMG2_arch1 27 wns06d-6611d
+
+
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_LP2_app 36G 
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_LP2_u01 500G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_LP2_u02 500G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_LP2_u03 1000G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_LP2_r01 36G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_LP2_r02 36G
+createaldvv -t r1 -ssz 2 -ha cage -p -nd 0-7 wns06d-6611_1203903_LP2_arch1 1000G
+createaldvv -t r5 -ssz 4 -ha cage -p -nd 0-7 wns06d-6611_1203903_LP2_dbd1 500G
+createvlun wns06d-6611_1203903_LP2_app 28 wns06d-6611d
+createvlun wns06d-6611_1203903_LP2_u01 29 wns06d-6611d
+createvlun wns06d-6611_1203903_LP2_u02 30 wns06d-6611d
+createvlun wns06d-6611_1203903_LP2_u03 31 wns06d-6611d
+createvlun wns06d-6611_1203903_LP2_r01 32 wns06d-6611d
+createvlun wns06d-6611_1203903_LP2_r02 33 wns06d-6611d
+createvlun wns06d-6611_1203903_LP2_arch1 34 wns06d-6611d
+createvlun wns06d-6611_1203903_LP2_dbd1  35 wns06d-6611d
+
+createvlun    wns06d-6611_1203903_dbdumps4 37 wns06d-6611d
+createvlun -f wns06d-6611_1203903_dbdumps4 37 wns06d-6611b
+
+createvlun    wns06d-6611_1203903_dbdumps5 38 wns06d-6611d
+createvlun -f wns06d-6611_1203903_dbdumps5 38 wns06d-6611b
+
+createvlun    wns06d-6611_1203903_dbdumps6 39 wns06d-6611d
+createvlun -f wns06d-6611_1203903_dbdumps6 39 wns06d-6611b
+
+createvlun    wns06d-6611_1203903_dbdumps7 40 wns06d-6611d
+createvlun -f wns06d-6611_1203903_dbdumps7 40 wns06d-6611b
+
+createvlun    wns06d-6611_1203903_dbdumps8 41 wns06d-6611d
+createvlun -f wns06d-6611_1203903_dbdumps8 41 wns06d-6611b
+
+createvlun    wns06d-6611_1203903_dbdumps9 42 wns06d-6611d
+createvlun -f   wns06d-6611_1203903_dbdumps9 42 wns06d-6611b

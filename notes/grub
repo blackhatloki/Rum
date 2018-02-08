@@ -1,0 +1,61 @@
+1. The Boot Menu is Automatically Created
+
+Do not attempt to manually edit the boot menu because it is automatically created from files within the /boot/ directory tree. However you can adjust the /etc/default/grub file that defines the general settings and the /etc/grub.d/40_custom file to add specific custom entries.
+
+The content of the /etc/default/grub file looks like this:
+
+GRUB_TIMEOUT=5
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"
+GRUB_CMDLINE_LINUX="crashkernel=auto rhgb quiet"
+GRUB_DISABLE_RECOVERY="true"
+Kernel options that are common to each entry are defined on the GRUB_CMDLINE_LINUX line. For example, if you like to see the full detailed boot messages, delete rhgb quiet. If you like to see the standard boot messages, just delete rhgb. Changes to the setting is made effective by executing the following command:
+
+[root@host ~]# grub2-mkconfig -o /boot/grub2/grub.cfg
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-3.10.0-229.14.1.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-229.14.1.el7.x86_64.img
+Found linux image: /boot/vmlinuz-3.10.0-229.4.2.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-229.4.2.el7.x86_64.img
+Found linux image: /boot/vmlinuz-3.10.0-229.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-229.el7.x86_64.img
+Found linux image: /boot/vmlinuz-0-rescue-605f01abef434fb98dd1309e774b72ba
+Found initrd image: /boot/initramfs-0-rescue-605f01abef434fb98dd1309e774b72ba.img
+done
+On UEFI-based systems, the command will be grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+
+2. How to Define the Default Entries
+
+To list all the menu entries that will be displayed at system boot, issue the following command:
+
+[root@host ~]# awk -F\' '$1=="menuentry " {print i++ " : " $2}' /etc/grub2.cfg
+0 : CentOS Linux 7 (Core), with Linux 3.10.0-229.14.1.el7.x86_64
+1 : CentOS Linux 7 (Core), with Linux 3.10.0-229.4.2.el7.x86_64
+2 : CentOS Linux 7 (Core), with Linux 3.10.0-229.el7.x86_64
+3 : CentOS Linux 7 (Core), with Linux 0-rescue-605f01abef434fb98dd1309e774b72ba
+Or alternatively:
+
+[root@host ~]# grep "^menuentry" /boot/grub2/grub.cfg | cut -d "'" -f2
+The default entry is defined by the GRUB_DEFAULT line in the /etc/default/grub file. However, if the GRUB_DEFAULT line is set as saved, the parameter is stored in the /boot/grub2/grubenv file. It may be viewed by:
+
+[root@host ~]# grub2-editenv list
+saved_entry=CentOS Linux (3.10.0-229.14.1.el7.x86_64) 7 (Core)
+The /boot/grub2/grubenv file cannot be manually edited. Use the following command instead:
+
+[root@host ~]# grub2-set-default 2
+[root@host ~]# grub2-editenv list
+saved_entry=2
+Note that the first entry in the output of the awk command, above, is index number 0.
+
+Now reboot the system.
+
+3. Rescue Mode and Emergency Mode
+
+The "Linux 0-rescue-..." menu entry is to boot the system in rescue mode. This is equivalent to the single-user mode.
+
+In addition, with CentOS 7, an emergency mode is also available. In this latter mode, a shell is provided immediately after systemd has started. No other processes will exist and the root filesystem will be mounted as read-only. No other filesystems will be mounted.
+
+To boot into emergency mode, enter the setup edit display by typing "e" in the grub2 menu. Then add "systemd.unit=emergency.target" to the end of the kernel option.
+
+[If you have a friendly relationship with systemd :-) you can see what happens in emergency mode by viewing the /usr/lib/systemd/system/emergency.service file.]

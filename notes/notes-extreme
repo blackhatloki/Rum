@@ -1,0 +1,68 @@
+Not sure why you haven't gotten a response, but here goes:
+
+Connect to the Switch via the console port.
+Power the switch on.
+When it says "Press and hold the <spacebar> to enter the bootrom" hold the spacebar.
+You should shortly get to a "BootRom>" prompt.
+Type "config none" and press enter.
+Type "boot" and press enter.
+
+This should allow you to login with the default username, "admin" and no password, it will probably go through the automatic setup when you log in.
+
+Kevin
+KeMystery (TechnicalUser)(OP)6 Nov 12 03:18
+Hi Ensomis,
+
+Thanks for responding but I'm afraid your suggestion did not work. When I entered "config none" I receive the following:
+BootStrap > config none
+config: Command not found. Try 'h' for help!
+
+BootStrap > unconfigure switch all
+unconfigure: Command not found. Try 'h' for help!
+
+I have also tried:
+http://www.tek-tips.com/viewthread.cfm?qid=320702
+and
+http://www.tek-tips.com/viewthread.cfm?qid=376981
+
+But these did not work either. I get the following when I hit "d":
+BootStrap > d
+d: not enough arguments
+usage: d [-bhwdsrx] adr [cnt]
+
+I even tried:
+BootStrap > d f
+Error when reading memory!
+0000000f 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+
+Not sure where I am going wrong.
+NikolayN (TechnicalUser)13 Nov 12 00:46
+You mast pass Botstrap and enter to Bootrom
+
+* Summit X *
+Version 1.0.3.1 Branch trunk by release-manager on Fri 04/20/07
+Copyright 2003-2007, Extreme Networks, Inc.
+
+
+Press and hold the <spacebar> to enter the bootstrap.
+
+Starting Seconday Bootloader ...
+
+
+
+
+Extreme Networks
+
+
+
+
+
+Running POST... PASSED
+
+Version 1.0.3.1 Branch trunk by release-manager on Fri 04/20/07
+Copyright 2003-2007, Extreme Networks, Inc.
+
+
+Press and hold the <spacebar> to enter the bootrom.
+
+BootRom>

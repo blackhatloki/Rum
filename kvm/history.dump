@@ -1,0 +1,1000 @@
+   80  ls -als 
+   81  cd uploads/
+   82  ls
+   83  cd ..
+   84  ls
+   85  mkdir vm-images iso 
+   86  ls -asl 
+   87  w
+   88  iso 
+   89  ls -asl 
+   90  cd iso 
+   91  ls
+   92  ls -asl 
+   93  wget http://mirror.rackspace.com/CentOS/7.3.1611/isos/x86_64/CentOS-7-x86_64-DVD-1611.iso
+   94  w
+   95  ps -ef
+   96  w
+   97  ps -ef
+   98  ls
+   99  vi /etc/hosts 
+  100  w
+  101  ps -ef
+  102  dmesg 
+  103  ip a s
+  104  ip a s 
+  105  [s =ef
+  106  d
+  107  w
+  108  ps -ef
+  109  dmesg 
+  110  ip a s
+  111  dmesg 
+  112  w
+  113  df
+  114  dmhh 
+  115  df
+  116  lvs
+  117  pvs
+  118  df
+  119  w
+  120  dmeg 
+  121  dmesg 
+  122  df
+  123  mount /dev/sr0 /mnt 
+  124  df
+  125  w
+  126  ps -ef
+  127  w
+  128  ps -ef
+  129  history 
+  130  w
+  131  ps -ef
+  132  dmesg 
+  133  ansible 
+  134  w
+  135  ps -ef
+  136  cd
+  137  ls
+  138  pwd
+  139  mkdir ansible 
+  140  ls
+  141  cd ansible/
+  142  ls
+  143  vi disable_services.yml 
+  144  ansible-playbook disable_services.yml 
+  145  l
+  146  vi disable_services.yml 
+  147  ansible-playbook disable_services.yml 
+  148  ps -ef
+  149  vi enable-services.yml 
+  150  ansible-playbook enable-services.yml 
+  151  vi enable-services.yml 
+  152  ansible-playbook enable-services.yml 
+  153  ps -ef
+  154  ls
+  155  df
+  156  dmesg 
+  157  ls
+  158  vi create-sysadminusers.yml
+  159  ls
+  160  ansible-playbook create-sysadminusers.yml 
+  161  vi create-sysadminusers.yml 
+  162  ansible-playbook create-sysadminusers.yml 
+  163  ls
+  164  w
+  165  ps -ef
+  166  cat /etc/passwd
+  167  df
+  168  ps -wef
+  169  w
+  170  ps -ef
+  171  df
+  172  dmesg 
+  173  ps -ef
+  174  df
+  175  w
+  176  ps -ef
+  177  dmesg 
+  178  df
+  179  w
+  180  ps -ef
+  181  dmesg 
+  182  ps -ef
+  183  ps -ef | grep open 
+  184  w
+  185  ps -ef
+  186  dmesg 
+  187  ip a s
+  188  virsh 
+  189  df
+  190  cd /home/iso/
+  191  ls
+  192  df -lj 
+  193  df -k 
+  194  cd /home 
+  195  ls
+  196  mkdir loop 
+  197  ls -asl 
+  198  dmesg 
+  199  ps -ef
+  200  df
+  201  w
+  202  [s =ef
+  203  df
+  204  dmesg 
+  205  ip a s
+  206  df
+  207  dmesg 
+  208  ip a s
+  209  df
+  210  dmesg 
+  211  df
+  212  w
+  213  ps -ef
+  214  ip a s 
+  215  mailx tst722@nyu.edu 
+  216  mail 
+  217  yum -y install mailx 
+  218  mailx -v tst722@nyu.edu 
+  219  mail 
+  220  ls
+  221  cd /etc/postfix/
+  222  ls
+  223  vi main.cf
+  224  vi master.cf 
+  225  systemctl restart postfix 
+  226  mailx -v tst722@nyu.edu 
+  227  mal
+  228  mail 
+  229  ls
+  230  vi main.cf
+  231  systemctl restart postfix 
+  232  mailx -v tst722@nyu.edu 
+  233  mail 
+  234  w
+  235  ps -ef
+  236  dmesg 
+  237  ps -ef
+  238  df
+  239  mailx teague 
+  240  su - teague 
+  241  ssh teague@localhost 
+  242  w
+  243  ps -ef
+  244  reboot 
+  245  cd /home/iso 
+  246  ls
+  247  ls -als 
+  248  wget http://mirror.rackspace.com/CentOS/7.3.1611/isos/x86_64/CentOS-7-x86_64-Everything-1611.iso
+  249  wget http://mirror.rackspace.com/CentOS/6.9/isos/x86_64/CentOS-6.9-x86_64-bin-DVD1.iso
+  250  wget http://mirror.rackspace.com/CentOS/6.9/isos/x86_64/CentOS-6.9-x86_64-bin-DVD2.iso
+  251  fc -l 
+  252  w
+  253  ps -ef
+  254  df -h 
+  255  w
+  256  ps -ef
+  257  df
+  258  w
+  259  dmesg 
+  260  ip a s
+  261  fdisk -l 
+  262  df
+  263  dmesg 
+  264  df
+  265  ps -ef
+  266  w
+  267  ps -ef
+  268  ip a s 
+  269  ps -ef
+  270  w
+  271  ps -ef
+  272  dmesh 
+  273  w
+  274  ip a s
+  275  ifup ib0 
+  276  ip a s
+  277  dmsh 
+  278  df
+  279  ps -ef
+  280  dmesg 
+  281  ip a s
+  282  cat /proc/cpuinfo 
+  283  lscpu 
+  284  lsblk 
+  285  w
+  286  ps -ef
+  287  df
+  288  dmesg 
+  289  ps -ef
+  290  df
+  291  ip a s
+  292  w
+  293  df
+  294  ps -ef
+  295  dmesg 
+  296  ps -ef
+  297  df
+  298  ip a s
+  299  who 
+  300  ps -ef
+  301  df
+  302  ssh w
+  303  ps -ef
+  304  dmesg 
+  305  ip a s 
+  306  dmesg 
+  307  df
+  308  dmesg 
+  309  uname -a 
+  310  ps -ef
+  311  ps -ef | more
+  312   
+  313  df
+  314  cd /etc
+  315  ls
+  316  more securetty 
+  317  df
+  318  ls
+  319  more sysctl.conf 
+  320  more yum.conf 
+  321  cd yum.repos.d/
+  322  ls
+  323  more * 
+  324  pwd
+  325  ls
+  326  cd ..
+  327  ls
+  328  more kdump.conf 
+  329   ls
+  330  more os-release 
+  331  w
+  332  ps -ef
+  333  sar
+  334  yum -y install systat 
+  335  yum -y install sysstat 
+  336  systemctl enable sysstat 
+  337  systemctl start  sysstat 
+  338  sar
+  339  ps -ef
+  340  dmesg 
+  341  ps -ef
+  342  cd /etc/sysstat 
+  343  ls
+  344  cd /etc/cron.d
+  345  ls
+  346  vi sysstat 
+  347  ps -ef
+  348  ntpq -p 
+  349  dmesg 
+  350  df
+  351  ps -ef
+  352  ps -ef | grep chro
+  353  ps -e
+  354  dmesg 
+  355  ip a s
+  356  systemctl restat cron 
+  357  systemctl restart crond 
+  358  ps -ef
+  359  df
+  360  ps -ef
+  361  dmesg 
+  362  ip a s
+  363  yum -y install nfs-utils 
+  364  df
+  365  ps -ef
+  366  dmesg 
+  367  ip a s
+  368  ps -ef
+  369  w
+  370  ps -ef
+  371  df
+  372  ps -ef
+  373  dmesg 
+  374  ip a s
+  375  ps -ef
+  376  w
+  377  ps -ef
+  378  dmesg 
+  379  ip a s
+  380  nmap localhost 
+  381  ip a s
+  382  cd /etc/sysconfig 
+  383  ls
+  384  cd network-scripts/
+  385  ls
+  386  vi ifcfg-em1
+  387  ip a s
+  388  ifup em1 
+  389  vi ifcfg-em1
+  390  ifup em1 
+  391  ip a s
+  392  vi ifcfg-em1
+  393  ifdown em1 
+  394  ifup em1 
+  395  ip a s
+  396  w
+  397  ps -ef
+  398  dmesg 
+  399  ip a s
+  400  dmesg 
+  401  df
+  402  ps -ef
+  403  ip a s
+  404  cat /etc/host 
+  405  cat /etc/hosts
+  406  ssh teague@10.0.252.1
+  407  w
+  408  ps -ef
+  409  ip a s
+  410  dmesg 
+  411  ip a s
+  412  w
+  413  sar
+  414  ps -ef
+  415  dmesg 
+  416  ip a s
+  417  dmesg 
+  418  ip a s
+  419  cat /etc/passwd
+  420  df
+  421  ps -ef
+  422  dmesg 
+  423  yum -y install telnet 
+  424  w
+  425  ps -ef
+  426  ip a s
+  427  w
+  428  ps -ef
+  429  ip a s
+  430  dmesg 
+  431  showmount -e 
+  432  w
+  433  ps -ef
+  434  df
+  435  git 
+  436  yum -y install git 
+  437  w
+  438  ps -ef
+  439  dmesg 
+  440  ps -ef
+  441  ip a s
+  442  w
+  443  sar
+  444  w
+  445  ps -ef
+  446  dmesg 
+  447  cd /etc/default/
+  448  ls
+  449  vi grub 
+  450  cp grub grub.backup 
+  451  vu grub
+  452  vi grub
+  453  w
+  454  ps -ef
+  455  dfw
+  456  ps -ef
+  457  w
+  458  ps -ef
+  459  dmesg 
+  460  ip a s
+  461  w
+  462  ps -ef
+  463  w
+  464  ps -ef
+  465  df
+  466  w
+  467  ps -ef
+  468  gcc
+  469  w
+  470  ps -ef
+  471  df
+  472  ip a s
+  473  w
+  474  ps -ef
+  475  ip a s
+  476  dmesg 
+  477  w
+  478  ps -ef
+  479  w
+  480  ps -ef
+  481  git 
+  482  w
+  483  ps -ef
+  484  df
+  485  w
+  486  ps -ef
+  487  dmesg 
+  488  w
+  489  ps -ef
+  490  ftp 
+  491  ps -ef
+  492  yum list | grep ftp 
+  493  yum -y install tftp tftp-server syslinux 
+  494  cd /tftpboot
+  495  ls
+  496  df
+  497  w
+  498  ps -ef
+  499  ip a s
+  500  w
+  501  ps -ef
+  502  w
+  503  ps -ef
+  504  cd /var/lib/tftpboot/
+  505  ls
+  506  ls -asl 
+  507  w
+  508  ps -ef
+  509  rpm -qa |grep sysinux 
+  510  rpm -qa |grep syslinux 
+  511  rpm -ql syslinux-4.05-13.el7.x86_64
+  512  df
+  513  w
+  514  ps -ef
+  515  dmesg 
+  516  ip a s
+  517  dmesg 
+  518  p a s
+  519  w
+  520  ps -ef
+  521  w
+  522  ps -ef
+  523  iptables -Lv 
+  524  w
+  525  ps -ef
+  526  systemctl enable iptables 
+  527  systemctl restart  iptables 
+  528  w
+  529  s -ef
+  530  dmesg 
+  531  yum install aide
+  532  /usr/sbin/aide --init
+  533  cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+  534   /usr/sbin/aide --check
+  535  vi /etc/crontab
+  536  ls
+  537  vi /etc/sysconfig/selinux 
+  538  vi /etc/profile 
+  539  ls
+  540  vi /etc/sysctl.conf 
+  541  w
+  542  ps -ef
+  543  w
+  544  ps -ef
+  545  df
+  546  w
+  547  ps -ef
+  548  nmap localhost 
+  549  w
+  550  dmesg 
+  551  ps -ef
+  552  ip a s
+  553  w
+  554  ps -ef
+  555  w
+  556  ps -ef
+  557  dmesg 
+  558  ip a s
+  559  dmesg 
+  560  ip a s
+  561  w
+  562  ps -ef
+  563  w
+  564  ps -ef
+  565  dmsg 
+  566  dmesg 
+  567  uname -a 
+  568  ps -ef
+  569  ip a s
+  570  w
+  571  yum -y install logwatch 
+  572  vi /usr/share/logwatch/default.conf/logwatch.conf
+  573  ls
+  574  w
+  575  ps -ef
+  576  w
+  577  ps -ef
+  578  df
+  579  dmsg 
+  580  ipa s
+  581  ip a s
+  582  w
+  583  ps -ef
+  584  df
+  585  ip a r
+  586  ip r a 
+  587  ip r s 
+  588  ethtool -a em1 
+  589  df 
+  590  dmesg 
+  591  ip a s
+  592  dmesg 
+  593  ip a s
+  594   ss -nmp
+  595  ss
+  596  ss -r
+  597  man ss
+  598  ss -rn 
+  599  ss -rn  | more 
+  600    
+  601  w
+  602  ps -ef
+  603  man ss
+  604   ss -t -a
+  605   ss -t -a -v -n 
+  606   ss -tnv  -a 
+  607   ss -t  -a 
+  608   ss -t  -n -a 
+  609  w
+  610  ls
+  611  ps -ef
+  612  dnesg 
+  613  ip a s
+  614  ip r s 
+  615  vi /etc/sysconfig/network
+  616  w
+  617  ps -ef
+  618  ip a s
+  619  dmesg 
+  620  w
+  621  ps -ef
+  622  ip a s
+  623  dmesg 
+  624  ip a s
+  625  w
+  626  ps -ef
+  627  showmount -e 
+  628  yum -y install showmount 
+  629  df
+  630  ps -ef
+  631  w
+  632  ps ef
+  633  ps -ef
+  634  w
+  635  cat /etc/sysctl.conf 
+  636  ip a s
+  637  dmesg 
+  638  ip a s
+  639  dmesg 
+  640  ipa s
+  641  ip a 
+  642  w
+  643  cat /etc/resolv.conf 
+  644  v /etc/resolv.con
+  645  vi /etc/resolv.conf
+  646  w
+  647  ps -ef
+  648  df
+  649  ps -ef
+  650  df
+  651  ps -ef
+  652  reboot 
+  653  w
+  654  ps -ef
+  655  ip a s
+  656  dmesg 
+  657  ip a s
+  658  q
+  659  w
+  660  ps -ef
+  661  dmesg 
+  662  w
+  663  [s =f
+  664  w
+  665  ps -ef
+  666  dmsg 
+  667  ip a s
+  668  dmesg
+  669  ps -eef
+  670  arp -a
+  671  dmesg 
+  672  ip a r 
+  673  ip r s 
+  674  dmesg 
+  675  ip a s
+  676  w
+  677  iptables -L 
+  678  nmcli connection show
+  679  ethtool 
+  680  ethtool em1 
+  681  networkctl
+  682  w
+  683  ps -ef
+  684  dmesg 
+  685  ps -ef
+  686  ps -ef | more
+  687   
+  688  ss 
+  689  ss |more 
+  690    
+  691  ss -r 
+  692  ss -r -t
+  693  ss 
+  694  man ss
+  695   ss -l 
+  696   ss -l  -n | more
+  697     
+  698  netstat 
+  699  netstat -a 
+  700  netstat -nr
+  701  w
+  702  ps -ef
+  703  w
+  704  dmesg 
+  705  ip a  s
+  706  iptables -L 
+  707   ethtool -a  em1 
+  708   ethtool -k  em1 
+  709  w
+  710  ps -ef
+  711  ip a s
+  712  w
+  713  df
+  714  dmesg 
+  715  ip a s
+  716  telnet 10.0.0.1 
+  717  arp -a
+  718  dmesg 
+  719  ip a s
+  720  w
+  721  dmesg 
+  722  ip a s
+  723  yum -y install samba 
+  724  df
+  725  ps -ef
+  726  systemctl enable samba 
+  727  id
+  728  systemctl enable samba
+  729  systemctl enable smb 
+  730  systemctl enable nmb 
+  731  systemctl start smb 
+  732  systemctl start nmb 
+  733  ps -ef
+  734  dmesg 
+  735  ls
+  736  ip a s
+  737  cd /etc/sysconfg/networ
+  738  cd /etc/sysconfig 
+  739  ls
+  740  cd network-scripts/
+  741  ls
+  742  vi ifcfg-ib0 
+  743  ifdowm ib0 
+  744  ifdown ib0 
+  745  ifup ib0 
+  746  ip a s
+  747  ping 10.0.0.1 
+  748  ssh teague@10.0.0.1 
+  749  w
+  750  ps -ef
+  751  ip a s
+  752  ssh teague@10.0.0.1 
+  753  ls
+  754  cd /etc/samba/
+  755  ls
+  756  vi smb.conf
+  757  ls
+  758  vi smb.conf.example 
+  759  mv smb.conf smb.conf.disable 
+  760  cp smb.conf.example  smb.conf 
+  761  vi smb
+  762  vi smb.conf
+  763  ip a s
+  764  vi smb.conf
+  765  ls -asl /home/images
+  766  lls -asl /home 
+  767  ls -asl /home
+  768  vi smb.conf
+  769  ls
+  770  systemctl restart smb
+  771  systemctl restart nmb 
+  772  systemctl status nmb.service
+  773  vi smb.cobf 
+  774  vi smb.conf
+  775  systemctl restart nmb 
+  776  vips -ef
+  777  ps -ef
+  778  smbstatu s
+  779  smbstatus
+  780  ps -ef
+  781  dmesg 
+  782  ls
+  783  w
+  784  w
+  785  ps ef
+  786  df
+  787  dmesg 
+  788  p a s 
+  789  ip a s
+  790  vi smb.conf
+  791  vi smb.conf
+  792  w
+  793  ps -ef
+  794  dmesg 
+  795  ls
+  796  w
+  797  ps -ef
+  798  ls
+  799  dmesg 
+  800  a
+  801  vi smb.conf
+  802  w
+  803  ip a s
+  804  ls
+  805  ls
+  806  cd ..
+  807  ls
+  808  ps -ef
+  809  who 
+  810  dmesg 
+  811  ls
+  812  ls
+  813  ip a s
+  814  cd /root/hosts 
+  815  vi /etc/hosts 
+  816  vi /etc/hosts.allow 
+  817  ps -ef
+  818  dmesg 
+  819   yum install denyhosts
+  820  ps -ef
+  821  dmesg 
+  822  ip a s
+  823  ps -ef
+  824  systemctl enable denyhosts 
+  825  systemctl start  denyhosts 
+  826  ps -ef
+  827  vi /etc/denyhosts.conf 
+  828  w
+  829  ps -ef
+  830  dmesg 
+  831  w
+  832  ps -ef
+  833  cd  /var/log
+  834  ls
+  835  cd sec
+  836  cd secure 
+  837  ls
+  838  more secure 
+  839         
+  840  ps -ef
+  841  w
+  842  w
+  843  ps -ef
+  844  ip a s
+  845  vi /etc/hosts 
+  846  vi /etc/hosts.allow
+  847  vi /etc/hosts.allow
+  848  w
+  849  ps -ef
+  850  reboot 
+  851  w
+  852  ps -ef
+  853  dmesg 
+  854  ip a s
+  855  ps -ef
+  856  ss -t -n 
+  857  ss -t -m 
+  858  ss -m 
+  859  w
+  860  nestat -s 
+  861  yum -y install netstart 
+  862  yum -y install netstar 
+  863  yum -y install netstat 
+  864  q
+  865  w
+  866  ps -ef
+  867  w
+  868  ps -ef
+  869  dmesg 
+  870  cat /etc/hosts.deny 
+  871  w
+  872  dmesg 
+  873  vi /etc/denyhosts.conf
+  874  ps -ef
+  875  dmesg 
+  876  df
+  877  ps -ef
+  878  w
+  879  ip a s 
+  880  ps -ef
+  881  w
+  882  ps -ef
+  883  vrish list 
+  884  w
+  885  virsh list 
+  886  w
+  887  ps -ef
+  888  dmesg 
+  889  ip a s
+  890  df
+  891  ls 
+  892  w
+  893  ps -ef
+  894  df
+  895  w
+  896  ls 
+  897  w
+  898  w
+  899  ps -ef
+  900  df
+  901  ls
+  902  w
+  903  df
+  904  ls
+  905  cd /home/iso/
+  906  ;s
+  907  ls
+  908  s -asl 
+  909  ls -asl 
+  910  df
+  911  virsh 
+  912  ip a s
+  913  ovs-vsctl show 
+  914  ovs-vsctl add-br vsw01 
+  915  ovs-vsctl show 
+  916  exit
+  917  ip a s 
+  918  ls
+  919  ovs-vctl show 
+  920  ovs-vsctl show 
+  921  ovs-vcstl list-br 
+  922  ovs-vsctl list-br 
+  923  ifconfig vsw01 
+  924  ip a s
+  925  pwd
+  926  cd /etc/sysconfig/network-scripts/
+  927  ls
+  928  ifdown p2p1
+  929  ovs-vsctl list-br 
+  930  ls
+  931  cp ifcfg-p2p2 ifcfg-vsw01
+  932  vi ifcfg-vsw01 
+  933  cp ifcfg-p2p1 ifcfg-vsw01
+  934  vi ifcfg-vsw01 
+  935  ls
+  936  cp ifcfg-p2p1 .ifcfg-p2p1-backup
+  937  vi ifcfg-p2p1
+  938  ifup vsw01 
+  939  ip a s
+  940  ifup p2p1 
+  941  ls
+  942  vi ifcfh-p2p1
+  943  vi ifcfg-p2p1
+  944  /etc/init.d/network restatt 
+  945  /etc/init.d/network restart 
+  946  ip a s
+  947  ovs-vsctl 
+  948  ovs-vsctl show 
+  949  ovs-vsctl add-port vsw01 p2p1 
+  950  ovs-vsctl show 
+  951  /etc/init.d/network restart 
+  952  systemctl status network.service
+  953  ovs-vsctl show 
+  954  ovs-vsctl del-port vsw01 p2p1 
+  955  ovs-vsctl show
+  956  ovs-vsctl add-port vsw01 p2p1 
+  957   ovs-vsctl show
+  958   ovs-vsctl list port 
+  959   ovs-vsctl show
+  960  w
+  961  ip a s
+  962  ifup p2p1 up 
+  963  ls
+  964  vi ifcfg-p2p1
+  965  ifup p2p1 up 
+  966  vi ifcfg-p2p1
+  967  vi ifcfg-p2p1
+  968  ifup p2p1 up 
+  969  vi ifcfg-p2p1
+  970  ifup p2p1 up 
+  971  ip a s
+  972  w
+  973  w
+  974  ip a s
+  975  w
+  976  ps -ef
+  977  reboot 
+  978  ip a s 
+  979  fc -l 
+  980  history 
+  981   ovs-vsctl show
+  982  ls
+  983  cd /etc/sysconfig/network-scripts/
+  984  ls
+  985  more ifcfg-p2p1 
+  986  more .ifcfg-p2p1-backup 
+  987  ifup p2p1 
+  988  ifup ifcfg-p2p1
+  989  vi ifcfg-p2p1
+  990  ifup p2p1 
+  991  vi ifcfg-p2p1
+  992  ifup p2p1 
+  993  ip  a s 
+  994  w
+  995  ps -ef
+  996  ps -ef
+  997  dmesg 
+  998  ip a s
+  999  ps -ef
+ 1000  reboot 
+ 1001  ip a s 
+ 1002  ip a s
+ 1003  ps -ef
+ 1004  ls
+ 1005  vi ovs-network.xml
+ 1006  virsh ne-define ovs-network.xml 
+ 1007  virsh net-define ovs-network.xml 
+ 1008  more ovs-network.xml 
+ 1009  ip a s
+ 1010  virsh net-start vswitch-net 
+ 1011  virsh net-start 
+ 1012  virsh net-list 
+ 1013  ls
+ 1014  vi balki.sh 
+ 1015  cd /home/
+ 1016  ls
+ 1017  cd vm-images/
+ 1018  ls
+ 1019  cd /home/teague 
+ 1020  ls
+ 1021  vi balki.sh 
+ 1022  cd ..
+ 1023  ls
+ 1024  cd iso/
+ 1025  ls
+ 1026  pwd
+ 1027  cd..
+ 1028  ls
+ 1029  cd ..
+ 1030  ls
+ 1031  cd  teague 
+ 1032  ls
+ 1033  cd balki.sh 
+ 1034  vo balki.sh 
+ 1035  vo balki.sh 
+ 1036  vi balki.sh 
+ 1037  ls -asl /home/iso/images/CentOS-6.9-x86_64-bin-DVD1.iso
+ 1038  cd /home/iso/
+ 1039  ls
+ 1040  cd ..
+ 1041  ls
+ 1042  cd teague/
+ 1043  ls
+ 1044  vi balki.sh 
+ 1045  ls
+ 1046  vi balki.sh 
+ 1047  ls -asl /home/iso/CentOS-6.9-x86_64-bin-DVD1.iso
+ 1048  ls
+ 1049  cat balki.sh 
+ 1050  chmod 755 balki.sh 
+ 1051  ./balki.sh balki
+ 1052  vi balki.sh 
+ 1053  ./balki.sh balki
+ 1054  vi co
+ 1055  ls
+ 1056  virsh net-list --all
+ 1057  more ovs-network.xml 
+ 1058  virsh net-start NewNetwork
+ 1059  virsh net-autostart  NewNetwork
+ 1060  ./balki.sh balki
+ 1061  ./balki.sh balki
+ 1062  ovs-vsctl show 
+ 1063  ip tuntap mode tap vnet0 
+ 1064  ip tuntap mode tap vnet0 
+ 1065  ip tuntap help 
+ 1066  ip tuntap add mode tap veth0 
+ 1067  ip tuntap add mode tap veth1 
+ 1068  ip a s 
+ 1069  ovs-vsctl add-port vsw01 veth0 
+ 1070  ovs-vsctl add-port vsw01 veth1 
+ 1071  ovs-vsctl show 
+ 1072  ./balki.sh balki
+ 1073  ip tuntap add mode tap vnet0
+ 1074  ip tuntap add mode tap vnet1
+ 1075  ovs-vsctl add-port vsw01 vnet0
+ 1076  ovs-vsctl add-port vsw01 vnet1
+ 1077  ./balki.sh balki
+ 1078  history 
+ 1079  history  > history.dump 

@@ -1,0 +1,4 @@
+show interfaces tengigabitethernet 1/33 transceiver details
+show inventory
+show inventory media
+show

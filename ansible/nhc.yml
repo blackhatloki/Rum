@@ -1,0 +1,7 @@
+---
+- hosts: all
+  tasks:
+  - name : Copy  /etc/nrpe.cfg 
+    copy : 'src=nrpe.cfg.new  dest=/etc/nagios/nrpe.cfg  owner=root group=root mode=644'
+  - command: /bin/systemctl enable nrpe 
+  - command: /bin/systemctl restart nrpe

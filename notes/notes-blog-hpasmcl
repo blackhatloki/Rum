@@ -1,0 +1,58 @@
+Using hpasmcli for HP servers
+
+HP comes with their server utility scripts called hpssacli and hpacucli. These tools allow you to view and modify your hardware configuration on the server. The hpacucli is the older implementation of the toolkit, but the syntax is pretty similar.
+
+HP tools information
+
+To show the firmware version, run:
+
+[root@web01 ~]# hpasmcli -s "show server"
+If you want to see extended information, run:
+
+[root@web01 ~]# hpssacli controller all show config detail
+General information
+
+To view information regarding the server model, cpu, type, memory, etc, run:
+
+[root@web01 ~]# hpasmcli -s "show server"
+Hardware Health
+
+If you want to view the health of the system and chassis components, run:
+
+[root@web01 ~]# hpasmcli -s "show server"
+The chassis can also only return specific components, such as:
+
+[root@web01 ~]# hpasmcli -s "show powersupply"
+[root@web01 ~]# hpasmcli -s "show dimm"
+[root@web01 ~]# hpasmcli -s "show fans"
+[root@web01 ~]# hpasmcli -s "show temp"
+Storage health
+
+To view the physical and virtual disks on the server:
+
+[root@web01 ~]# hpssacli controller all show
+[root@web01 ~]# hpssacli controller slot=3 physicaldrive all show
+[root@web01 ~]# hpssacli controller slot=3 logicaldrive all show
+To see the storage battery status:
+
+[root@web01 ~]# hpssacli controller all show status
+Hardware logs
+
+To display the hardware logs:
+
+[root@web01 ~]# hpasmcli -s "show iml"
+If you need to clear the hardware logs:
+
+[root@web01 ~]# hpasmcli -s "clear iml"
+CPU actions
+
+To see if hyperthreading is enabled on the CPUs:
+
+[root@web01 ~]# hpasmcli -s "show ht"
+If you wanted to change the hyperthreading settings:
+
+# Enable
+[root@web01 ~]# hpasmcli -s "enable ht"
+
+# Disable
+[root@web01 ~]# hpasmcli -s "disable ht"

@@ -1,0 +1,9 @@
+---
+- hosts: all
+  tasks:
+  - name : Copy gmond 
+    copy : 'src=gmond.conf.client  dest=/etc/ganglia/gmond.conf   owner=root group=root mode=744'
+  - name : Copy gangla hosts
+    copy : 'src=ganglia.hosts  dest=/etc/ganglia/ganglia.hosts   owner=root group=root mode=744'
+  - command: /bin/systemctl enable gmond 
+  - command: /bin/systemctl restart gmond 

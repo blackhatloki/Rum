@@ -1,0 +1,17 @@
+Usage Examples:
+
+- Configure rack name for server:
+  racadm set system.location.rack.name rack1
+
+- To clear out a string attribute, pass in double quotes for the value.
+  racadm set system.location.datacenter
+
+- Configure a RAC from an XML configuration file located on a remote CIFS share.
+  racadm set -f myfile.xml -t xml -u myuser -p mypass -l //10.1.2.3/myshare
+
+- Preview RAC from an XML configuration file located on a remote CIFS share.
+  racadm set -f myfile.xml -t xml -u myuser -p mypass -l //10.1.2.3/myshare
+    --preview
+
+- Configure a RAC from an XML configuration file located on a remote NFS share.
+  racadm set -f myfile.xml -t xml -l 10.1.2.3:/mysharehel

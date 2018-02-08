@@ -1,0 +1,45 @@
+#!/bin/bash
+racadm set iDRAC.EmailAlert.1.Address "controls-system-admins@slac.stanford.edu"
+racadm set iDRAC.EmailAlert.1.Enable Enabled
+racadm set iDRAC.IPMILan.AlertEnable Enabled
+racadm set iDRAC.IPMILan.1.Enable Enabled
+racadm set idrac.NTPConfigGroup.NTP1 134.79.151.12
+racadm set idrac.NTPConfigGroup.NTP2 134.79.151.13
+
+racadm set idrac.time.timezone PST8PDT
+racadm set idrac.NTPConfigGroup.NTPEnable 1
+
+racadm set iDRAC.RemoteHosts.SMTPServerIPADDRESS 134.79.151.23
+
+racadm set iDRAC.IPv4.DNS1 134.79.151.12
+racadm set iDRAC.IPv4.DNS2 134.79.151.13
+racadm set iDRAC.Syslog.Server1 134.79.151.40
+racadm set iDRAC.Syslog.SyslogEnable Enabled
+HOST=`uname -n`
+racadm set iDRAC.NIC.DNSRacName "$HOST"
+racadm set iDRAC.NIC.DNSDomainName slac.stanford.edu
+racadm set System.LCD.LCDUserString "$HOST"
+
+racadm set iDRAC.Snmp.AgentEnable Disabled
+
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 1 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 2 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 3 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 4 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 5 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 6 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 7 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 8 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 9 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 10 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 11 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 12 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 13 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 14 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 15 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 16 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 17 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 18 0
+racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 19 0
+#racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 20 0
+#racadm config -g cfgIpmiPef -o cfgIpmiPefAction -i 21 0

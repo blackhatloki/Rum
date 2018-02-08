@@ -1,0 +1,5 @@
+---
+- hosts: all
+  tasks:
+  - name : Copy check_openmanage
+    copy : 'src=check_openmanage  dest=/usr/lib64/nagios/plugins/check_openmanage  owner=root group=root mode=744'

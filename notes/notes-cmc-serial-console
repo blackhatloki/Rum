@@ -1,0 +1,27 @@
+connect -- connect to switch or blade serial console
+NOTE: This subcommand is only supported on the firmware interface(s).
+
+Usage:
+
+racadm connect [-b] -m <module>
+
+-------------------------------------------------------------------------------
+
+Valid Options:
+
+-b : binary mode
+     NOTE : If -b is used, cmc must be reset to terminate connect
+-m : <module> : must be one of the following values:
+     server-<n> : where n = 1 to 16
+     server-<nx>: where n = 1 to 8; x = a to d (lower case)
+     switch-n   : where n = 1 to 6 or <a1 | a2 | b1 | b2 | c1 | c2>
+
+-------------------------------------------------------------------------------
+
+Usage Examples:
+
+- Connect to I/O Module 1 serial console
+  racadm connect -m switch-1
+
+- Connect to server 1 serial console
+  racadm connect -m server-1

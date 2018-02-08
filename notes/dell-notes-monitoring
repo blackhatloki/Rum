@@ -1,0 +1,19 @@
+Introduction
+Dell server hardware can be remotely monitored via SNMP. The plugin used here comes with the op5 Monitor plugin package as default. To be able to monitor your Dell server you need to have the following installed on the monitored server:
+Dell openmanage Server Administrator” (Managed Node), a.k.a ‘OMSA’ >= 5.1.0
+Verify OMSA
+First verify that the Dell server your trying to monitor has ‘OMSA’ installed and running. (This may require installation and network security configuration of SNMP in Windows.)
+A good test is to browse to https://dell-server:1311/
+If you don’t have OMSA installed do the following:
+Linux
+Set up the Dell OpenManage Repository
+# wget -q -O - http://linux.dell.com/repo/hardware/latest/bootstrap.cgi | bash
+Install OMSA
+# yum install srvadmin-all
+Start OMSA Services.
+# service snmpd restart
+# /opt/dell/srvadmin/sbin/srvadmin-services.sh restart
+You may want even add this script to your server start, so next time you boot it, start automatically.
+Run the following command to enable autostart of the service after reboot:
+# /opt/dell/srvadmin/sbin/srvadmin-services.sh enable
+ 

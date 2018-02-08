@@ -1,0 +1,27 @@
+DROP DATABASE IF EXISTS hpcinventorydb
+CREATE TABLE inventory (
+productID  INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+country    VARCHAR(30)   NOT NULL DEFAULT 'US',
+site       VARCHAR(30)   NOT NULL DEFAULT 'SDC',
+floor      INT UNSIGNED  NOT NULL DEFAULT 12,
+room       VARCHAR(10)   NOT NULL DEFAULT '',
+row        VARCHAR(10)   NOT NULL DEFAULT '',
+cabinet    VARCHAR(10)   NOT NULL DEFAULT '',
+type       VARCHAR(30)   NOT NULL DEFAULT '',
+chassis    VARCHAR(30)   NOT NULL DEFAULT 'NA',
+cluster    VARCHAR(30)   NOT NULL DEFAULT '',
+monitoring VARCHAR(30)   NOT NULL DEFAULT '',
+uposition  VARCHAR(15)   NOT NULL DEFAULT '',
+hostname   VARCHAR(30)   NOT NULL DEFAULT '',
+slot       INT UNSIGNED  NOT NULL DEFAULT 1,
+mtype      VARCHAR(30)   NOT NULL DEFAULT '',
+mname      VARCHAR(30)   NOT NULL DEFAULT '',
+serialnum  VARCHAR(30)   NOT NULL DEFAULT '',
+commission                     DATE NOT NULL,
+desciptions VARCHAR(20)   NOT NULL DEFAULT '',
+status      VARCHAR(10)   NOT NULL DEFAULT 'production',
+pi          VARCHAR(20)   NOT NULL DEFAULT 'NA',
+school      VARCHAR(20)   NOT NULL DEFAULT 'NA',
+dept        VARCHAR(20)   NOT NULL DEFAULT 'NA',
+PRIMARY KEY (productID)
+);

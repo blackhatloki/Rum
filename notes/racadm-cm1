@@ -1,0 +1,134 @@
+racadm quick dirty cheatsheet
+Posted on April 27, 2015 by jlim0930
+iDRAC racadm quick and dirty cheatsheet. racadm command can be issues via iDRAC/CMC/OS if svradmin-racadm is installed. Also you can specify -h option to access remote servers RAC as long as you have network access. Also if you are having problems with racadm “Failed to initialize transport” install openssl-devel. full documentation for iDRAC7 can be found here.
+
+% Get all iDRAC settings in a file
+
+racadm get -f config.txt
+
+If you like you can change the contents of config.txt and apply it back to iDRAC
+racadm set -f config.txt
+
+% Set password for root user
+racadm set iDRAC.Users.2.Password PASSWORD"
+
+% List all ssh keys for root user
+racadm sshpkauth -i 2 -v -k all
+
+% Add ssh key to root user
+racadm sshpkauth -i 2 -k 1 "CONTENTS OF PUBLIC KEY"
+
+% Delete ssh key for root user
+racadm sshpkauth -i 2 -d -k 1
+
+% Get iDRAC IP config
+
+racadm getniccfg
+racadm get iDRAC.NIC
+
+% set iDRAC IP
+
+Using config command:
+racadm config -g cfgLanNetworking -o cfgNicEnable 1
+racadm config -g cfgLanNetworking -o cfgNicIpAddress x.x.x.x
+racadm config -g cfgLanNetworking -o cfgNicNetmask 255.255.255.0
+racadm config -g cfgLanNetworking -o cfgNicGateway x.x.x.x
+racadm config -g cfgLanNetworking -o cfgNicUseDHCP 0
+racadm config -g cfgLanNetworking -o cfgDNSServersFromDHCP 0
+racadm config -g cfgLanNetworking -o cfgDNSServer1 y.y.y.y
+racadm config -g cfgLanNetworking -o cfgDNSServer2 y.y.y.y
+• Using set command:
+racadm set iDRAC.Nic.Enable 1
+racadm set iDRAC.IPv4.Address x.x.x.x
+racadm set iDRAC.IPv4.Netmask 255.255.255.0
+racadm set iDRAC.IPv4.Gateway x.x.x.x
+racadm set iDRAC.IPv4.DHCPEnable 0
+racadm set iDRAC.IPv4.DNSFromDHCP 0
+racadm set iDRAC.IPv4.DNS1 y.y.y.y
+racadm set iDRAC.IPv4.DNS2 y.y.y.y
+
+% Set iDRAC DNS Name
+racadm set iDRAC.NIC.DNSRacName iDRACNAME
+
+% Set iDRAC domain name
+racadm set iDRAC.NIC.DNSDomainName DOMAIN.NAME
+
+% Set iDRAC DNS Server
+
+racadm config -g cfgLanNetworking -o cfgDNSServer1 x.x.x.x
+racadm config -g cfgLanNetworking -o cfgDNSServer2 y.y.y.y
+
+% Set Front LCD to hostname
+racadm set System.LCD.Configuration 16
+
+% Reset iDRAC to factory defaults
+racadm racresetcfg
+
+% Reset/Reboot iDRAC
+
+racadm racreset OPTIONS
+
+Options : soft, hard, cold
+or
+racadm serveraction powercycle
+
+% Get Serial number (service tag)
+racadm getsvctag
+
+% Get current system information
+racadm getsysinfo
+
+% Configure one-time-boot to PXE
+
+racadm set BIOS.OneTimeBoot.OneTimeBootMode OneTimeBootSeq
+racadm set BIOS.OneTimeBoot.OneTimeBootSeqDev NIC.Integrated.1-1-1
+
+% Configure persistent Boot Device
+
+racadm config -g cfgServerInfo -o cfgServerBootOnce 0
+racadm config -g cfgServerInfo -i cfgServerFirstBootDevice HDD
+
+% Check boot order list
+racadm get BIOS.BiosBootSettings.bootseq
+
+% Disable HyperThreading
+racadm set BIOS.ProcSettings.LogicalProc Disabled
+
+% Disable OS to iDRAC pass-thru for iDRAC service module (automatically create a pseudo NIC in OS)
+racadm set iDRAC.OS-BMC.AdminState Disabled
+
+% Change SNMP public community string
+racadm set iDRAC.SNMP.AgentCommunity NEW STRING
+
+% Disable ASR
+racadm config -g cfgRacTuning -o cfgRacTuneAsrEnable 0
+
+% Configure Serial redirection
+
+racadm config -g cfgSerial -o cfgSerialConsoleEnable 1
+racadm config -g cfgSerial -o cfgSerialBaudRate 115200
+racadm config -g cfgSerial -o cfgSerialCom2RedirEnable 1
+racadm config -g cfgSerial -o cfgSerialTelnetEnable 0
+racadm config -g cfgSerial -o cfgSerialSshEnable 1
+
+to access console via ssh console com2
+
+% Disable Serial On Lan
+racadm config -g cfgImpiSol -o cfgIpmiSolEnable 0
+
+% Change Power Profile
+racadm set BIOS.SysProfileSettings PerfPerWattOptimizedOs
+
+% Set AC Power Recovery
+
+racadm set BIOS.SysSecurity.AcPwdRcvry Last
+racadm set BIOS.SysSecurity.AcPwdRcvryDelay Immediate
+
+% Get RAID physical Disk information
+
+racadm raid get pdisks
+racadm raid get pdisks -o (all information)
+racadm raid get pdisks -o -p state,size (specific information)
+
+% Get RAID Virtual Disk Information
+Racadm raid get vdisks

@@ -1,0 +1,23 @@
+Ansible 
+     archive 
+     mail(postfix) 
+     nagios client 
+     nagios server
+     gangalia client 
+     gangalia server
+   
+
+Backup 
+     mysql backup hpcmysql 
+                  warewulf 
+                  slurm 
+
+Netapp Simulator 
+
+mdb - function has been move to log-0. Waiting for the begining of the month
+balki - Move the function to the new balki or greene 
+
+Docs 
+    zfs setup and replication
+    kvm and openvswitch 
+ 

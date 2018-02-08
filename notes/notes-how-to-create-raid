@@ -1,0 +1,183 @@
+http://cavepopo.hd.free.fr/wordpress/linux/how-to-create-a-raid-array-using-omconfig-omreport-cli/
+
+Master plan
+Here is the master plan that should help you to best understand the process as a whole.
+
+Finding the controller number & ID
+Finding the physical Hdd’s number & ID
+Checking (and correcting) the Hdd’s state
+Creating the RAID array
+Checking the newly created array
+Have a drink !
+ 
+
+ 
+
+1) Finding the controller number & ID
+Remember my server has 2 controllers, a PERC H310 Mini for internal storage and a PERC H810 for external storage (connected to a MD1200), I want to create a RAID 5 array on my external MD1200 storage array, first mission is then to accordingly identify which controller is the H810.
+
+The following command should give you a clear view of how many and what controllers you have on your server :
+
+[root@server ~]# omreport storage controller |grep -A3 "^ID"
+ID : 0
+Status : Ok
+Name : PERC H310 Mini
+Slot ID : Embedded
+--
+ID : 1
+Status : Ok
+Name : PERC H810 Adapter
+Slot ID : PCI Slot 1
+The PERC H810 controller has the ID #1, this is the ID number we will be using for the whole process.
+
+Note : Be careful here because wrong ID means wrong Hdd and also means losing all your data !
+
+ 
+
+ 
+
+2) Finding the physical Hdd’s number & ID
+Let’s now find the Hdd’s physical addresses to be used by the RAID array creation.
+
+[root@server ~]# omreport storage pdisk controller=1 |grep -Ew "^ID"
+ID : 0:0:0
+ID : 0:0:1
+ID : 0:0:2
+ID : 0:0:3
+These are the pdisk attached to the H810 controller (ID : 1), the ones we are going to use for the vdisk (RAID array) creation.
+
+ 
+
+ 
+
+3) Checking (and correcting) the Hdd’s state
+Before starting the effective creation of the RAID array, we must ensure the Hdd’s are in a correct state, by correct I mean not in a “Foreign state” for example, or in any state other than “Ready”. Check the example in this section to see what could be a “not-correct” Hdd state that would prevent us from creating the array.
+
+ 
+
+3.1 Wrong Hdd state and the corresponding error
+Here is an example of a Hdd state that would prevent us to create an array.
+
+[root@server ~]# omreport storage pdisk controller=1 |grep "^State"
+State : Foreign
+State : Foreign
+State : Foreign
+State : Foreign
+Let’s see what happens if we do launch the array creation command :
+
+[root@server ~]# omconfig storage controller controller=1 action=createvdisk raid=r5 size=max pdisk=0:0:0,0:0:1,0:0:2,0:0:3 name=seances
+The virtual disk cannot be created on the physical disks you selected. Possible reasons include: Insufficient disk space, available disks are not initialized, incorrect number of disks selected, unsupported mix of SAS and SATA type disks, unsupported mix of SSD and HDD type disks, unsupported mix of 512Bytes and 4KBytes sector size disks, unsupported mix of PI capable and incapable type disks, controller restrictions or unsupported configuration.
+ 
+
+ 
+
+3.2 Correcting the Hdd state
+As seen above the Hdd’s are in a “Foreign” state, the next command will get the Hdd’s back in a “Ready” state (which, basically, clear the actual RAID config contains by the Hdd’s. Check this page for more information about Hdd’s state).
+
+[root@server ~]# omconfig storage controller controller=1 action=clearforeignconfig
+Command successful!
+A quick check of the current Hdd’s state :
+
+[root@server ~]# omreport storage pdisk controller=1 |grep "^State"
+State : Ready
+State : Ready
+State : Ready
+State : Ready
+All disks are now “Ready”, we can now start the array creation…
+
+ 
+
+ 
+
+4) Creating the RAID array
+As we now have everything in order, we may create the RAID array, the next command will do that for us…
+
+[root@server ~]# omconfig storage controller controller=1 action=createvdisk raid=r5 size=max pdisk=0:0:0,0:0:1,0:0:2,0:0:3 name=seances
+Command successful!
+Here is some information about the different parameters used in the above line :
+
+raid=r5
+This is the RAID level, RAID5 here.
+
+size=max
+This is the size one want the vdisk (RAID array in the Dell terminology) to be.
+
+pdisk=0:0:0,0:0:1,0:0:2,0:0:3
+These are the physical drives (pdisk) of the RAID array, 4 drives in this case.
+
+name=seances
+The vdisk (RAID array) name, this is an optional parameter.
+
+ 
+
+4.1 Additional information
+You will find here an excerpt of the above command help that explain the possible (required and optional) parameters and their meaning.
+
+Required parameters
+controller=<id>
+Specify the controller id here, should be a numerical id.
+
+raid=<raid_level>
+The RAID level is given here.
+– Possible values are :
+c | r0 | r1 | r1c | r5 | r10 | r50 | r6 | r60
+Value like “r” are for RAID level, the “c” value stands for “concatenated” and is now useless, please check this Open Manage manual for more info.
+
+size=<size>
+This is the desired size for the vdisk.
+You may want to use the whole available space or just a part of it when creating a RAID array.
+– Possible values are :
+<number><b | m | g> | <max | min>
+Where :
+<number><b|m|g> = Use this specification to indicate a specific size for the virtual disk. The virtual disk size may be specified in b (bytes), m (megabytes), or g (gigabytes). For example, size=500m indicates that the virtual disk should be 500 MB.
+max = To create a virtual disk that is the maximum size possible, specify size=max. When creating a RAID-50 virtual disk, this parameter must be specified as size=max.
+min = To create a virtual disk that is the minimum size possible, specify size=min
+
+pdisk=<PDISKID,PDISKID,.....>
+Use this parameter to specify the physical disks to be included in the virtual disk.
+The physical disk specification applies to physical disks in the original virtual disk and will continue to be in the reconfigured virtual disk and to any new physical disks being added to the reconfigured virtual disk. Some controllers allow you to remove a physical disk from a virtual disk. In this case, do not specify the physical disk to be removed.
+
+ Optional parameters are:
+Feel free to ask if you need more information about the optional parameters.
+stripesize=< 2kb | 4kb | 8kb | 16kb | 32kb | 64kb | 128kb | 256kb | 512kb | 1mb> 
+cachepolicy=<d | c>
+readpolicy=<ra | nra | ara | rc | nrc>
+writepolicy=<wb | wt | wc | nwc |fwb>
+diskcachepolicy=<disabled | enabled>
+name=<string>
+spanlength=<n>
+secureflag=yes
+vdpienabled=yes
+ 
+
+5) Checking the newly created array
+We may now check the state of the new array to ensure everything went smooth and we may use it as expected (we still have to create a filesystem on top of it and add some files and dirs …)
+
+ 
+
+[root@server ~]# omreport storage vdisk controller=1
+ 
+Virtual Disk 0 on Controller PERC H810 Adapter (Slot 1)
+ 
+Controller PERC H810 Adapter (Slot 1)
+ID : 0
+Status : Ok
+Name : seances
+State : Ready
+Hot Spare Policy violated : Not Assigned
+Encrypted : No
+Layout : RAID-5
+Size : 5,587.50 GB (5999532441600 bytes)
+T10 Protection Information Status : No
+Associated Fluid Cache State : Not Applicable
+Device Name : /dev/sdb
+Bus Protocol : SAS
+Media : HDD
+Read Policy : Adaptive Read Ahead
+Write Policy : Write Back
+Cache Policy : Not Applicable
+Stripe Element Size : 64 KB
+Disk Cache Policy : Disabled
+ 
+
+

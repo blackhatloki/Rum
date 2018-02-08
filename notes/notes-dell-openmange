@@ -1,0 +1,195 @@
+Installation
+
+First we add Dell repo to our system.
+
+#wget -q -O - http://linux.dell.com/repo/hardware/latest/bootstrap.cgi | bash
+Now we can istall src-admin, it’s Dell utility to manage Dell servers.
+
+#yum install srvadmin-all
+If we ger error about about unsupported system, we can use this command.
+
+#touch /opt/dell/srvadmin/lib/openmanage/IGNORE_GENERATION
+We start OpenManagement.
+
+#/opt/dell/srvadmin/sbin/srvadmin-services.sh start
+Starting Systems Management Device Drivers:
+Starting dell_rbu:                                         [  OK  ]
+Starting ipmi driver:                                      [  OK  ]
+Starting Systems Management Device Drivers:
+Starting dell_rbu: Already started                         [  OK  ]
+Starting ipmi driver:                                      [  OK  ]
+Starting Systems Management Data Engine:
+Starting dsm_sa_datamgrd:                                  [  OK  ]
+Starting dsm_sa_eventmgrd:                                 [  OK  ]
+Starting DSM SA Shared Services:                           [  OK  ]
+Starting DSM SA Connection Service:                        [  OK  ]
+Monitoring
+
+We create symlink to omreport – Raid utility.
+
+ln -s /opt/dell/srvadmin/bin/omreport /sbin/omreport
+We add rights for system users.
+
+#chmod +s /opt/dell/srvadmin/bin/omreport
+And now we can look at our HW Raid status.
+
+$/sbin/omreport storage vdisk
+Controller PERC 3/Di (Embedded)
+ID                       : 0
+Status                   : Ok
+Name                     : RAID5           _
+State                    : Ready
+HotSpare Policy violated : Not Applicable
+Virtual Disk Bad Blocks  : Not Applicable
+Secured                  : Not Applicable
+Progress                 : Not Applicable
+Layout                   : RAID-5
+Size                     : 273.43 GB (293595512832 bytes)
+Device Name              : /dev/sda
+Bus Protocol             : SCSI
+Media                    : HDD
+Read Policy              : Read Cache Enabled
+Write Policy             : Write Cache Enabled Protected
+Cache Policy             : Not Applicable
+Stripe Element Size      : 64 KB
+Disk Cache Policy        : Not Applicable
+If we want more detailed ouput we can use command.
+
+$omreport storage pdisk controller=0
+List of Physical Disks on Controller PERC 3/Di (Embedded)
+
+Controller PERC 3/Di (Embedded)
+ID                        : 0:0
+Status                    : Ok
+Name                      : Physical Disk 0:0
+State                     : Online
+Failure Predicted         : No
+Certified                 : Not Applicable
+Encryption Capable        : No
+Secured                   : Not Applicable
+Progress                  : Not Applicable
+Bus Protocol              : SCSI
+Media                     : HDD
+Capacity                  : 33.90 GB (36398759936 bytes)
+Used RAID Disk Space      : 33.90 GB (36398759936 bytes)
+Available RAID Disk Space : 0.00 GB (0 bytes)
+Hot Spare                 : No
+Vendor ID                 : MAXTOR
+Product ID                : ATLAS10K4_36SCA
+Revision                  : DFM0
+Serial No.                : Not Available
+Part Number               : Not Available
+Negotiated Speed          : Not Available
+Capable Speed             : Not Available
+Manufacture Day           : Not Available
+Manufacture Week          : Not Available
+Manufacture Year          : Not Available
+SAS Address               : Not Available
+
+ID                        : 0:1
+Status                    : Ok
+Name                      : Physical Disk 0:1
+State                     : Online
+Failure Predicted         : No
+Certified                 : Not Applicable
+Encryption Capable        : No
+Secured                   : Not Applicable
+Progress                  : Not Applicable
+Bus Protocol              : SCSI
+Media                     : HDD
+Capacity                  : 33.90 GB (36398759936 bytes)
+Used RAID Disk Space      : 33.90 GB (36398759936 bytes)
+Available RAID Disk Space : 0.00 GB (0 bytes)
+Hot Spare                 : No
+Vendor ID                 : MAXTOR
+Product ID                : ATLAS10K4_36SCA
+Revision                  : DFM0
+Serial No.                : Not Available
+Part Number               : Not Available
+Negotiated Speed          : Not Available
+Capable Speed             : Not Available
+Manufacture Day           : Not Available
+Manufacture Week          : Not Available
+Manufacture Year          : Not Available
+SAS Address               : Not Available
+
+ID                        : 0:2
+Status                    : Ok
+Name                      : Physical Disk 0:2
+State                     : Online
+Failure Predicted         : No
+Certified                 : Not Applicable
+Encryption Capable        : No
+Secured                   : Not Applicable
+Progress                  : Not Applicable
+Bus Protocol              : SCSI
+Media                     : HDD
+Capacity                  : 33.90 GB (36398759936 bytes)
+Used RAID Disk Space      : 33.90 GB (36398759936 bytes)
+Available RAID Disk Space : 0.00 GB (0 bytes)
+Hot Spare                 : No
+Vendor ID                 : MAXTOR
+Product ID                : ATLAS10K4_36SCA
+Revision                  : DFM0
+Serial No.                : Not Available
+Part Number               : Not Available
+Negotiated Speed          : Not Available
+Capable Speed             : Not Available
+Manufacture Day           : Not Available
+Manufacture Week          : Not Available
+Manufacture Year          : Not Available
+SAS Address               : Not Available
+
+ID                        : 0:3
+Status                    : Ok
+Name                      : Physical Disk 0:3
+State                     : Online
+Failure Predicted         : No
+Certified                 : Not Applicable
+Encryption Capable        : No
+Secured                   : Not Applicable
+Progress                  : Not Applicable
+Bus Protocol              : SCSI
+Media                     : HDD
+Capacity                  : 33.90 GB (36398759936 bytes)
+Used RAID Disk Space      : 33.90 GB (36398759936 bytes)
+Available RAID Disk Space : 0.00 GB (0 bytes)
+Hot Spare                 : No
+Vendor ID                 : MAXTOR
+Product ID                : ATLAS10K4_36SCA
+Revision                  : DFM0
+Serial No.                : Not Available
+Part Number               : Not Available
+Negotiated Speed          : Not Available
+Capable Speed             : Not Available
+Manufacture Day           : Not Available
+Manufacture Week          : Not Available
+Manufacture Year          : Not Available
+SAS Address               : Not Available
+
+ID                        : 0:4
+Status                    : Ok
+Name                      : Physical Disk 0:4
+State                     : Online
+Failure Predicted         : No
+Certified                 : Not Applicable
+Encryption Capable        : No
+Secured                   : Not Applicable
+Progress                  : Not Applicable
+Bus Protocol              : SCSI
+Media                     : HDD
+Capacity                  : 33.90 GB (36398759936 bytes)
+Used RAID Disk Space      : 33.90 GB (36398759936 bytes)
+Available RAID Disk Space : 0.00 GB (0 bytes)
+Hot Spare                 : No
+Vendor ID                 : MAXTOR
+Product ID                : ATLAS10K4_36SCA
+Revision                  : DFM0
+Serial No.                : Not Available
+Part Number               : Not Available
+Negotiated Speed          : Not Available
+Capable Speed             : Not Available
+Manufacture Day           : Not Available
+Manufacture Week          : Not Available
+Manufacture Year          : Not Available
+SAS Address               : Not Available

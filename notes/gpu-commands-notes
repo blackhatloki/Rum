@@ -1,0 +1,11 @@
+nvidia-smi 
+nvidia-smi -L
+nvidia-smi --query-gpu=index,name,uuid,serial --format=csv
+nvidia-smi -q -d SUPPORTED_CLOCKS
+nvidia-smi -q -d CLOCK
+nvidia-smi -q -d PERFORMANCE
+nvidia-smi topo --matrix
+nvidia-smi -i 0 -q
+nvidia-smi -i 0 -q -d MEMORY,UTILIZATION,POWER,CLOCK,COMPUTE
+https://www.microway.com/hpc-tech-tips/nvidia-smi_control-your-gpus/
+

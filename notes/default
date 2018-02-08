@@ -1,0 +1,45 @@
+prompt 1
+default linux
+timeout 100
+
+label linux
+	kernel vmlinuz \
+	append initrd=initrd.img ramdisk_size=9216 noapic acpi=off nofb
+
+label fc9
+	kernel vmlinuz \
+	append initrd=initrd.img ramdisk_size=9216 noapic acpi=off nofb ks=nfs:192.168.1.72:/nfs_share/ks/ks-fc9.cfg
+
+label fc10
+	kernel vmlinuz \
+	append initrd=initrd.img ramdisk_size=9216 noapic acpi=off nofb ks=nfs:192.168.1.72:/nfs_share/ks/ks-fc10.cfg
+
+label fc9-eth0
+	kernel vmlinuz \
+	append initrd=initrd.img ramdisk_size=9216 noapic acpi=off nofb ks=nfs:192.168.1.72:/nfs_share/ks/ks-fc9.cfg ksdevice=eth0
+
+label fc9-eth1
+	kernel vmlinuz \
+	append initrd=initrd.img ramdisk_size=9216 noapic acpi=off nofb ks=nfs:192.168.1.72:/nfs_share/ks/ks-fc9.cfg ksdevice=eth1
+
+label fc10-eth0
+	kernel vmlinuz \
+	append initrd=initrd.img ramdisk_size=9216 noapic acpi=off nofb ks=nfs:192.168.1.72:/nfs_share/ks/ks-fc10.cfg ksdevice=eth0
+
+label fc10-eth1
+	kernel vmlinuz \
+	append initrd=initrd.img ramdisk_size=9216 noapic acpi=off nofb ks=nfs:192.168.1.72:/nfs_share/ks/ks-fc10.cfg ksdevice=eth1
+
+label rescue
+  menu label ^Rescue installed system
+  kernel vmlinuz
+  append initrd=initrd.img rescue
+
+label local
+  menu label Boot from ^local drive
+  localboot 0xffff
+
+label memtest86
+  menu label ^Memory test
+  kernel memtest
+  append -

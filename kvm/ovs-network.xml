@@ -1,0 +1,6 @@
+<network>
+<name>NewNetwork</name>
+<forward mode='bridge'/>
+<bridge name='vsw01'/>
+<virtualport type='openvswitch'/>
+</network>

@@ -1,0 +1,39 @@
+For upgrading the cmc firmware 
+racadm fwupdate -f 192.168.0.1 teague password -d firmimg_5.21_A00.cmc  -m cmc-active  -m cmc-standby
+ 
+Usage Examples:
+
+- Upload a firmware image from the client and start firmware update:
+  racadm fwupdate -p -u -d firmimg.cmc
+
+- Upload firmware image from TFTP server and start firmware update:
+  racadm fwupdate -g -u -a 192.168.0.100 -d firmimg.cmc -m cmc-active
+
+- Upload firmware image from FTP server and start firmware update:
+  racadm fwupdate -f 192.168.0.100 fred password123 -d firmimg.cmc -m cmc-active
+
+- Start IOM infrastructure firmware update:
+  racadm fwupdate -u -m iominf-1
+
+- Update firmware on both CMC's:
+  racadm fwupdate -g -u -a 192.168.0.100 -d firmimg.cmc -m cmc-active -m cmc-standby
+
+- Update firmware on multiple servers:
+  racadm fwupdate -g -u -a 192.168.0.100 -d firmimg.imc -m server-1 -m server-2 -m server-3
+
+- Update firmware on servers of iDRAC6 generation:
+  racadm fwupdate -g -u -a 192.168.0.100 -d firmimg.imc -m server-idrac6
+
+- Query the current status of all updateable firmware targets:
+  racadm fwupdate -s -m all
+
+- Query the current status of the firmware update process for a particular module:
+  racadm fwupdate -s -m cmc-active
+
+- Cancel a firmware update in progress:
+  racadm fwupdate -c
+
+racadm fwupdate -f 192.168.0.1 teague HPC@2468 -d firmimg_5.22_A00.cmc -m cmc-standby
+racadm getsysinfo
+cmcchangeover
+racadm serveraction -m server-10 reseat -f

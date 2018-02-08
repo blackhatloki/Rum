@@ -1,0 +1,4 @@
+yum install OpenIPMI OpenIPMI-tools
+chkconfig ipmi on
+service ipmi start
+

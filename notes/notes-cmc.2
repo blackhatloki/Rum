@@ -1,0 +1,64 @@
+Other commands
+
+You can script any command you want. Just take the above sample scripts and modify them with the command-line switches needed. Here are a few sample command-lines:
+
+Get system event log (places log into log stored in .\dell\alogs)
+racadm.exe -r %DEST_IP% -u %USERNAME% -p %PASSWORD% getsel >> %DEPLOY_SHARE_PATH%\Dell\alogs\%ID%.log
+Power on system
+racadm.exe -r %DEST_IP% -u %USERNAME% -p %PASSWORD% serveraction powerup
+Power off system
+racadm.exe -r %DEST_IP% -u %USERNAME% -p %PASSWORD% serveraction powerdown
+Reboot system
+racadm.exe -r %DEST_IP% -u %USERNAME% -p %PASSWORD% serveraction powercycle:wq
+
+firmware
+ racadm fwupdate -p -u -d <path> 
+
+
+remoteimage
+Description Connects, disconnects, or deploys a media file on a remote server.
+To run this subcommand, you must log in with virtual media privilege for iDRAC.
+Synopsis
+• racadm remoteimage [-m <module> | -a]
+• racadm remoteimage -d [-m <module> | -a]
+• racadm remoteimage -s [-m <module> | -a]
+• racadm remoteimage -c [-m <module> | -a] [-u <username> -p <password> -l
+<image_path>]
+• racadm remoteimage -e [-m <module> | -a] [-u <username> -p <password> -l
+<image_path>]
+Input
+• -c — Connect the image.
+• -d — Disconnect image.
+• -l — Image location on the network share; use single quotation marks around the location.
+• -s — Display current status.
+NOTE: Use a forward slash (/) when providing the image location. If backward slash (\) is used,
+override the backward slash for the command to run successfully.
+For example:
+racadm remoteimage -c -u user -p xxx -l /\/\192.168.0.2/\CommonShare/
+\diskette
+NOTE: The following options only apply to connect and deploy actions
+• -u — Username.
+63
+User name to access the network share. For domain users, you can use the following formats:
+– domain/user
+– domain\user
+– user@domain
+• -p — Password to access the network share.
+Example
+• Configure a Remote image.
+racadm remoteimage -c -u "user" -p "xxx" -l //shrloc/foo.iso
+Remote Image is now Configured
+• Disable Remote File Sharing.
+racadm remoteimage -d
+Disable Remote File Started. Please check status using -s option to know
+Remote File Share is ENABLED or DISABLED.
+• Check Remote File Share status.
+racadm remoteimage -s
+Remote File Share is Enabled
+UserName
+Password
+ShareName //192.168.0/xxxx/dtk
+• Deploy a remote image on iDRAC CIFS Share.
+racadm remoteimage -c -u admin -p xxx -l //192.168.0/dev/floppy.img
+• Deploy a remote image on iDRAC NFS Share.
+racadm remoteimage -c -u admin -p xxx -l '//192.168.0/dev/floppy.img'

@@ -1,0 +1,23 @@
+IDRAC
+
+racadm set iDRAC.NIC.DNSRacName `hostname`-ipmi
+racadm set system.location.rack.name rack1
+racadm set iDRAC.NIC.DNSDomainName hpc.nyu.edu
+racadm set BIOS.ProcSettings.LogicalProc Disabled
+
+
+racadm config -g cfgLanNetworking -o cfgDNSServer1 128.122.253.79
+racadm config -g cfgLanNetworking -o cfgDNSServer2  128.122.253.24
+racadm set iDRAC.SNMP.TrapFormat 1
+racadm set iDRAC.Snmp.AgentEnable enabled
+racadm set iDRAC.SNMP.AgentCommunity public 
+
+racadm set idrac.NTPConfigGroup.NTPEnable Enabled
+racadm set idrac.time.timezone  America/New_York
+racadm set idrac.NTPConfigGroup.ntp1 1.centos.pool.ntp.org
+racadm set idrac.NTPConfigGroup.ntp2 2.centos.pool.ntp.org
+racadm set idrac.NTPConfigGroup.ntp3 3.centos.pool.ntp.org
+
+racadm set iDRAC.RemoteHosts.SMTPServerIPAddress 192.168.0.1
+racadm config -g cfgEmailAlert -o cfgEmailAlertEnable -i 1 1
+racadm config -g cfgEmailAlert -o cfgEmailAlertAddress -i 1 hpc-staff@nyu.edu

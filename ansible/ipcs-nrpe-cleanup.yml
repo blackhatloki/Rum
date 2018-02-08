@@ -1,0 +1,6 @@
+---
+- hosts: all
+  tasks:
+  - name : copy ipcs clean up
+    copy : 'src=clean_up_ipcs.sh dest=/tmp/clean_up_ipcs.sh  owner=root group=root mode=755'
+  - command: /tmp/clean_up_ipcs.sh

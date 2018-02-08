@@ -1,0 +1,79 @@
+#!/usr/bin/python
+import os
+retvalue = os.system("ps -p 2993 -o time --no-headers")
+print retvalue
+
+Clustername 
+Country  USA 
+City     New York City 
+datacenter  South Data Center 
+Room        NA
+Row         NA
+floor       12
+cabinet     NA  
+RU          NA 
+Support Group  HPC 
+Environment  Prod/Dev/QA/DR
+Type NA - Compute/GPU/Login/Home/Master/Bastion/Monitoring
+Virtual Machine - Y/N
+
+Hostname = hostname 
+fdqn     prince-hostname.hpc.nyu.edu 
+fdqn-ipmi prince-hostname-ipmi.hpc.nyu.edu 
+
+vendor = dmidecode | grep "Vendor:"
+
+Serial Number: 1W3RKB2 = dmidecode | grep -i "Serial Number:"  | head -1
+Product Name: PowerEdge R630 = dmidecode | grep -i "Product Name:"  | head -1
+MemTotal:       131746484 kB  = cat /proc/meminfo  | head -1
+model name	: Intel(R) Xeon(R) CPU E5-2680 v4 @ 2.40GHz  = cat /proc/cpuinfo | grep "model name" | uniq
+Number of sockets = cat /proc/cpuinfo | grep "physical id" |  sort -u | wc -l 
+Number of cores = cat /proc/cpuinfo |  grep processor | wc -l
+Number of cores per socket = Number of cores / Number of sockets
+CPU_Speed_Mhz = cat /proc/cpuinfo | grep "cpu MHz" | wc -l
+kernel = uname -r 
+Number of ib interfaces = ip a s | egrep "ib[0-9]?[0-9]:" | wc -l
+Number of bonding interfaces = ip a s | egrep "bond[0-9]?[0-9]:" | wc -l
+Number of eth = ip a s | egrep "ethm[0-9]?[0-9]:"
+Number of em  = ip a s | egrep "ethm[0-9]?[0-9]:"
+Number of p   = ip a s | egrep "p[0-9]p[0-9]:"
+Number of enp =  ip a s | egrep "enp[0-9][0-9][0-9]s0f[0-9]:"
+Number of ens = ip a s | egrep  "ens"
+Number of ens =  ip a s | egrep "eno"
+redhat-release = cat /etc/redhat-release
+swap space = free -h | grep "Swap:" 
+MgmtNM
+MgmtGW
+MgmtIP
+MgmtServerName
+# Number of disk = lshw -class disk | egrep "sd"
+SwitchName 
+TypeofSwitch  IP/IB
+LID
+SwitchSpeed   10Ge/1Ge/100m/40G/56G
+Number of Ports 
+Model Number 
+lscpu | grep -i -E  "^CPU\(s\):|core|socket"
+PU(s):                56
+Thread(s) per core:    2
+Core(s) per socket:    14
+Socket(s):             2
+
+
+
+Type: Rack Mount Chassis
+Type: Server Blade
+
+Blade 
+RackServer 
+Chassis 
+
+Location in chassis =  dmidecode | grep -i "Location In Chassis:"  | head -1
+
+
+Chassis Inventory by Cluster 
+
+
+
+
+Room Name	Row Name	Floor Equipment Name	Rack Equipment Name	U-position	Sub Equipment Name	Slot	Type 	Model Name	Serial Number

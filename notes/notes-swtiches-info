@@ -1,0 +1,63 @@
+copy running-config tftp://{hostip or hostname}/ filepath/filename
+copy running-config scp://{hostip or hostname}/ filepath/filename
+copy running-config ftp:// username:password@{hostip or hostname}/filepath/ filename
+ 
+
+Dell#copy startup-config tftp://10.0.0.1   ßthis IP need to match with your linux box IP address
+Destination file name [startup-config]:        ßpress enter when you get to this prompt.
+ 
+
+Knowledge Base
+ 
+How to Configure a LACP Port-Channel on an N Series Switch
+
+This article explains how to create a LACP, dynamic, port-channel on an N-Series switch.
+
+
+
+
+To configure a LACP, dynamic, port-channel on an N-Series switch, do the following:
+
+Warning: It is best practice to configure the LACP port-channel before plugging in the respective cables. Not doing so could cause unexpected issues.
+Configure the respective gigabit, tengigabit or fortygigabit interfaces to the appropriate port-channel number, 1-128, using the interface range command.
+N-Series>en
+N-Series#conf
+N-Series(config)#interface range ?
+
+Gigabitethernet Configure a range of GigabitEthernet interfaces.
+Fortygigabitethernet Configure a range of FortyGigabitEthernet interfaces.
+Tengigabitethernet Configure a range of TenGigabitEthernet interfaces.
+port-channel Port-channel range mode.
+vlan Interface vlan range mode.
+
+
+N-Series(config)#interface range tengigabitethernet ?
+
+<intf-list> Enter the list of interfaces. Separate
+non-consecutive ports with a comma and no spaces.
+Use a hyphen to designate a range of ports.
+all Configure all valid interfaces.
+Note: Avoid using all when configuring a port range for port-channels. Specify the exact interfaces.
+
+N-Series(config)#interface range tengigabitethernet 1/0/1-4
+
+N-Series(config-if)#channel-group ?
+
+<1-128> Enter the port-channel number.
+
+N-Series(config-if)#channel-group 1 mode active
+
+Configure the switchport mode and vlan membership inside port channel interface. The below command shows how to enter the LACP interface configuration.
+
+N-Series(config-if)#Interface po 1
+Verify the respective port-channel is active.
+N-Series#show interface port-channel port-channel-number
+
+Copy the configuration changes to the startup configuration
+N-Series#copy running-config startup-config
+This operation may take few minutes.
+Management interfaces will not be available during this time.
+
+Are you sure you want to save? (y/n)
+
+Configuration Saved!

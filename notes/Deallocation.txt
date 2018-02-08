@@ -1,0 +1,86 @@
+9  wns06d-6611_CF1_archive1    wns06d-6611c ----------------       --- host
+10 wns06d-6611_CF1_archive2    wns06d-6611c ----------------       --- host
+17 wns06d-6611_CF1_data_u9     wns06d-6611c ----------------       --- host
+19 wns06d-6611_CF1_dbdumps3    wns06d-6611c ----------------       --- host
+20 wns06d-6611_CF1_dbdumps4    wns06d-6611c ----------------       --- host
+51 wns06d-6611_CF2_archive1    wns06d-6611c ----------------       --- host
+52 wns06d-6611_CF2_archive2    wns06d-6611c ----------------       --- host
+159 wns06d-6611_LP1_archive1    wns06d-6611c ----------------       --- host
+165 wns06d-6611_LP2_archive1    wns06d-6611c ----------------       --- host
+170 wns06d-6611_CF1_archive3    wns06d-6611c ----------------       --- host
+171 wns06d-6611_CF2_archive3    wns06d-6611c ----------------       --- host
+191 wns06d-6611_LP1_archive2    wns06d-6611c ----------------       --- host
+192 wns06d-6611_LP2_archive2    wns06d-6611c ----------------       --- host
+193 wns06d-6611_CF1_u9_new      wns06d-6611c ----------------       --- host
+
+removevlun -f wns06d-6611_CF1_archive1 9 wns06d-6611a
+removevlun -f wns06d-6611_CF1_archive1 9 wns06d-6611b
+removevlun -f wns06d-6611_CF1_archive1 9 wns06d-6611c
+
+removevlun -f wns06d-6611_CF1_archive2 10 wns06d-6611a
+removevlun -f wns06d-6611_CF1_archive2 10 wns06d-6611b
+removevlun -f wns06d-6611_CF1_archive2 10 wns06d-6611c
+
+removevlun -f wns06d-6611_CF1_data_u9  17 wns06d-6611a
+removevlun -f wns06d-6611_CF1_data_u9  17 wns06d-6611b
+removevlun -f wns06d-6611_CF1_data_u9  17 wns06d-6611c
+
+removevlun -f wns06d-6611_CF1_dbdumps3 19 wns06d-6611a
+removevlun -f wns06d-6611_CF1_dbdumps3 19 wns06d-6611b
+removevlun -f wns06d-6611_CF1_dbdumps3 19 wns06d-6611c
+
+removevlun -f wns06d-6611_CF1_dbdumps4 20 wns06d-6611a
+removevlun -f wns06d-6611_CF1_dbdumps4 20 wns06d-6611b
+removevlun -f wns06d-6611_CF1_dbdumps4 20 wns06d-6611c
+
+removevlun -f wns06d-6611_CF2_archive1 51 wns06d-6611a
+removevlun -f wns06d-6611_CF2_archive1 51 wns06d-6611b
+removevlun -f wns06d-6611_CF2_archive1 51 wns06d-6611c
+
+removevlun -f wns06d-6611_CF2_archive2 52 wns06d-6611a
+removevlun -f wns06d-6611_CF2_archive2 52 wns06d-6611b
+removevlun -f wns06d-6611_CF2_archive2 52 wns06d-6611c
+
+removevlun -f wns06d-6611_LP1_archive1 159 wns06d-6611a
+removevlun -f wns06d-6611_LP1_archive1 159 wns06d-6611b
+removevlun -f wns06d-6611_LP1_archive1 159 wns06d-6611c
+
+removevlun -f wns06d-6611_LP2_archive1 165 wns06d-6611a
+removevlun -f wns06d-6611_LP2_archive1 165 wns06d-6611b
+removevlun -f wns06d-6611_LP2_archive1 165 wns06d-6611c
+
+removevlun -f wns06d-6611_CF1_archive3 170 wns06d-6611a
+removevlun -f wns06d-6611_CF1_archive3 170 wns06d-6611b
+removevlun -f wns06d-6611_CF1_archive3 170 wns06d-6611c
+
+removevlun -f wns06d-6611_CF2_archive3 171 wns06d-6611a
+removevlun -f wns06d-6611_CF2_archive3 171 wns06d-6611b
+removevlun -f wns06d-6611_CF2_archive3 171 wns06d-6611c
+
+removevlun -f wns06d-6611_LP1_archive2 191 wns06d-6611a
+removevlun -f wns06d-6611_LP1_archive2 191 wns06d-6611b
+removevlun -f wns06d-6611_LP1_archive2 191 wns06d-6611c
+
+removevlun -f wns06d-6611_LP2_archive2 192 wns06d-6611a
+removevlun -f wns06d-6611_LP2_archive2 192 wns06d-6611b
+removevlun -f wns06d-6611_LP2_archive2 192 wns06d-6611c
+
+removevlun -f wns06d-6611_CF1_u9_new   193 wns06d-6611a
+removevlun -f wns06d-6611_CF1_u9_new   193 wns06d-6611b
+removevlun -f wns06d-6611_CF1_u9_new   193 wns06d-6611c
+
+
+removevv  wns06d-6611_CF1_archive1
+removevv  wns06d-6611_CF1_archive2
+removevv  wns06d-6611_CF1_data_u9
+removevv  wns06d-6611_CF1_dbdumps3
+removevv  wns06d-6611_CF1_dbdumps4
+removevv  wns06d-6611_CF2_archive1
+removevv  wns06d-6611_CF2_archive2
+removevv  wns06d-6611_LP1_archive1
+removevv  wns06d-6611_LP2_archive1
+removevv  wns06d-6611_CF1_archive3
+removevv  wns06d-6611_CF2_archive3
+removevv  wns06d-6611_LP1_archive2
+removevv  wns06d-6611_LP2_archive2
+removevv  wns06d-6611_CF1_u9_new

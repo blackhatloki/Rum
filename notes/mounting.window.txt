@@ -1,0 +1,8 @@
+mount –t cifs –o username=geek,password=thepass //geekmini/root /media/Video
+mount -t cifs -o user=sysEQTOAMAAESReport,domain=CSFB,password=car44toncrush32er //Gnyc19p10999.csfb.cs-group.com/AESScans /mnt2
+
+169.39.155.41
+.
+
+
+mount -t cifs  -o user=sysEQT0AMAESReport,domain=csfb,password=car44toncrush32er //169.39.155.41/aesscans$ /app/audit 

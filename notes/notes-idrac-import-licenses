@@ -1,0 +1,5 @@
+racadm license import -f DE00000082417958.xml -l 192.168.0.1:/mnt/home/license/breakfix
+
+racadm license import -f DE00000082417958.xml -l 192.168.0.1:/mnt/home/licenses/breakfix  -c idrac.embedded.1
+racadm license import -f FD00000003528140.xml -l 192.168.0.1:/mnt/home/licenses/breakfix  -c idrac.embedded.1
+racadm license import -f 1SBBQD2-iDRAC8Enterprise-License.XML  -l 192.168.0.1:/mnt/home/licenses/breakfix/Dell -c idrac.embedded.1

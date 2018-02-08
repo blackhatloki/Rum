@@ -1,0 +1,5 @@
+commands
+ibstat
+ smpquery ND -L 1
+ sminfo
+https://linuxcluster.wordpress.com/2016/10/25/how-to-find-which-switch-the-opensm-is-running-on/

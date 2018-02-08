@@ -1,0 +1,41 @@
+3001
+
+alicreate  "wnl06a_9481a", "10:00:00:00:c9:ab:4b:86" 
+alicreate  "wnl06a_9481b", "10:00:00:00:c9:ab:52:2c" 
+
+zonecreate "wnl06a_9481a_cs_3Par_2182_032", "wnl06a_9481a;cs_3Par_2182_032"
+zonecreate "wnl06a_9481a_cs_3Par_2182_132", "wnl06a_9481a;cs_3Par_2182_132"
+zonecreate "wnl06a_9481b_cs_3Par_2182_032", "wnl06a_9481b;cs_3Par_2182_032"
+zonecreate "wnl06a_9481b_cs_3Par_2182_132", "wnl06a_9481b;cs_3Par_2182_132"
+
+cfgadd "Roger_A", "wnl06a_9481a_cs_3Par_2182_032"
+cfgadd "Roger_A", "wnl06a_9481a_cs_3Par_2182_132"
+cfgadd "Roger_A", "wnl06a_9481b_cs_3Par_2182_032"
+cfgadd "Roger_A", "wnl06a_9481b_cs_3Par_2182_132"
+
+cfgenable "Roger_A"
+
+3002 
+alicreate  "wnl06a_9481a", "10:00:00:00:c9:ab:4b:87" 
+alicreate  "wnl06a_9481b", "10:00:00:00:c9:ab:52:2d" 
+
+zonecreate "wnl06a_9481a_cs_3Par_2182_052", "wnl06a_9481a;cs_3Par_2182_052"
+zonecreate "wnl06a_9481a_cs_3Par_2182_152", "wnl06a_9481a;cs_3Par_2182_152"
+zonecreate "wnl06a_9481b_cs_3Par_2182_052", "wnl06a_9481b;cs_3Par_2182_052"
+zonecreate "wnl06a_9481b_cs_3Par_2182_152", "wnl06a_9481b;cs_3Par_2182_152"
+
+
+cfgenable "Roger_B"
+
+
+3par array 
+createhost wnl06a-9481a 10000000c9ab4b86 10000000c9ab4b87
+createhost wnl06a-9481b 10000000c9ab522c 10000000c9ab522d
+createcpg -t r5 -ssz 4 -ha cage -p -devtype FC –nd 6,7 wnl06a-9481-cpg1
+createvv -tpvv wnl06a-9481-cpg1 wnl06a-9481-cpg1-vol.1 144g
+createvv -tpvv wnl06a-9481-cpg1 wnl06a-9481-cpg1-vol.2 144g
+createvlun    wnl06a-9481-cpg1-vol.1 1 wnl06a-9481a
+createvlun -f wnl06a-9481-cpg1-vol.1 1 wnl06a-9481b
+createvlun    wnl06a-9481-cpg1-vol.2 2 wnl06a-9481a
+createvlun -f wnl06a-9481-cpg1-vol.2 2 wnl06a-9481b
+

@@ -1,0 +1,6 @@
+git clone https://github.com/ansible/ansible.git
+git clone https://github.com/Dell-Networking/ansible-dellos-examples.git
+https://github.com/Dell-Networking/ansible-dellos-examples.git
+https://github.com/Dell-Networking/ansible-dellos-examples.git
+:wq
+

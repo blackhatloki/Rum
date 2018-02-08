@@ -1,0 +1,1 @@
+mysql -u teague -h hpcmysql -b hpctest

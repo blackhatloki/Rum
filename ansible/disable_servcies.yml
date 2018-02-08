@@ -1,0 +1,48 @@
+---
+  - hosts: all
+    tasks:
+      - name: "disable unused services"
+        service: name={{item}} state=stopped enabled=no
+        with_items:
+        - httpd
+        - sendmail
+        - firewalld
+        - iptables
+        - iptables6
+        - cups
+        - tuned
+        - NetworkManager
+        - xinetd
+        - rexec
+        - rsh
+        - rlogin
+        - ypbind
+        - tftp
+        - certmonger
+        - cgconfig
+        - cgred
+        - cpuspeed
+        - irqbalance
+        - kdump
+        - mdmonitor
+        - messagebus
+        - netconsole
+        - ntpdate
+        - oddjobd
+        - portreserve
+        - psacct
+        - qpidd
+        - quota_nld
+        - rdisc
+        - rhnsd
+        - rhsmcertd
+        - saslauthd
+        - smartd
+        - sysstat
+        - nfslock
+        - named
+        - dovecot
+        - squid
+        - snmpd
+        - avahi-daemon
+        - autofs

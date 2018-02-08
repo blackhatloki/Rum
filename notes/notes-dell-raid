@@ -1,0 +1,27 @@
+wget -q -O - http://linux.dell.com/repo/hardware/latest/bootstrap.cgi > bootstrap.cgi
+bash bootstrap.cgi
+yum install srvadmin-base
+yum install srvadmin-storageservices
+Add to root's .bashrc:
+
+export PATH=$PATH:/opt/dell/srvadmin/bin
+Enjoy:
+
+RAID Commands
+
+Show all physical disks on controller 0
+
+omreport storage pdisk controller=0
+Show all logical disks on controller 0
+omreport storage vdisk controller=0
+
+Show all physical disks on vdisk 0
+omreport storage pdisk controller=0 vdisk=0
+
+Reconfigure a vdisk to be raid1 from raid0 (COOL!!!!)
+omconfig storage vdisk action=reconfigure controller=0 vdisk=1 raid=r1 pdisk=0:0:2,0:0:3
+
+Create a vdisk on a new disk:
+omconfig storage controller controller=0 action=clearforeignconfig omconfig storage controller controller=0 action=createvdisk raid=r0 size=max pdisk=0:0:2
+
+

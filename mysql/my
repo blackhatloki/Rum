@@ -1,0 +1,6 @@
+create user tony@'%' identified by 'tony' ;
+show grants for tony
+GRANT ALL PRIVILEGES ON *.* TO 'tolkien'@'%';:wq
+ grant all privileges on hpcinventorydb.* to 'tony'@'%' ;
+create user 'tony'@'%' identified by 'tony';:wq
+

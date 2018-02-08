@@ -1,0 +1,53 @@
+###POWERSHELL CODE
+
+#Insert all the ip addresses in an array
+$ Brokerage = @(“10.16.27.223″,”10.16.27.224”)
+
+$user = “root”
+$password = “Pa$$w0rd”
+$ Snmp_dest = “10.16.27.202”
+$smtp_server = “mail.domain.com”
+$ Mail_dest = “mail@comain.com”
+$snmp_community = “monitoring”
+
+$ Dns_server1 = “10.16.27.210”
+
+$ Dns_server2 = “10.16.27.211”
+
+$ntp_server1 = “10.16.27.5”
+
+$ntp_server2 = “10.16.27.6”
+
+foreach ($idrac in $aRAC) {
+
+racadm -r $idrac -u $user -p $password set iDRAC.Tuning.DefaultCredentialWarning Disabled
+
+#DNS Config
+write-host “Setup iDrac $idrac DNS…”
+racadm -r $idrac -u $user -p $password config -g cfgLanNetworking -o cfgDNSServer1 $dns_server1
+racadm -r $idrac -u $user -p $password config -g cfgLanNetworking -o cfgDNSServer2 $dns_server2
+
+write-host “Setup iDrac $idrac SNMP…”
+
+racadm -r $idrac -u $user -p $password set idrac.IPMILan.AlertEnable Enabled
+racadm -r $idrac -u $user -p $password config -g cfgIpmiPet -o cfgIpmiPetAlertEnable -i 1 1
+racadm -r $idrac -u $user -p $password config -g cfgIpmiPet -o cfgIpmiPetAlertDestIPAddr -i 1 $snmp_dest
+racadm -r $idrac -u $user -p $password config -g cfgIpmiLan -o cfgIpmiPetCommunityName $snmp_community
+racadm -r $idrac -u $user -p $password set iDRAC.SNMP.TrapFormat 1
+racadm -r $idrac -u $user -p $password set iDRAC.Snmp.AgentEnable enabled
+racadm -r $idrac -u $user -p $password set iDRAC.SNMP.AgentCommunity $snmp_community
+
+#Config NTP
+write-host “Setup iDrac $idrac NTP…”
+racadm -r $idrac -u $user -p $password set idrac.NTPConfigGroup.NTPEnable Enabled
+racadm -r $idrac -u $user -p $password set idrac.time.timezone Europe/Rome
+racadm -r $idrac -u $user -p $password set idrac.NTPConfigGroup.ntp1 $ntp_server1
+racadm -r $idrac -u $user -p $password set idrac.NTPConfigGroup.ntp2 $ntp_server2
+
+#write-host “Setup iDrac $idrac SMTP…”
+#racadm -r $idrac -u $user -p $password set iDRAC.RemoteHosts.SMTPServerIPAddress $smtp_server
+#racadm -r $idrac -u $user -p $password config -g cfgEmailAlert -o cfgEmailAlertEnable -i 1 1
+#racadm -r $idrac -u $user -p $password config -g cfgEmailAlert -o cfgEmailAlertAddress -i 1 $mail_dest
+}
+
+####

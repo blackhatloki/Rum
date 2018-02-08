@@ -1,0 +1,36 @@
+Omreport fails : object not found
+If you get the following message while using omreport :
+ $ omreport chassis memory  
+ Memory Information  
+ Error : Memory object not found  
+ $ omreport chassis hwperformance  
+ Error! No Hardware Peformance probes found on this system.  
+
+The first thing to do is to restart the srvadmin services :
+ # srvadmin-services.sh restart  
+ # service ipmi restart  
+
+Check that the services are properly started.
+
+If that doesn't solve the problem, you might have a semaphore issue. In my case Zabbix agent/scripts became nuts and didn't close its semaphores.
+
+To list the current semaphore's arrays use the following command :
+ # ipcs -s  
+
+To show the current system limits
+ # ipcs -sl  
+
+You can use the following command to count the current number of semaphore's arrays
+ # ipcs -us  
+
+If you reached the system limit, it will certainly explain the omreport issue. From now on, you have two possibilities :
+
+You've reached the limit because there is an issue on your system (semaphores not closed or whatever reason). You need to cleanup your semaphores with the following command :
+ # ipcrm -s semaphore_id  
+ To clean all semaphores from a particular user :  
+ # ipcs -s | awk '/username/ {system("ipcrm -s" $2)}'   
+
+Important : You need to stop attached process before removing the semaphores.
+All your semaphores are legit, you need to increase the system limits :
+https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/5/html/Tuning_and_Optimizing_Red_Hat_Enterprise_Linux_for_Oracle_9i_and_10g_Databases/sect-Oracle_9i_and_10g_Tuning_Guide-Setting_Semaphores-Setting_Semaphore_Parameters.html
+

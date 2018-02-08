@@ -1,0 +1,85 @@
+V
+EDUCATION
+SOFTOGRAPHY
+RESEARCH
+EXPERIENCE
+HACK BLOG
+PERSONAL INFO
+CONTACT
+Table of
+contents
+8.1.2010	The year I started blogging (blogware)
+9.1.2010	Linux initramfs with iSCSI and bonding support for PXE booting
+9.1.2010	Using manually tweaked PTX assembly in your CUDA 2 program
+9.1.2010	OpenCL autoconf m4 macro
+9.1.2010	Mandelbrot with MPI
+10.1.2010	Using dynamic libraries for modular client threads
+11.1.2010	Creating an OpenGL 3 context with GLX
+11.1.2010	Creating a double buffered X window with the DBE X extension
+12.1.2010	A simple random file read benchmark
+14.12.2011	Change local passwords via RoundCube safer
+5.1.2012	Multi-GPU CUDA stress test
+6.1.2012	CUDA (Driver API) + nvcc autoconf macro
+29.5.2012	CUDA (or OpenGL) video capture in Linux
+31.7.2012	GPGPU abstraction framework (CUDA/OpenCL + OpenGL)
+7.8.2012	OpenGL (4.3) compute shader example
+10.12.2012	GPGPU face-off: K20 vs 7970 vs GTX680 vs M2050 vs GTX580
+4.8.2013	DAViCal with Windows Phone 8 GDR2
+5.5.2015	Sample pattern generator
+
+5.1.2012
+Multi-GPU CUDA stress test
+
+Update 30-11-2016: Versions 0.7 and up also benchmark.
+
+I work with GPUs a lot and have seen them fail in a variety of ways: too much (factory) overclocked memory/cores, unstable when hot, unstable when cold (not kidding), memory partially unreliable, and so on. What's more, failing GPUs often fail silently and produce incorrect results when they are just a little unstable, and I have seen such GPUs consistently producing correct results on some apps and incorrect results on others.
+
+What I needed in my tool box was a stress test for multi-GPGPU-setups that used all of the GPUs' memory and checked the results while keeping the GPUs burning. There are not a lot of tools that can do this, let alone for Linux. Therefore I hacked together my own. It runs on Linux and uses the CUDA driver API.
+
+My program forks one process for each GPU on the machine, one process for keeping track of the GPU temperatures if available (e.g. Fermi Teslas don't have temp. sensors), and one process for reporting the progress. The GPU processes each allocate 90% of the free GPU memory, initialize 2 random 2048*2048 matrices, and continuously perform efficient CUBLAS matrix-matrix multiplication routines on them and store the results across the allocated memory. Both floats and doubles are supported. Correctness of the calculations is checked by comparing results of new calculations against a previous one -- on the GPU. This way the GPUs are 100% busy all the time and CPUs idle. The number of erroneous calculations is brought back to the CPU and reported to the user along with the number of operations performed so far and the GPU temperatures.
+
+Real-time progress and summaries every ~10% are printed as shown below. Matrices processed are cumulative, whereas errors are for that summary. GPUs are separated by slashes. The program exits with a conclusion after it has been running for the number of seconds given as the last command line parameter. If you want to burn using doubles instead, give parameter "-d" before the burn duration. The example below was on a machine that had one working GPU and one faulty (too much factory overclocking and thus slightly unstable (you wouldn't have noticed it during gaming)):
+% ./gpu_burn 120
+GPU 0: GeForce GTX 1080 (UUID: GPU-f998a3ce-3aad-fa45-72e2-2898f9138c15)
+GPU 1: GeForce GTX 1080 (UUID: GPU-0749d3d5-0206-b657-f0ba-1c4d30cc3ffd)
+Initialized device 0 with 8110 MB of memory (7761 MB available, using 6985 MB of it), using FLOATS
+Initialized device 1 with 8113 MB of memory (7982 MB available, using 7184 MB of it), using FLOATS
+10.8%  proc'd: 3472 (4871 Gflop/s) - 3129 (4683 Gflop/s)   errors: 0 - 0   temps: 56 C - 56 C 
+	Summary at:   Mon Oct 31 10:32:22 EET 2016
+
+22.5%  proc'd: 6944 (4786 Gflop/s) - 7152 (4711 Gflop/s)   errors: 0 - 0   temps: 61 C - 60 C 
+	Summary at:   Mon Oct 31 10:32:36 EET 2016
+
+33.3%  proc'd: 10850 (4843 Gflop/s) - 10728 (4633 Gflop/s)   errors: 2264 (WARNING!) - 0   temps: 63 C - 61 C 
+	Summary at:   Mon Oct 31 10:32:49 EET 2016
+
+44.2%  proc'd: 14756 (4861 Gflop/s) - 13857 (4675 Gflop/s)   errors: 1703 (WARNING!) - 0   temps: 66 C - 63 C 
+	Summary at:   Mon Oct 31 10:33:02 EET 2016
+
+55.0%  proc'd: 18228 (4840 Gflop/s) - 17433 (4628 Gflop/s)   errors: 3399 (WARNING!) - 0   temps: 69 C - 65 C 
+	Summary at:   Mon Oct 31 10:33:15 EET 2016
+
+66.7%  proc'd: 22134 (4824 Gflop/s) - 21009 (4652 Gflop/s)   errors: 3419 (WARNING!) - 0   temps: 70 C - 65 C 
+	Summary at:   Mon Oct 31 10:33:29 EET 2016
+
+77.5%  proc'd: 25606 (4844 Gflop/s) - 25032 (4648 Gflop/s)   errors: 5715 (WARNING!) - 0   temps: 71 C - 66 C 
+	Summary at:   Mon Oct 31 10:33:42 EET 2016
+
+88.3%  proc'd: 29078 (4835 Gflop/s) - 28161 (4602 Gflop/s)   errors: 7428 (WARNING!) - 0   temps: 73 C - 67 C 
+	Summary at:   Mon Oct 31 10:33:55 EET 2016
+
+100.0%  proc'd: 33418 (4752 Gflop/s) - 32184 (4596 Gflop/s)   errors: 9183 (WARNING!) - 0   temps: 74 C - 68 C 
+Killing processes.. done
+
+Tested 2 GPUs:
+	GPU 0: FAULTY
+	GPU 1: OK
+With this tool I've been able to spot unstable GPUs that performed well under every other load they were subjected to. So far it has also never missed a GPU that was known to be unstable. *knocks on wood*
+
+Grab it here 
+gpu_burn-0.4.tar.gz 
+gpu_burn-0.6.tar.gz (compatible with nvidia-smi and nvcc as of 04-12-2015) 
+gpu_burn-0.7.tar.gz (includes benchmark, Gflop/s) 
+and burn with floats for an hour: make && ./gpu_burn 3600
+If you're running a Tesla, burning with doubles instead stresses the card more (as it was friendly pointed out to me in the comments by Rick W): make && ./gpu_burn -d 3600
+You might have to show the Makefile to your CUDA if it's not in the default path, and also to a version of gcc your nvcc can work with. It expects to find nvidia-smi from your default path.

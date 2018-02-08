@@ -1,0 +1,1000 @@
+    3  systemctl enable nmb 
+    4  systemctl start smb 
+    5  systemctl start nmb 
+    6  ps -ef
+    7  dmesg 
+    8  ls
+    9  ip a s
+   10  cd /etc/sysconfg/networ
+   11  cd /etc/sysconfig 
+   12  ls
+   13  cd network-scripts/
+   14  ls
+   15  vi ifcfg-ib0 
+   16  ifdowm ib0 
+   17  ifdown ib0 
+   18  ifup ib0 
+   19  ip a s
+   20  ping 10.0.0.1 
+   21  ssh teague@10.0.0.1 
+   22  w
+   23  ps -ef
+   24  ip a s
+   25  ssh teague@10.0.0.1 
+   26  ls
+   27  cd /etc/samba/
+   28  ls
+   29  vi smb.conf
+   30  ls
+   31  vi smb.conf.example 
+   32  mv smb.conf smb.conf.disable 
+   33  cp smb.conf.example  smb.conf 
+   34  vi smb
+   35  vi smb.conf
+   36  ip a s
+   37  vi smb.conf
+   38  ls -asl /home/images
+   39  lls -asl /home 
+   40  ls -asl /home
+   41  vi smb.conf
+   42  ls
+   43  systemctl restart smb
+   44  systemctl restart nmb 
+   45  systemctl status nmb.service
+   46  vi smb.cobf 
+   47  vi smb.conf
+   48  systemctl restart nmb 
+   49  vips -ef
+   50  ps -ef
+   51  smbstatu s
+   52  smbstatus
+   53  ps -ef
+   54  dmesg 
+   55  ls
+   56  w
+   57  w
+   58  ps ef
+   59  df
+   60  dmesg 
+   61  p a s 
+   62  ip a s
+   63  vi smb.conf
+   64  vi smb.conf
+   65  w
+   66  ps -ef
+   67  dmesg 
+   68  ls
+   69  w
+   70  ps -ef
+   71  ls
+   72  dmesg 
+   73  a
+   74  vi smb.conf
+   75  w
+   76  ip a s
+   77  ls
+   78  ls
+   79  cd ..
+   80  ls
+   81  ps -ef
+   82  who 
+   83  dmesg 
+   84  ls
+   85  ls
+   86  ip a s
+   87  cd /root/hosts 
+   88  vi /etc/hosts 
+   89  vi /etc/hosts.allow 
+   90  ps -ef
+   91  dmesg 
+   92   yum install denyhosts
+   93  ps -ef
+   94  dmesg 
+   95  ip a s
+   96  ps -ef
+   97  systemctl enable denyhosts 
+   98  systemctl start  denyhosts 
+   99  ps -ef
+  100  vi /etc/denyhosts.conf 
+  101  w
+  102  ps -ef
+  103  dmesg 
+  104  w
+  105  ps -ef
+  106  cd  /var/log
+  107  ls
+  108  cd sec
+  109  cd secure 
+  110  ls
+  111  more secure 
+  112         
+  113  ps -ef
+  114  w
+  115  w
+  116  ps -ef
+  117  ip a s
+  118  vi /etc/hosts 
+  119  vi /etc/hosts.allow
+  120  vi /etc/hosts.allow
+  121  w
+  122  ps -ef
+  123  reboot 
+  124  w
+  125  ps -ef
+  126  dmesg 
+  127  ip a s
+  128  ps -ef
+  129  ss -t -n 
+  130  ss -t -m 
+  131  ss -m 
+  132  w
+  133  nestat -s 
+  134  yum -y install netstart 
+  135  yum -y install netstar 
+  136  yum -y install netstat 
+  137  q
+  138  w
+  139  ps -ef
+  140  w
+  141  ps -ef
+  142  dmesg 
+  143  cat /etc/hosts.deny 
+  144  w
+  145  dmesg 
+  146  vi /etc/denyhosts.conf
+  147  ps -ef
+  148  dmesg 
+  149  df
+  150  ps -ef
+  151  w
+  152  ip a s 
+  153  ps -ef
+  154  w
+  155  ps -ef
+  156  vrish list 
+  157  w
+  158  virsh list 
+  159  w
+  160  ps -ef
+  161  dmesg 
+  162  ip a s
+  163  df
+  164  ls 
+  165  w
+  166  ps -ef
+  167  df
+  168  w
+  169  ls 
+  170  w
+  171  w
+  172  ps -ef
+  173  df
+  174  ls
+  175  w
+  176  df
+  177  ls
+  178  cd /home/iso/
+  179  ;s
+  180  ls
+  181  s -asl 
+  182  ls -asl 
+  183  df
+  184  virsh 
+  185  ip a s
+  186  ovs-vsctl show 
+  187  ovs-vsctl add-br vsw01 
+  188  ovs-vsctl show 
+  189  exit
+  190  ip a s 
+  191  ls
+  192  ovs-vctl show 
+  193  ovs-vsctl show 
+  194  ovs-vcstl list-br 
+  195  ovs-vsctl list-br 
+  196  ifconfig vsw01 
+  197  ip a s
+  198  pwd
+  199  cd /etc/sysconfig/network-scripts/
+  200  ls
+  201  ifdown p2p1
+  202  ovs-vsctl list-br 
+  203  ls
+  204  cp ifcfg-p2p2 ifcfg-vsw01
+  205  vi ifcfg-vsw01 
+  206  cp ifcfg-p2p1 ifcfg-vsw01
+  207  vi ifcfg-vsw01 
+  208  ls
+  209  cp ifcfg-p2p1 .ifcfg-p2p1-backup
+  210  vi ifcfg-p2p1
+  211  ifup vsw01 
+  212  ip a s
+  213  ifup p2p1 
+  214  ls
+  215  vi ifcfh-p2p1
+  216  vi ifcfg-p2p1
+  217  /etc/init.d/network restatt 
+  218  /etc/init.d/network restart 
+  219  ip a s
+  220  ovs-vsctl 
+  221  ovs-vsctl show 
+  222  ovs-vsctl add-port vsw01 p2p1 
+  223  ovs-vsctl show 
+  224  /etc/init.d/network restart 
+  225  systemctl status network.service
+  226  ovs-vsctl show 
+  227  ovs-vsctl del-port vsw01 p2p1 
+  228  ovs-vsctl show
+  229  ovs-vsctl add-port vsw01 p2p1 
+  230   ovs-vsctl show
+  231   ovs-vsctl list port 
+  232   ovs-vsctl show
+  233  w
+  234  ip a s
+  235  ifup p2p1 up 
+  236  ls
+  237  vi ifcfg-p2p1
+  238  ifup p2p1 up 
+  239  vi ifcfg-p2p1
+  240  vi ifcfg-p2p1
+  241  ifup p2p1 up 
+  242  vi ifcfg-p2p1
+  243  ifup p2p1 up 
+  244  ip a s
+  245  w
+  246  w
+  247  ip a s
+  248  w
+  249  ps -ef
+  250  reboot 
+  251  ip a s 
+  252  fc -l 
+  253  history 
+  254   ovs-vsctl show
+  255  ls
+  256  cd /etc/sysconfig/network-scripts/
+  257  ls
+  258  more ifcfg-p2p1 
+  259  more .ifcfg-p2p1-backup 
+  260  ifup p2p1 
+  261  ifup ifcfg-p2p1
+  262  vi ifcfg-p2p1
+  263  ifup p2p1 
+  264  vi ifcfg-p2p1
+  265  ifup p2p1 
+  266  ip  a s 
+  267  w
+  268  ps -ef
+  269  ps -ef
+  270  dmesg 
+  271  ip a s
+  272  ps -ef
+  273  reboot 
+  274  ip a s 
+  275  ip a s
+  276  ps -ef
+  277  ls
+  278  vi ovs-network.xml
+  279  virsh ne-define ovs-network.xml 
+  280  virsh net-define ovs-network.xml 
+  281  more ovs-network.xml 
+  282  ip a s
+  283  virsh net-start vswitch-net 
+  284  virsh net-start 
+  285  virsh net-list 
+  286  ls
+  287  vi balki.sh 
+  288  cd /home/
+  289  ls
+  290  cd vm-images/
+  291  ls
+  292  cd /home/teague 
+  293  ls
+  294  vi balki.sh 
+  295  cd ..
+  296  ls
+  297  cd iso/
+  298  ls
+  299  pwd
+  300  cd..
+  301  ls
+  302  cd ..
+  303  ls
+  304  cd  teague 
+  305  ls
+  306  cd balki.sh 
+  307  vo balki.sh 
+  308  vo balki.sh 
+  309  vi balki.sh 
+  310  ls -asl /home/iso/images/CentOS-6.9-x86_64-bin-DVD1.iso
+  311  cd /home/iso/
+  312  ls
+  313  cd ..
+  314  ls
+  315  cd teague/
+  316  ls
+  317  vi balki.sh 
+  318  ls
+  319  vi balki.sh 
+  320  ls -asl /home/iso/CentOS-6.9-x86_64-bin-DVD1.iso
+  321  ls
+  322  cat balki.sh 
+  323  chmod 755 balki.sh 
+  324  ./balki.sh balki
+  325  vi balki.sh 
+  326  ./balki.sh balki
+  327  vi co
+  328  ls
+  329  virsh net-list --all
+  330  more ovs-network.xml 
+  331  virsh net-start NewNetwork
+  332  virsh net-autostart  NewNetwork
+  333  ./balki.sh balki
+  334  ./balki.sh balki
+  335  ovs-vsctl show 
+  336  ip tuntap mode tap vnet0 
+  337  ip tuntap mode tap vnet0 
+  338  ip tuntap help 
+  339  ip tuntap add mode tap veth0 
+  340  ip tuntap add mode tap veth1 
+  341  ip a s 
+  342  ovs-vsctl add-port vsw01 veth0 
+  343  ovs-vsctl add-port vsw01 veth1 
+  344  ovs-vsctl show 
+  345  ./balki.sh balki
+  346  ip tuntap add mode tap vnet0
+  347  ip tuntap add mode tap vnet1
+  348  ovs-vsctl add-port vsw01 vnet0
+  349  ovs-vsctl add-port vsw01 vnet1
+  350  ./balki.sh balki
+  351  history 
+  352  history  > history.dump 
+  353  ls
+  354  pwd
+  355  more history.dump 
+  356  ./balki.sh balki
+  357  virsh list 
+  358  more balki.sh 
+  359  vi balki.sh 
+  360  ./balki.sh 
+  361  ./balki.sh  balki
+  362  vi balki.sh 
+  363  ./balki.sh  balki
+  364  vi balki.sh 
+  365  ./balki.sh  balki
+  366  vi withoutnetwork 
+  367  cp balki.sh  balki.sh.orig.notworking 
+  368  vi balki.sh
+  369  ./balki.sh balki
+  370  ./balki.sh balki
+  371  virsh console  balki
+  372  w
+  373  ps -ef
+  374  virsh list 
+  375  w
+  376  ps -ef
+  377  reboot 
+  378  ls
+  379  more ovs-network.xml 
+  380  ovs-vsctl show
+  381  history | grep ip 
+  382  ip tuntap add mode tap veth0
+  383  ip tuntap add mode tap veth1
+  384  ip tuntap add mode tap vnet0
+  385  ip tuntap add mode tap vnet1
+  386  ovs-vsctl show
+  387  cat *.xml 
+  388  virsh net-edit default
+  389  vi default.xml 
+  390  vi default.xml 
+  391  vi default.xml 
+  392  virsh net-define default.xml 
+  393  virsh net-start default 
+  394  virsh net-autostart default 
+  395  grep virsh history.dump 
+  396  virsh net-list --all
+  397   virsh net-stop NewNetwork
+  398  virsh net-destory NewNetwork 
+  399  virsh net-destroy NewNetwork 
+  400  virsh net-list --all
+  401  virsh net-autostart --disable NewNetwork
+  402  virsh net-undefine NewNetwork
+  403  virsh net-list --all
+  404  virsh list 
+  405  w
+  406  w
+  407  ps -ef
+  408  ls
+  409  more boris.sh 
+  410  ./boris.sh boris 
+  411  ls
+  412  history | grep ip 
+  413  ip tuntap add mode tap vnet2 
+  414  ovs-vsctl add-port vsw01 vnet2 
+  415  ovs-vsctl  show 
+  416  ./boris.sh boris 
+  417  ip a s
+  418  ifconfig vnet2 up 
+  419  ./boris.sh boris 
+  420  net-dumpxml default 
+  421  virsh net-dumpxml default 
+  422   brctl show br1
+  423   brctl show 
+  424  ip a s
+  425  ls
+  426  vi boris.sh 
+  427  ./boris.sh boris1 
+  428  vi boris.sh 
+  429  vi boris.sh 
+  430  ./boris.sh boris1 
+  431  vi boris.sh 
+  432  ./boris.sh boris1 
+  433  vi boris.sh 
+  434  ip tuntap del mode tap vnet2 
+  435  ip tuntap del mode tap vnet1
+  436  ip tuntap del mode tap vnet0
+  437  ovs-vsctl show 
+  438  ip tuntap del mode tap veth0
+  439  ip tuntap del mode tap veth1
+  440  ovs-vsctl del-port veth0 
+  441  ovs-vsctl del-port veth1 
+  442  ovs-vsctl del-port veth2 
+  443  ovs-vsctl del-port vnet0 
+  444  ovs-vsctl del-port vnet1
+  445  ovs-vsctl show 
+  446  ovs-vsctl del-port vnet2
+  447  ovs-vsctl show 
+  448  ./boris.sh boris1 
+  449  vi boris.sh 
+  450  ./boris.sh boris1 
+  451  w
+  452  ps -ef
+  453  df
+  454  ls
+  455  vi boris.sh 
+  456  ./boris.sh boris1 
+  457  vi boris.sh 
+  458  ./boris.sh boris1 
+  459  vi boris.sh 
+  460  which kvm 
+  461  which virt-install
+  462  file /bin/virt-install
+  463  vi /bin/virt-install
+  464  file /usr/share/virt-manager/virt-install"
+  465  file /usr/share/virt-manager/virt-install
+  466  file /usr/share/virt-manager/virt-install
+  467  vi /usr/share/virt-manager/virt-install
+  468  ls -asl /usr/share/virt-manager/virt-install
+  469  ls
+  470  vu boris.sh 
+  471  vi boris.sh 
+  472  ./boris.sh  boris.sh 
+  473  vi boris.sh 
+  474  ./boris.sh  boris.sh 
+  475  virsh console boris.sh
+  476  ./boris.sh boris2
+  477  w
+  478  ps -ef
+  479  virsh list 
+  480  w
+  481  ps -ef
+  482  strace -p  10235
+  483  strace
+  484  yum -y install strace
+  485  strace -p  10235
+  486  w
+  487  ps -ef
+  488  ls
+  489  virsh 
+  490  cd /etc
+  491  ls
+  492  cd libvirt/
+  493  s
+  494  ;s
+  495  ls
+  496  cd qemu
+  497  ls
+  498  cd networks/
+  499  ls
+  500  more * 
+  501   ;s
+  502  cd ..
+  503  l
+  504  ls
+  505  w
+  506  ps -ef
+  507  w
+  508  ls
+  509  reboot 
+  510  virsh list 
+  511  virsh | grep net 
+  512  grep net history.dump 
+  513   virsh net-list --all
+  514   virsh net-destroy default
+  515  virsh net-autostart --disable default
+  516   virsh net-undefine default
+  517  ls
+  518  cp balki.sh.orig.notworking  balki.sh
+  519  vi balki.sh
+  520  more balki.sh
+  521  ./balki.sh balki 
+  522  ./balki.sh balki1
+  523  vi balki.sh
+  524  ./balki.sh balki1
+  525  vi balki.sh
+  526  ./balki.sh balki1
+  527  ./balki.sh balki1
+  528  ls
+  529  more withoutnetwork 
+  530  ./balki.sh balki1
+  531  vi balki.sh
+  532  ./balki.sh balki1
+  533  fc -l 
+  534  ls
+  535  more balki.sh
+  536  more balki.sh.orig.notworking 
+  537  vi balki.sh.orig.notworking boris.sh 
+  538  cp  balki.sh.orig.notworking boris.sh 
+  539  vi boris.sh 
+  540  ./boris.sh boris1
+  541  w
+  542  ps -ef
+  543  ps -ef
+  544  ip a s
+  545  ps -ef
+  546  w
+  547  ps -ef
+  548  dmesg 
+  549  ps -ef
+  550  df
+  551  w
+  552  ps -ef
+  553  df
+  554  w
+  555  ps -ef
+  556  cd /home/vm-images/
+  557  ls
+  558  ls -asl 
+  559  ls -asl 
+  560  w
+  561  ps -ef
+  562  w
+  563  ip a s
+  564  ovs-vsctl show 
+  565  ls
+  566  cd /home
+  567  ls
+  568  cd teague/
+  569  ls
+  570  cp boris.sh  boris2.sh 
+  571  vi boris2.sh 
+  572  virt-install --os-variant list
+  573  w
+  574  ps -e
+  575  df
+  576  ps -ef
+  577  ls
+  578  more withoutnetwork 
+  579  more boris.sh
+  580  vi boris2.sh 
+  581  vi boris2.sh 
+  582  ./boris2.sh  test2 
+  583  vi boris2.sh 
+  584  ./boris2.sh  test2 
+  585  lspcu 
+  586  yum -y install lspc
+  587  lscpu 
+  588  grep -E 'svm|vmx' /proc/cpuinfo 
+  589  w
+  590  w
+  591  ps -ef
+  592  virsh list 
+  593  virsh console balki 
+  594  w
+  595  ssh teague@10.0.0.1 
+  596  ls
+  597  ipmitool lan print 1
+  598  ovs-vsctl show 
+  599  virsh list 
+  600  virsh list --all 
+  601  virsh start balki 
+  602  virsh destroy tes2 
+  603  virsh destroy test2 
+  604  virsh undefine  test2 
+  605  virsh boris2  test2 
+  606  virsh undfine boris2 
+  607  virsh undefine boris2 
+  608  virsh list --all 
+  609  virsh undefine boris.sh 
+  610  virsh undefine balki1 
+  611  virsh list 
+  612  p -ef
+  613  ps -ef
+  614  ls
+  615  ./boris2.sh test4 
+  616  virsh list 
+  617  ;s
+  618  ls
+  619  ./boris2.sh  test50 
+  620  ovs-vsctl show 
+  621  ls
+  622  cd /home/teague 
+  623  grep ip history.dump 
+  624  ip a s
+  625  ovs-vsctl del-port veth1 
+  626  ovs-vsctl del-ports veth1 
+  627  ovs-vsctl del-br veth1 
+  628  ovs-vsctl show 
+  629  grep ovs history.dump 
+  630  ovs-vsctl show 
+  631   ovs-vsctl del-port vsw01 vnet1
+  632   ovs-vsctl del-port vsw01 vnet2
+  633  ip a s
+  634  w
+  635  ps -ef
+  636  virsh list 
+  637  virsh auto-start test50 
+  638  virsh autostart test50 
+  639  w
+  640  ps -ef
+  641  w
+  642  ps -ef
+  643  dmesg 
+  644  ip a s
+  645  ps -ef
+  646  df
+  647  w
+  648  ps 0ef
+  649  ip a s
+  650  id
+  651  reboot 
+  652  cp -p boris2.sh buildKVM.sh 
+  653  vi buildKVM.sh 
+  654  ls
+  655  scp * teague@10.0.0.1:/home/teague 
+  656  ls
+  657  w
+  658  dmesg 
+  659  ps -ef
+  660  w
+  661  vi j
+  662  df -h 
+  663  ls
+  664  vi buildKVM.sh 
+  665  mv buildKVM.sh rhel6_buildVM.sh 
+  666  virsh list 
+  667  ./rhel6_buildVM.sh balki
+  668  virsh undefine bakli 
+  669  virsh undefine balki 
+  670  ./rhel6_buildVM.sh balki
+  671  w
+  672  ps -ef
+  673  w
+  674  ps -ef
+  675  df
+  676  ps -ef
+  677  resize 
+  678  w
+  679  clear
+  680  w
+  681  ps e-f
+  682  cd /home
+  683  ls
+  684  cd iso/
+  685  ls
+  686  cp /tmp/rhel-server-5.11-x86_64-dvd.iso  . 
+  687  ls -asl 
+  688  ls
+  689  ls
+  690  cd /home/teague 
+  691  ls
+  692  cp rhel6_buildVM.sh  rhel5_buildVM.sh 
+  693  vi rhel5_buildVM.sh 
+  694  virsh list 
+  695  virsh shutdown balki 
+  696  virsh destroy balki 
+  697  virsh undefine  balki 
+  698  ls
+  699  vi rhel5_buildVM.sh 
+  700  ./rhel5_buildVM.sh  balki 
+  701  exot
+  702  exit
+  703  passwd root
+  704  exit
+  705  virsh attach-disk balki rhel-server-6.5-x86_64-dvd.iso  vdc  --driver file --type cdrom --mode readonly
+  706  virsh attach-disk balki rhel-server-6.5-x86_64-dvd.iso  vdb  --driver file --type cdrom --mode readonly
+  707  more virsh attach-disk balki rhel-server-6.5-x86_64-dvd.iso  vdb --type cdrom
+  708   virsh attach-disk balki rhel-server-6.5-x86_64-dvd.iso  vdb --type cdrom
+  709   virsh attach-disk balki /home/iso/rhel-server-6.5-x86_64-dvd.iso  vdb --type cdrom
+  710   virsh attach-disk balki /home/iso/rhel-server-6.5-x86_64-dvd.iso  hdc --type cdrom
+  711   virsh attach-disk balki /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc  --type cdrom
+  712   virsh attach-disk balki /home/iso/rhel-server-6.5-x86_64-dvd.iso sdc  --type cdrom
+  713   virsh attach-disk balki /home/iso/rhel-server-6.5-x86_64-dvd.iso vdc  --type cdrom
+  714   virsh attach-disk balki /home/iso/rhel-server-6.5-x86_64-dvd.iso vdc  --type cdrom -mode shareable 
+  715   virsh attach-disk balki /home/iso/rhel-server-6.5-x86_64-dvd.iso vdc  --type cdrom --mode shareable 
+  716  mount -t iso9660 /dev/sr0 /home/iso/rhel-server-6.5-x86_64-dvd.iso
+  717  df
+  718   attach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc   --type cdrom --mode readonly
+  719  vattach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc   --type cdrom --mode readonly
+  720  virsh attach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc   --type cdrom --mode readonly
+  721  virsh edit balki 
+  722  virsh shutdown balki 
+  723  virsh list 
+  724  virsh shutdown balki 
+  725  virsh list 
+  726  virsh shutdown balki 
+  727  virsh list 
+  728  virsh help 
+  729  virsh stop balki 
+  730  virsh shutdown  balki 
+  731  virsh shutdown  force balki 
+  732  virsh shutdown  balki 
+  733  virsh list --all 
+  734  virsh list --all 
+  735  virsh reboot  balki 
+  736  virsh list --all 
+  737  virsh list --all 
+  738  virsh list --all 
+  739  virsh list --all 
+  740  virsh destroy   balki 
+  741  virsh list --all 
+  742  vattach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc   --type cdrom --mode readonly
+  743  virsh attach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc   --type cdrom --mode readonly
+  744  virsh attach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc   --type cdrom --mode readonly
+  745  virsh start balki 
+  746  virsh attach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc   --type cdrom --mode readonly
+  747  virsh attach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc   --type cdrom --mode readonly
+  748  virsh attach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc   --type cdrom --mode readonly
+  749  virsh attach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc   --type cdrom --mode readonly
+  750  w
+  751  virsh attach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc   --type cdrom --mode readonly
+  752  virsh attach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso hdc --driver qemu    --type cdrom --mode readonly
+  753  virsh attach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso vdb  --driver qemu    --type cdrom --mode readonly
+  754  virsh attach-disk balki  /home/iso/rhel-server-6.5-x86_64-dvd.iso vdc --driver qemu    --type cdrom --mode readonly
+  755  ls -asl /home/iso/rhel-server-6.5-x86_64-dvd.iso
+  756  ls -asl /home/iso/rhel-server-6.5-x86_64-dvd.iso
+  757  ls asl /home/iso/*
+  758  ls -asl /home/iso 
+  759  virsh destory balki 
+  760  virsh destroy balki 
+  761  virsh undefine balki 
+  762  virsh destroy balki 
+  763  virsh undefine balki 
+  764  cd /home/vm-images/
+  765  ls
+  766  rm balki1.img  balki.img
+  767  virsh undefine balki 
+  768  virsh undefine balki 
+  769  virsh undefine balki 
+  770  cd /etc/libvirt/
+  771  ls
+  772  cd qemu
+  773  ls
+  774  cd autostart/
+  775  ls
+  776  cd ..
+  777  ls
+  778  cd networks/
+  779  ls
+  780  ls -aslR
+  781  cd ..
+  782  s
+  783  cd ..
+  784  ls
+  785  virsh list --all 
+  786  virsh destory balki 
+  787  virsh destroy balki 
+  788  ls
+  789  cd /home/teague 
+  790  ;s
+  791  ls
+  792  vi rhel6-11.ks
+  793  vi rhel6-11.ks
+  794  cp rhel6_buildVM.sh rhel6_buildVM.1.sh
+  795  vi rhel6_buildVM.1.sh
+  796  pwd
+  797  ls
+  798  pwd
+  799  vi rhel6_buildVM.1.sh
+  800  virsh destroy balki 
+  801  virsh undefine  balki 
+  802  vi rhel6-11.ks 
+  803  ls asl 
+  804  ls -asl 
+  805  chmod 755 rhel6-11.ks
+  806  virsh destroy balki 
+  807  virsh undefine  balki 
+  808  virsh shutdown  balki 
+  809  virsh destroy  balki 
+  810  virsh undefine  balki 
+  811  virsh undefine  balki 
+  812  virsh destroy  balki 
+  813  virsh undefine  balki 
+  814  ls
+  815  vi rhel6_buildVM.1.sh 
+  816  virsh destroy  balki 
+  817  virsh undefine  balki 
+  818  vi rhel6_buildVM.1.sh 
+  819  vi rhel6_buildVM.1.sh 
+  820  vi rhel6-11.ks 
+  821  virsh destroy  balki 
+  822  virsh undefine  balki 
+  823  vi rhel6-11.ks 
+  824  virsh destroy  balki 
+  825  virsh destroy  balki 
+  826  virsh destroy  balki 
+  827  virsh undefine  balki 
+  828  vi rhel6-11.ks 
+  829  vi rhel6-11.ks 
+  830  grep teague /etc/shadow 
+  831  vi rhel6-11.ks 
+  832  virsh destroy  balki 
+  833  virsh destroy  balki 
+  834  virsh undefine  balki 
+  835  ssh teague@balki
+  836  exit
+  837  ls
+  838  virsh list 
+  839  virsh shutdown test50 
+  840  virsh shutdown balki 
+  841  virsh destroy test50 
+  842  virsh destroy balki 
+  843  virssh undefine test50 
+  844  virsh undefine test50 
+  845  virsh undefine balki  
+  846  ls
+  847  vi rhel6_buildVM.sh 
+  848  ls -asl /home/iso/rhel-server-6.5-x86_64-dvd.iso
+  849  pwd
+  850  ls
+  851  vi rhel5_buildVM.sh 
+  852  vi rhel6_buildVM.sh 
+  853  ./rhel6_buildVM.sh balki
+  854  ./rhel6_buildVM.sh balki
+  855  virsh console balki 
+  856  ls
+  857  ./rhel6_buildVM.sh  balki
+  858  clear
+  859  ./rhel6_buildVM.sh  balki
+  860  ./rhel6_buildVM.sh  balki
+  861  ./rhel6_buildVM.sh  balki
+  862  q
+  863  ping greene.es.its.nyu.edu
+  864  cat /etc/resolv.conf 
+  865  :q!
+  866  ls
+  867  ls
+  868  ./rhel6_buildVM.1.sh balki 
+  869  ./rhel6_buildVM.1.sh balki 
+  870  ./rhel6_buildVM.1.sh balki 
+  871  ./rhel6_buildVM.1.sh balki 
+  872  ./rhel6_buildVM.1.sh balki 
+  873  ./rhel6_buildVM.1.sh balki 
+  874  ./rhel6_buildVM.1.sh balki 
+  875  ./rhel6_buildVM.1.sh balki 
+  876  w
+  877  who 
+  878  ps -df
+  879  ps -ef
+  880  df
+  881  htop 
+  882  atop 
+  883  ps -ef
+  884  who 
+  885  os 0ef
+  886  ps -ef
+  887  dmesg 
+  888  uname -a 
+  889  ps -ef
+  890  top 
+  891  ps -ef
+  892  dmesg
+  893  ip a s
+  894  w
+  895  ps -ef
+  896  dmesg 
+  897  cat /etc/syctl.conf 
+  898  cat /etc/sysctl.conf 
+  899  w
+  900  s -ef
+  901  ps -ef
+  902  ls
+  903  more hel6_buildVM.1.sh
+  904  more rhel6_buildVM.1.sh
+  905  yum install fuse-sshfs 
+  906  cd /root
+  907  ls
+  908  wget https://github.com/libfuse/sshfs/releases/download/sshfs_2.8/sshfs-2.8.tar.gz
+  909  ls
+  910  tar -xvf sshfs-2.8.tar.gz 
+  911  cd sshfs-2.8
+  912  ls
+  913  ./configure 
+  914  yum install fuse-sshfs 
+  915  df
+  916  w
+  917  ps -ef
+  918  dmesg 
+  919  ps -ef
+  920  virsh list 
+  921  w
+  922  df
+  923  ps -ef
+  924  yum -y install sshfs 
+  925  ls
+  926  ./configure 
+  927  yum install fuse 
+  928  yum -y install epel
+  929  yum -y install epel*
+  930  yum install fuse 
+  931  ./configure 
+  932  yum -y install epel
+  933  sshfs 
+  934  df
+  935  df
+  936  df
+  937  df
+  938  mkdir /var/mnt 
+  939  sshfs root@localhost:/ /var/mnt/ 
+  940  df
+  941  cd /var/mnt 
+  942  ls
+  943  df 
+  944  w
+  945  df 
+  946  dmesg 
+  947  df
+  948  mkdir /var/mnt1
+  949  sshfs root@greene:/ /var/mnt1/ 
+  950  sshfs root@greene:/ /var/mnt1/ 
+  951  df
+  952  sshfs root@greene:/ /var/mnt1/ 
+  953  sshfs  root@greene:/ /var/mnt1/
+  954  mkdir /var/mnt2
+  955  sshfs  root@greene:/ /var/mnt2/
+  956  sshfs  root@greene:/ /var/mnt2/
+  957  df
+  958  cd /var/mnt2
+  959  ls
+  960  ls -asl 
+  961  cd etc 
+  962  ls
+  963  cd sysconfig 
+  964  ls
+  965  cd network-scripts/
+  966  ls
+  967  more ifcfg-eth0 
+  968  df
+  969  netstat -r
+  970  ps -ef
+  971  df
+  972  w
+  973  ps -ef
+  974  dmesg 
+  975  ip a s
+  976  dmesg 
+  977  ovs-vsctl show 
+  978  df
+  979  w
+  980  ps -ef
+  981  w
+  982  df
+  983  df
+  984  dmesg 
+  985  df
+  986  w
+  987  ps -ef
+  988  exit
+  989  ipmitool lan print 1
+  990  iptables -L 
+  991  ps -ef
+  992  exit
+  993  ssh greene 
+  994  ssh root@greene 
+  995  ssh teaguet@greene 
+  996  ssh teague@greene 
+  997  ip a s
+  998  su- 
+  999  su - 
+ 1000  w
+ 1001  history 
+ 1002  history > spring.history 

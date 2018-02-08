@@ -1,0 +1,4 @@
+---
+- hosts: all
+  tasks:
+  - command:  /opt/dell/srvadmin/sbin/srvadmin-services.sh restart

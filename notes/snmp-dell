@@ -1,0 +1,17 @@
+configure
+snmp-server location Brossard
+snmp-server contact support@domain.com
+snmp-server community 1qaz2wsx
+snmp-server host x.x.x.x 1qaz2wsx traps v2
+exit
+copy running-config startup-config
+
+
+configure
+snmp-server location Brossard
+snmp-server contact support@domain.com
+snmp-server community 1qaz2wsx ro
+snmp-server host x.x.x.x 1qaz2wsx traps v2
+snmp-server host x.x.x.x traps version 2c 1qaz2wsx udp-port 162
+exit
+write memory

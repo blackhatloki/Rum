@@ -1,0 +1,11 @@
+---
+- hosts: all 
+  tasks:
+  - name: Install nrpe
+    yum:
+      name: nrpe
+      state: present
+  - name: Install nagios-plugins
+    yum:
+      name: nagios-plugins-all
+      state: present

@@ -1,0 +1,5 @@
+---
+- hosts: all
+  tasks:
+  - name : Copy   check_dell_memory
+    copy : 'src=check_dell_memory  dest=/usr/lib64/nagios/plugins/check_dell_memory  owner=root group=root mode=755'

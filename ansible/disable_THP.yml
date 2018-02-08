@@ -1,0 +1,6 @@
+---
+- hosts: all
+  tasks:
+  - name :   Disable THP
+  - command: echo madvise > /sys/kernel/mm/transparent_hugepage/enabled
+

@@ -1,0 +1,2 @@
+#!/bin/bash 
+select host, user, password from mysql.user;

@@ -1,0 +1,11 @@
+---
+- hosts: all 
+  tasks:
+    - name: perl-Net-SNMP
+      yum: pkg={{ item }} state=installed
+      with_items:
+      - perl-Crypt-DES
+      - perl-Digest-HMAC
+      - perl-Digest-SHA1
+      - perl-Socket6
+      - perl-Net-SNMP

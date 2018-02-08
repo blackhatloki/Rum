@@ -1,0 +1,6 @@
+cat ip.txt | parallel -I {} -L 1 -P 24 ssh -i ~/.ssh/keyfilename -o StrictHostKeyChecking=no user@{} racadm racreset hard
+the -I sets the substitution parameter
+the -L reads one line at a time 
+the -P does 24 at a time. tune for your network
+-o is there to ignore StrictHostKeyChecking 
+user is the target login user on the idrac

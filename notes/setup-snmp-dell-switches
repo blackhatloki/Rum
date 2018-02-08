@@ -1,0 +1,57 @@
+How to Configure SNMP Community Strings on a Dell Switch
+How to SNMP enable your Dell Switch?
+
+You need to access the switch via a telnet prompt: 
+ 
+
+Type Enable. The prompt displays the "#" sign. 
+
+ 
+
+Console enable
+
+Console#
+
+ 
+
+Type configure and press <Enter>, if the Privileged Exec level global configuration context is not enabled. 
+
+ 
+
+Console# configure
+
+Console(config)# 
+
+ 
+
+Type snmp-server community private rw and then press <Enter> to delete the private community string. 
+
+ 
+
+Console(config)#snmp-server community private rw
+
+Console(config)#
+
+ 
+
+Type snmp-server community public ro and then press <Enter> to delete the public community string. 
+
+ 
+
+Console(config)#snmp-server community public rw
+
+Console(config)#
+
+ 
+
+Type exit. The configuration context is exited. 
+
+Type copy running-config startup-config and then press <Enter> to save the configuration changes. 
+
+ 
+
+For more info please refer to: 
+
+http://support.dell.com/support/edocs/network/5p788/clig/snmp.htm#snmp_host
+
+ 

@@ -1,0 +1,27 @@
+In this example, run 16 cpu stressors and stops after 900000 bogo operations:
+stress-ng --cpu 16 --cpu-ops 900000
+To run 4 simultaneous instances of all the stressors sequentially one by one, each for 6 minutes and summaries with performance metrics at the end:
+
+stress-ng --sequential 4 --timeout 6m --metrics
+To run 2 FFT cpu stressors, stop after 5000 bogo operations and produce a summary just for the FFT results:
+
+stress-ng --cpu 2 --cpu-method fft --cpu-ops 5000 --metricsâˆ’brief
+To run cpu stressors on all online CPUs working through all the available CPU stressors for 2 hour:
+
+stressâˆ’ng --cpu 0 --cpu-method all -t 2h
+To run 2 instances of all the stressors for 10 minutes:
+
+stress-ng --all 2 --timeout 10m
+To run 128 stressors that are randomly chosen from all the available stressors:
+
+stress-ng --random 128
+To run 64 instances of all the different cpu stressors and verify that the computations are correct for 5 minutes with a bogo operations summary at the end:
+
+stress-ng --cpu 64 --cpuâˆ’method all --verify -t 5m --metricsâˆ’brief
+To run all the stressors one by one for 5 minutes, with the number of instances of each stressor matching the number of online CPUs:
+
+stress-ng --sequential 0 -t 5m
+To run all the stressors in the io class one by one for 1 minutes each, with 8 instances of each stressor running concurrently and show overall time utilisation statistics at the end of the run:
+
+stress-ng --sequential 8 --class io -t 1m --times
+

@@ -1,0 +1,11 @@
+---
+- hosts: all 
+  tasks:
+  - name: Install net-snmp 
+    yum:
+      name: net-snmp 
+      state: present
+  - name: Install nett-snmp-utils
+    yum:
+      name:  net-snmp-utils
+      state: present

@@ -1,0 +1,75 @@
+View, Create, Delete virtual RAID volumes with RACADM on an R720 server (Dell 12G)
+JANUARY 23, 2015 TECH COMMENTS OFF
+Background
+Yesterday I needed to setup an R720 remotely and it needed a new RAID volume created. The issue was that rather than the normal Enterprise license the server had an iDRAC Express license (no remote console) so it wasn’t possible to use the normal UEFI / BIOS wizard to create the disks. Luckily a GUI isn’t required and the disks can be created quite happily with RACADM.
+
+Local and remote
+RACADM can be used locally on the server and remotely. In the examples below all commands are done from a remote workstation across the network. It is also possible to SSH to the iDRAC and execute the commands from there (or from the server OS itself it it’s already setup).
+
+Check the presence of virtual disks by using:
+racadm -r <iDRAC IP> -u <user> -p <password> raid get vdisks
+
+In the below case the machine doesn’t have any virtual volumes yet:
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin raid get vdisks
+ERROR: STOR0104 : No virtual disks are displayed.
+Check if the server has power, physical disks are available, and virtual
+disks are created.
+No virtual disk data to display. The system is powered off, physical
+disks are not present on the system, or virtual disks are not created.
+If the machine had a virtual disk defined we’d see the below:
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin raid get vdisks
+Disk.Virtual.0:RAID.Integrated.1-1
+To delete an existing virtual disk:
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin raid deletevd:Disk.Virtual.0:RAID.Integrated.1-1
+
+Then schedule the job:
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin jobqueue create RAID.Integrated.1-1
+RAC1024: Successfully scheduled a job.
+Verify the job status using "racadm jobqueue view -i JID_xxxxx" command.
+Commit JID = JID_219611981076
+Reboot server to execute job:
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin serveraction hardreset
+Server power operation successful
+Check the status of the job:
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin jobqueue view -i JID_219611981076
+---------------------------- JOB -------------------------
+[Job ID=JID_219611981076]
+Job Name=Configure: RAID.Integrated.1-1
+Status=Scheduled
+Start Time=[Now]
+Expiration Time=[Not Applicable]
+Message=[JCP001: Task successfully scheduled.]
+----------------------------------------------------------
+To view all jobs (results in a list of jobs and their status):
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin jobqueue view
+
+To create a virtual disk / volume
+Help will show:
+racadm raid createvd:<Controller FQDD> -rl {r0|r1|r5|r6|r10|r50|r60} [-wp {wt|wb}] [-rp {nra|ra|ara}]
+[-ss {1k|2k|4k|8k|16k|32k|64k|128k|256k|512k|1M|2M|4M|8M|16M}] -pdkey:<comma separated PD FQDD>
+[-dcp {enabled|disabled|default}] [-name <VD name>] [-size <VD size>{b|k|m|g|t}]
+So we need the FQDD of the Controller and also the list of FQDD:s for our physical disks.
+
+Checking our controller FQDD:
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin raid get controllers
+RAID.Integrated.1-1
+Checking our physical disks FQDD:
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin raid get pdisks
+Disk.Bay.0:Enclosure.Internal.0-1:RAID.Integrated.1-1
+Disk.Bay.1:Enclosure.Internal.0-1:RAID.Integrated.1-1
+Disk.Bay.2:Enclosure.Internal.0-1:RAID.Integrated.1-1
+Example of creating the virtual disk with RAID0, write-through and no read-ahead (YES, IT’S ALL ONE LINE):
+
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin raid createvd:RAID.Integrated.1-1 -rl r0 -wp wt -rp nra -name raid_0 -pdkey:Disk.Bay.0:Enclosure.Internal.0-1:RAID.Integrated.1-1,Disk.Bay.1:Enclosure.Internal.0-1:RAID.Integrated.1-1,Disk.Bay.2:Enclosure.Internal.0-1:RAID.Integrated.1-1
+Example of creating the virtual disk with RAID0, write-back cache and read-ahead enabled (YES, IT’S ALL ONE LINE):
+
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin raid createvd:RAID.Integrated.1-1 -rl r0 -wp wb -rp ra -name raid_0 -pdkey:Disk.Bay.0:Enclosure.Internal.0-1:RAID.Integrated.1-1,Disk.Bay.1:Enclosure.Internal.0-1:RAID.Integrated.1-1,Disk.Bay.2:Enclosure.Internal.0-1:RAID.Integrated.1-1
+Schedule the job:
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin jobqueue create RAID.Integrated.1-1
+
+Restart to execute the job:
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin serveraction hardreset
+
+View the virtual disk once created:
+C:\Users\Administrator.DSC>racadm -r 192.168.0.1 -u root -p calvin raid get vdisks
+Disk.Virtual.0:RAID.Integrated.1-1
