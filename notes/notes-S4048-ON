@@ -1,0 +1,4 @@
+show version 
+show system brief 
+show system stack-ports
+show interfaces port brief
