@@ -1,0 +1,74 @@
+# Register the Microsoft RedHat repository
+curl https://packages.microsoft.com/config/rhel/7/prod.repo | sudo tee /etc/yum.repos.d/microsoft.repo
+
+# Install PowerShell
+sudo yum install -y powershell
+
+# Start PowerShell
+pwsh
+
+
+
+Installation via Direct Download - Red Hat Enterprise Linux (RHEL) 7
+Download the RPM package powershell-6.0.0-1.rhel.7.x86_64.rpm from the releases page onto the Red Hat Enterprise Linux machine:
+
+sh
+
+Copy
+wget https://github.com/PowerShell/PowerShell/releases/download/v6.0.0/powershell_6.0.0-1.debian.9_amd64.deb
+Then execute the following in the terminal:
+
+sh
+
+Copy
+sudo yum install powershell-6.0.0-1.rhel.7.x86_64.rpm
+You can also install the RPM without the intermediate step of downloading it:
+
+sh
+
+Copy
+sudo yum install https://github.com/PowerShell/PowerShell/releases/download/v6.0.0/powershell-6.0.0-1.rhel.7.x86_64.rpm
+
+
+macOS 10.12
+Installation via Homebrew (preferred) - macOS 10.12
+Homebrew is the missing package manager for macOS. If the brew command is not found, you need to install Homebrew following their instructions.
+
+Once you've installed Homebrew, installing PowerShell is easy. First, install Homebrew-Cask, so you can install more packages:
+
+sh
+
+Copy
+brew tap caskroom/cask
+Now, you can install PowerShell:
+
+sh
+
+Copy
+brew cask install powershell
+When new versions of PowerShell are released, simply update Homebrew's formulae and upgrade PowerShell:
+
+sh
+
+Copy
+brew update
+brew cask reinstall powershell
+Note: because of this issue in Cask, you currently have to do a reinstall to upgrade.
+
+Installation via Direct Download - macOS 10.12
+Using macOS 10.12, download the PKG package powershell-6.0.0-osx.10.12-x64.pkg from the releases page onto the macOS machine.
+
+Either double-click the file and follow the prompts, or install it from the terminal:
+
+sh
+
+Copy
+sudo installer -pkg powershell-6.0.0-osx.10.12-x64.pkg -target /
+Uninstallation - macOS 10.12
+If you installed PowerShell with Homebrew, uninstallation is easy:
+
+sh
+
+Copy
+brew cask uninstall powershell
+
