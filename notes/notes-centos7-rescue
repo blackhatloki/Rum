@@ -1,0 +1,24 @@
+
+w to Boot into Single User Mode
+
+ 
+1. First restart your CentOS 7 machine, once boot process starts, wait for the GRUB boot menu to appear as shown in the screen shot below.
+
+CentOS 7 Grub Menu
+
+2. Next, select your Kernel version from the grub menu item and press e key to edit the first boot option. Now use the Down arrow key to find the kernel line (starts with “linux16“), then change the argument ro to  rw init=/sysroot/bin/sh as shown in the screen shot below.
+
+Edit Grub Boot Options
+
+3. Once you have finished the task in the previous step, press Ctrl-X or F10 to boot into single user mode (access an emergency shell).
+
+CentOS 7 Emergency Shell
+
+4. Now mount root (/) filesystem using the following command.
+sh-4.2# mount -t proc proc /sysroot/proc
+sh-4.2# mount --rbind /dev /sysroot/dev
+sh-4.2# mount --rbind /sys /sysroot/sys
+# chroot /sysroot/
+At this point, you can perform all the necessary low-level system maintenance tasks. Once you are done, reboot the system using this command.
+
+# reboot -f
