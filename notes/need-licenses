@@ -1,0 +1,27 @@
+* c05-03 SBBQD2
+ LIC012 : The license file does not exist.
+
+c11-02 1SC8DQ2
+ LIC012 : The license file does not exist.
+
+* c28-12 G8H4B42
+ LIC012 : The license file does not exist.
+
+* c31-11 G8K1B42
+ LIC012 : The license file does not exist.
+
+. Motherboard was change and I have lost my enterprise license for the idrac. 
+
+* G8K1B42 DE00000082417958.zip
+* G8H4B42 FD00000003528140.zip
+1SBBQD2 FD00000006414361.zip License.zip 
+
+
+racadm license import -f DE00000082417958.xml -l 192.168.0.1:/mnt/home/license/breakfix
+
+racadm license import -f DE00000082417958.xml -l 192.168.0.1:/mnt/home/licenses/breakfix  -c idrac.embedded.1
+racadm license import -f FD00000003528140.xml -l 192.168.0.1:/mnt/home/licenses/breakfix  -c idrac.embedded.1
+racadm license import -f 1SBBQD2-iDRAC8Enterprise-License.XML  -l 192.168.0.1:/mnt/home/licenses/breakfix/Dell -c idrac.embedded.1
+
+ dmidecode -s system-serial-number
+`

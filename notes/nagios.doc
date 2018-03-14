@@ -1,0 +1,80 @@
+iPrerequisites
+For Ubuntu users, run all steps from this document with root permissions. The following command can be run to switch to a root shell.
+sudo -i
+Package requirements may vary depending on what type of installation platform Nagios is being installed on.
+For RHEL/CentOS users:
+yum install -y wget httpd php gcc glibc glibc-common gd gd-devel make net-snmp unzip
+For Ubuntu (15.10 and below) users:
+sudo apt-get install wget build-essential apache2 php5 php5-gd libgd-dev unzip
+For Ubuntu (16.04 and above) users:
+sudo apt-get install wget build-essential apache2 php apache2-mod-php7.0 php-gd libgd-dev unzip
+Download Nagios Core and Nagios Plugins Tarballs
+For all systems, run the following commands in your terminal:
+cd /tmp
+wget http://prdownloads.sourceforge.net/sourceforge/nagios/nagios-4.2.0.tar.gz
+wget http://nagios-plugins.org/download/nagios-plugins-2.1.2.tar.gz
+This will download Nagios Core, and its required plugins.
+Adding the Nagios User and Group
+Next add the appropriate user and groups for the Nagios process to run:
+useradd nagios
+groupadd nagcmd
+usermod -a -G nagcmd nagios
+For RHEL/CentOS users:
+usermod -a -G nagios,nagcmd apache
+For Ubuntu users:
+usermod -a -G nagios,nagcmd www-data
+
+Extract the package contents:
+tar zxvf nagios-4.2.0.tar.gz
+tar zxvf nagios-plugins-2.1.2.tar.gz
+Change to the new Nagios directory and install the packages:
+cd nagios-4.2.0
+For RHEL/CentOS users:
+./configure --with-command-group=nagcmd
+For Ubuntu users:
+./configure --with-command-group=nagcmd -–with-mail=/usr/bin/sendmail
+ --with-httpd-conf=/etc/apache2/
+All systems:
+make all
+make install
+make install-init
+make install-config
+make install-commandmode
+make install-webconf
+cp -R contrib/eventhandlers/ /usr/local/nagios/libexec/
+chown -R nagios:nagios /usr/local/nagios/libexec/eventhandlers
+/usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
+For Ubuntu users:
+sudo a2ensite nagios
+sudo a2enmod rewrite cgi
+For RHEL/CentOS users:
+/etc/init.d/nagios start
+/etc/init.d/httpd start
+For Ubuntu users using systemd:
+sudo cp /etc/init.d/skeleton /etc/init.d/nagios
+sudo vi /etc/init.d/nagios (and add the following lines)
+DESC="Nagios"
+NAME=nagios
+DAEMON=/usr/local/nagios/bin/$NAME
+DAEMON_ARGS="-d /usr/local/nagios/etc/nagios.cfg"
+PIDFILE=/usr/local/nagios/var/$NAME.lock
+systemctl restart apache2
+systemctl start nagios
+Create a Default User for Web Access.
+Add a default user for Web Interface Access:
+htpasswd –c /usr/local/nagios/etc/htpasswd.users nagiosadmin
+
+
+Nagios Plugin Installation
+cd /tmp/nagios-plugins-2.1.2
+./configure --with-nagios-user=nagios --with-nagios-group=nagios
+make
+make install
+Nagios Service Setup
+The following commands will register the Nagios daemon to be run upon system startup.
+chkconfig --add nagios
+chkconfig --level 35 nagios on
+chkconfig --add httpd
+chkconfig --level 35 httpd on
+For Ubuntu:
+sudo update-rc.d nagios defaults:
