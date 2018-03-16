@@ -1,0 +1,203 @@
+All-In-One TSM Client Commands
+By Surya09:166 comments
+TSM (Tivoli Storage Manager)  is  a centralized, policy-based, enterprise class, data backup and recovery package from IBM Corporation.The software enables the user to insert objects not only via backup, but also through space management and archive tools. It also allows retrieval of the same data via similar restore, recall, and retrieve methods.
+
+As  Unix Admins  we used to get lot of requests from the application teams for tsm backup restores.I would like to discuss about the the best 14 best use-full TSM client commands.
+
+I will  go by the  a category wise  "Query,Backup & Restore".
+
+Generally we use dsmc/dsm  for the  TSM client commands.
+
+In this article we are going to discuss about the following contents with practice examples.
+
+  1) Querying the server
+    A. Querying your scheduled backup slot
+    B. Querying what files are included / excluded for backup
+    C.Querying what partitions have been backed up
+    D.Querying what files have been backed up
+    
+ 2) Backing Up data
+    A. Backing your local filesystems
+    B. Backing up selected files
+    
+ 3) Restore Data
+    A. Restore a file to its original directory
+    B. Restore the most recent backup version of a file
+    C. Display a list of active and inactive backup versions of files from which you can select versions to restore
+    D. Restore with a directory including subdirectories
+    E. Restore the  file under a new name and directory
+    F. Restore all files in a directory  as of their current state
+    G. Restore all files from a  directory that end with .xyz to the another directory
+    H. Restore files specified in the text file to a different location
+
+1) Querying the server
+A. Querying your scheduled backup slot
+To query your scheduled backup slot enter dsmc q sched (which is short for query schedule). The output should look similar to that below:
+#dsmc q sched
+
+    Schedule Name: WEEKLY_UM
+      Description: UM weekly incremental backup
+   Schedule Style: Classic
+           Action: Incremental
+          Options:
+          Objects:
+         Priority: 5
+   Next Execution: 135 Hours and 25 Minutes
+         Duration: 20 Minutes
+           Period: 1 Week 
+      Day of Week: Thursday
+           Expire: Never
+
+B. Querying what files are included / excluded for backup
+"q inclexcl" to list output similar to the following:
+#dsmc q inclexcl
+*** FILE INCLUDE/EXCLUDE ***
+Mode Function  Pattern (match from top down)  Source File
+---- --------- ------------------------------ -----------------
+Excl Filespace /var/run                       /opt/tivoli/tsm/client/ba/bin/incl.excl
+Excl Filespace /tmp                           /opt/tivoli/tsm/client/ba/bin/incl.excl
+Excl Directory /.../.opera/.../cache4         /opt/tivoli/tsm/client/ba/bin/incl.excl
+Excl Directory /.../.mozilla/.../Cache        /opt/tivoli/tsm/client/ba/bin/incl.excl
+Excl Directory /.../.netscape/.../cache       /opt/tivoli/tsm/client/ba/bin/incl.excl
+Excl Directory /var/tmp                       /opt/tivoli/tsm/client/ba/bin/incl.excl
+Excl All       /.../dsmsched.log              /opt/tivoli/tsm/client/ba/bin/incl.excl
+Excl All       /.../core                      /opt/tivoli/tsm/client/ba/bin/incl.excl
+Excl All       /.../a.out                     /opt/tivoli/tsm/client/ba/bin/incl.excl
+C.Querying what partitions have been backed up
+"q fi" to list which partitions have been backed up:
+** Unix/Linux  **
+
+#dsmc q fi
+  #     Last Incr Date      Type    File Space Name
+---     --------------      ----    ---------------
+  1   02-05-2013 02:13:13   UFS     /         
+  2   25-07-2012 12:26:09   UFS     /export/home
+  3   02-05-2013 02:13:26   UFS     /home     
+  4   16-01-2013 11:26:37   UFS     /scratch   
+  5   02-05-2013 02:13:54   UFS     /usr/local 
+  6   12-02-2013 02:52:41   UFS     /var     
+
+** Netware **
+
+  #     Last Incr Date      Type       File Space Name
+---     --------------      ----       ---------------
+  1   02-05-2013 00:23:46   NTW:LONG   Oracle_data\usr:
+  2   02-07-2013 00:22:42   NDS        Oracle_data\bin:
+  3   02-07-2013 00:25:33   NTW:LONG   Oracle_data\apps:
+  4   02-07-2013 00:25:11   NTW:LONG   Oracle_data\usr:
+D.Querying what files have been backed up
+In order to query the files or directories that are backed-up earlier you can use "q ba".
+
+The below example gives you only the directory information.
+#dsmc q ba /home/oraadmin
+   Size      Backup Date                Mgmt Class           A/I File
+   ----      -----------                ----------           --- ----
+   1024  B  15-10-2013 02:52:09          STANDARD             A  /home/oraadmin
+ 
+
+If you just add a trailing * (star) as a wildcard in the above query, TSM will only return those files and directories backed up immediately below the directory path given in the query
+#dsmc q ba /home/oraadm/*
+   Size      Backup Date        Mgmt Class A/I File
+   ----      -----------        ---------- --- ----
+    512  12-09-2012 19:57:09    STANDARD    A  /home/oraadm/data1.dtf
+  1,024  08-12-2012 02:46:53    STANDARD    A  /home/oraadm/data2.dtf
+    512  12-09-2012 19:57:09    STANDARD    A  /home/oraadm/data3.dtf
+    512  24-04-2002 00:22:56    STANDARD    A  /home/oraadm/data4.dtf
+
+If you want to query all the current files and directories backed up under a directory and all its sub-directories you need to add the -subdir=yes option as below:
+
+#dsmc q ba /home/oraadm/* -subdir=yes
+   Size      Backup Date        Mgmt Class A/I File
+   ----      -----------        ---------- --- ----
+    512  12-09-2012 19:57:09    STANDARD    A  /home/oraadm/data1.dtf
+  1,024  08-12-2012 02:46:53    STANDARD    A  /home/oraadm/data2.dtf
+    512  12-09-2012 19:57:09    STANDARD    A  /home/oraadm/data3.dtf
+    512  24-04-2002 00:22:56    STANDARD    A  /home/oraadm/data4.dtf
+  1,024  12-09-2012 19:57:09    STANDARD    A  /home/oraadm/datasmart1/test
+  1,024  12-09-2012 19:57:09    STANDARD    A  /home/oraadm/datasmart1/test/test2
+ 12,048  04-12-2012 02:01:29    STANDARD    A  /home/oraadm/datasmart2/tables
+ 50,326  30-04-2013 01:35:26    STANDARD    A  /home/oraadm/datasmart3/data_file1
+ 50,326  27-04-2013 00:28:15    STANDARD    A  /home/oraadm/datasmart3/data_file2
+ 11,013  24-04-2013 00:22:56    STANDARD    A  /home/oraadm/datasmart3/data_file3
+2. Backing Up data
+A. Backing your local filesystems
+The syntax for this is "dsmc backup-type filesystem" , where backup-type is one of incremental or selective. 
+
+
+Incremental Backup : It is one that backs up only the data that changed since the last backup — be it a full or incremental backup
+Selective Backup : A type of backup where only the user specified files and directories are backed up. A selective backup is commonly used for backing up files which change frequently or in situations where the space available to store backups is limited. Also called a partial backup.
+
+I would always suggest you always go with incremental. The command is "dsmc incremental"  or "dsmc incr" Where "incr" is an abbreviation for incremental.
+
+Perform an incremental backup of your client server.
+#dsmc incr
+
+Make this will omit the filesystems which were mention in the exclude file.
+To incrementally back up specific file-systems enter:
+#dsmc incr /  /usr  /usr/local  /home
+
+To back up entire filesystem irrespective of whether files have changed since the last backup, use the selective command with a wild-card and -subdir=yes as below:
+#dsmc sel /*  /usr/*   /home/*  -su=yes
+B. Backing up selected files
+For backing up selected files is similar to that for backing up filesystems. Be aware, however, that you cannot use wildcards in directory / folder names:
+#dsmc incr /home/oradm/data*/* -su=yes
+ANS1071E Invalid domain name entered: '/home/oradm/data*/*'
+
+#dsmc sel /home/oradm/data*/* -su=yes
+Selective Backup function invoked.
+ANS1081E Invalid search file specification '/home/oradm/data*/*' entered
+
+You can, however, enter several file specifications on the command line, as below:
+#dsmc incr /home/surya/*  /usr/bin/* -su=yes
+
+3) Restore Data
+We use the "restore" command to restore  files
+ A. Restore a file to its original directory
+ Restore the /home/oraadm/data.txt  file to its original directory.
+
+ #dsmc restore /home/oraadm/data.txt
+
+ If you do not specify a destination, the files are restored to their original location.
+B. Restore the most recent backup version of a file
+Here is an example to restore  /home/oraadm/data.txt file, even if the backup is inactive.
+#dsmc restore /home/oraadm/data.txt -latest
+
+If the file you are restoring no longer resides on your client machine, and you have run an incremental backup since deleting the file, there is no active backup of the file on the server. In this case, use the latest option to restore the most recent backup version. Tivoli Storage Manager restores the latest backup version, whether it is active or inactive.
+
+C. Display a list of active and inactive backup versions of files from which you can select versions to restore
+#dsmc restore "/home/oraadmin/*"-pick -inactive
+D. Restore with a directory including subdirectories
+Restore the files in the /oradata1 directory and all of its sub-directories (-sub=yes)
+#dsmc restore /oradata1/ -subdir=yes
+
+When restoring a specific path and file, Tivoli Storage Manager recursively restores all sub-directories under that path, and any instances of the specified file that exist under any of those sub-directories.
+
+E. Restore the  file under a new name and directory
+In-order to restore the  /home/oraadm/data.txt   file under a new name and directory.
+
+#dsmc restore /home/oraadm/data.txt /tmp/data-renamed.txt
+F. Restore all files in a directory  as of their current state
+Restore all files in the /usr/oradata/docs directory to their state as of 5:00 PM on October 16, 2013.
+#dsmc restore -pitd=10/16/2013 -pitt=17:00:00 /usr/oradata/docs/
+
+Use the pitdate option with the pittime option to establish a point in time for which you want to display or restore the latest version of your backups. Files that were backed up on or before the date and time you specified, and which were not deleted before the date and time you specified, are processed. Backup versions that you create after this date and time are ignored.
+
+G. Restore all files from a  directory that end with .xyz to the another directory
+Restore all files from the /usr/oradata/docs/ directory that end with .bak to the /usr/oradata/projects/ directory.
+
+# dsmc restore "/usr/oradata/docs/*.bak" /usr/oradata/projects/
+
+If the destination is a directory, specify the delimiter (/) as the last character of the destination. If you omit the delimiter and your specified source is a directory or a file spec with a wildcard, you will receive an error. If the projects directory does not exist, it is created.
+H. Restore files specified in the text file to a different location
+Restore files specified in the restorelist.txt file to a different location.
+# dsmc restore -filelist=/tmp/restorelist.txt /usr/ora_backup/
+
+The files (entries) listed in the filelist must adhere to the following rules:
+
+Each entry must be a fully or partially qualified path to a file or directory or a relative path.
+Each entry must be on a new line.
+Do not use wildcard characters.
+Each entry results in the processing of only one object (file or directory).
+If the file name contains any spaces, enclose the file name with quotes.
+The filelist can be an MBCS file or a Unicode file with all Unicode entries.
+Tivoli Storage Manager ignores any entry that is not valid.
