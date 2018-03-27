@@ -1,0 +1,539 @@
+Virsh display node information:
+This is the first item on our virsh commands cheatsheet. This displays the host node information and the machines that support the virtualization process.
+
+$ sudo virsh nodeinfo 
+CPU model:           x86_64
+CPU(s):              8
+CPU frequency:       2200 MHz
+CPU socket(s):       1
+Core(s) per socket:  4
+Thread(s) per core:  2
+NUMA cell(s):        1
+Memory size:         12238908 KiB
+Virsh list all domains
+To list both inactive and active domains, use the command:
+
+sudo virsh list --all
+ Id    Name                           State
+ ----------------------------------------------------
+-     admin                          shut off
+-     cloudstack                     shut off
+-     hyperv                         shut off
+-     ipa                            shut off
+-     katello                        shut off
+-     node1                          shut off
+-     node2                          shut off
+-     node3                          shut off
+-     server1                        shut off
+-     server2                        shut off
+-     test                           shut off
+-     ubuntu14.04                    shut off
+-     win12k                         shut off
+-     xen                            shut off
+-     zenoss                         shut off
+List only active domains
+To list only active domains with virsh command, use:
+
+$ sudo virsh list
+ Id    Name                           State
+ ----------------------------------------------------
+Virsh start vm
+This is an example on how to use virsh command to start a guest virtual machine. We’re going to start test domain displayed above:
+
+$ sudo virsh start test
+Domain test started
+
+$ sudo virsh list      
+ Id    Name                           State
+ ----------------------------------------------------
+  3     test                           running
+Virsh autostart vm
+To set a vm to start automatically on system startup, do:
+
+$ sudo virsh autostart test
+Domain test marked as autostarted
+
+$ sudo virsh dominfo test  
+Id:             9
+Name:           test
+UUID:           a943ed42-ba62-4270-a41d-7f81e793d754
+OS Type:        hvm
+State:          running
+CPU(s):         2
+CPU time:       144.6s
+Max memory:     2048 KiB
+Used memory:    2048 KiB
+Persistent:     yes
+Autostart:      enable
+Managed save:   no
+Security model: none
+Security DOI:   0
+Keep an eye on the option Autostart: enable.
+
+Virsh autostart disable
+To disable autostart feature for a vm:
+
+ $ virsh autostart --disable test
+ Domain test unmarked as autostarted
+
+ $ virsh dominfo test
+ Id:             -
+ Name:           test
+ UUID:           a943ed42-ba62-4270-a41d-7f81e793d754
+ OS Type:        hvm
+ State:          shut off
+ CPU(s):         2
+ Max memory:     2048 KiB
+ Used memory:    2048 KiB
+ Persistent:     yes
+ Autostart:      disable
+ Managed save:   no
+ Security model: none
+ Security DOI:   0
+Virsh stop vm, virsh shutdown vm
+To shutdown a running vm gracefully use:
+
+$ sudo virsh shutdown test
+Domain test is being shutdown
+
+$ sudo virsh list
+ Id    Name                           State
+ ----------------------------------------------------
+Virsh force shutdown vm
+You can do a forceful shutdown of active domain using the command:
+
+$ sudo virsh destroy test
+Virsh stop all running vms
+In case you would like to shutdown all running domains, just issue the command below:
+
+$ for i in `sudo virsh list | grep running | awk '{print $2}'` do
+    sudo virsh shutdown $i
+done
+
+Virsh reboot vm
+To restart a vm named test, the command used is:
+
+$ sudo virsh reboot test
+
+Virsh remove vm
+To cleanly remove a vm including its storage columes, use the commands shown below. The domain test should be replaced with the actual domain to be removed.
+
+$ sudo virsh destroy test 2> /dev/null
+$ sudo virsh undefine  test
+$ sudo virsh pool-refresh default
+$ sudo virsh vol-delete --pool default test.qcow2
+In this example, storage volume is named /var/lib/libvirt/images/test.qcow2
+
+Virsh create a vm
+If you would like to create a new virtual machine with virsh, the relevant command to use is `virt-install. This is crucial and can’t miss on virsh commands cheatsheet arsenal. The example below will install a new operating system from CentOS 7 ISO Image.
+
+sudo virt-install \
+--name centos7 \
+--description "Test VM with CentOS 7" \
+--ram=1024 \
+--vcpus=2 \
+--os-type=Linux \
+--os-variant=rhel7 \
+--disk path=/var/lib/libvirt/images/centos7.qcow2,bus=virtio,size=10 \
+--graphics none \
+--location $HOME/iso/CentOS-7-x86_64-Everything-1611.iso \
+--network bridge:virbr0  \
+--console pty,target_type=serial -x 'console=ttyS0,115200n8 serial'
+Virsh connect to vm console
+To connect to the guest console, use the command:
+
+$ sudo virsh console test
+This will return a fail message if an active console session exists for the provided domain.
+
+Virsh edit vm xml file
+To edit a vm xml file, use:
+
+# To  use vim text editor
+
+$ sudo EDITOR=vim virsh edit test 
+
+# To use nano text editor
+
+$ sudo EDITOR=nano virsh edit test
+Virsh suspend vm, virsh resume vm
+To suspend a guest called testwith virsh command, run:
+
+$ sudo virsh suspend test
+Domain test suspended
+NOTE: When a domain is in a suspended state, it still consumes system RAM. Disk and network I/O will not occur while the guest is suspended.
+
+Resuming a guest vm:
+To restore a suspended guest with virsh using the resume option:
+
+$ sudo virsh resume test
+Domain test resumed
+Virsh save vm
+To save the current state of a vm to a file using the virsh command :
+
+The syntax is:
+
+$ sudo virsh save test test.saved
+Domain test saved to test.save
+
+$ ls -l test.save 
+-rw------- 1 root root 328645215 Mar 18 01:35 test.saved
+Restoring a saved vm
+To restore saved vm from the file:
+
+$ virsh restore test.save 
+Domain restored from test.save
+
+$ sudo virsh list
+ Id    Name                           State
+ ----------------------------------------------------
+  7     test                           running
+The next section of virsh commands cheatsheet will cover managing volumes with virsh command:
+
+Virsh Manage Volumes
+Here we’ll cover how to create a storage volume , attach it to a vm , detach it from a vm and how to delete a volume.
+
+Virsh create volume
+To create a 2GB volume named test_vol2 on the default storage pool, use:
+
+$ sudo virsh vol-create-as default  test_vol2.qcow2  2G
+Vol test_vol2.qcow2 created
+
+$ sudo du -sh /var/lib/libvirt/images/test_vol2.qcow2
+2.0G/var/lib/libvirt/images/test_vol2.qcow2
+default: Is the pool name.
+
+test_vol2: This is the name of the volume.
+
+2G: This is the storage capacity of the volume.
+
+Virsh attach a volume to vm
+To attach created volume above to vm test, run:
+
+# virsh attach-disk --domain test \
+--source /var/lib/libvirt/images/test_vol2.qcow2  \
+--persistent --target vdb
+
+Disk attached successfully
+
+--persistent: Make live change persistent
+
+--target vdb: Target of a disk device
+
+You can confirm that the volume was added to the vm as a block device /dev/vdb
+
+# ssh test
+Last login: Fri Mar 17 19:30:54 2017 from gateway
+[root@test ~]# 
+
+[root@test ~]# lsblk --output NAME,SIZE,TYPE
+NAME              SIZE TYPE
+sr0              1024M rom
+vda                10G disk
+├─vda1              1G part
+└─vda2              9G part
+  ├─cl_test-root    8G lvm
+    └─cl_test-swap    1G lvm
+    vdb                 2G disk
+Virsh detach volume on vm
+To detach above volume test_vol2 from the vm test:
+
+$ sudo virsh detach-disk --domain test --persistent --live --target vdb
+Disk detached successfully
+
+$ ssh test
+Last login: Sat Mar 18 01:52:33 2017 from gateway
+[root@test ~]# 
+[root@test ~]# lsblk --output NAME,SIZE,TYPE 
+NAME              SIZE TYPE
+sr0              1024M rom
+vda                10G disk
+├─vda1              1G part
+└─vda2              9G part
+  ├─cl_test-root    8G lvm
+    └─cl_test-swap    1G lvm
+    [root@test ~]# 
+You can indeed confirm from this output that the device /dev/vdb has been detached
+
+Please note that you can directly grow disk image for the vm using qemu-img command, this will look something like this:
+
+$ sudo qemu-img resize /var/lib/libvirt/images/test.qcow2 +1G
+The main shortcoming of above command is that you cannot resize an image which has snapshots.
+
+Virsh delete volume
+To delete volume with virsh command, use:
+
+$ sudo virsh vol-delete test_vol2.qcow2  --pool default
+Vol test_vol2.qcow2 deleted
+
+$ sudo virsh pool-refresh  default
+Pool default refreshed
+
+$ sudo virsh vol-list default
+ Name                 Path                                    
+ ------------------------------------------------------------------------------
+admin.qcow2          /var/lib/libvirt/images/admin.qcow2     
+cloudstack.qcow2     /var/lib/libvirt/images/cloudstack.qcow2
+ipa.qcow2            /var/lib/libvirt/images/ipa.qcow2       
+katello.qcow2        /var/lib/libvirt/images/katello.qcow2   
+node1.qcow2          /var/lib/libvirt/images/node1.qcow2     
+node2.qcow2          /var/lib/libvirt/images/node2.qcow2     
+node3.qcow2          /var/lib/libvirt/images/node3.qcow2     
+test.qcow2           /var/lib/libvirt/images/test.qcow2      
+ubuntu14.04.qcow2    /var/lib/libvirt/images/ubuntu14.04.qcow2
+zenoss.qcow2         /var/lib/libvirt/images/zenoss.qcow2    
+From the output of vol-list virsh command, it is observed that the volume has been deleted.
+
+
+Virsh Manage Snapshots
+In this second last section of managing kvm guest machines with virsh command, we’ll have a look at managing VM snapshots.
+
+Virsh Create Snapshot for a vm
+Let’s create a snapshot for our test vm.
+
+$ sudo virsh snapshot-create-as --domain test \
+--name "test_vm_snapshot1" \
+--description "test vm snapshot 1-working"
+
+Domain snapshot test_vm_snapshot1 created
+
+Virsh list Snapshots for a vm
+To list available snapshots for a vm, use:
+
+$ sudo virsh snapshot-list test
+ Name                 Creation Time             State
+ ------------------------------------------------------------
+  1489689679           2017-03-16 21:41:19 +0300 shutoff
+  test_fresh           2017-03-16 22:11:48 +0300 shutoff
+  test_vm_snapshot1    2017-03-18 02:15:58 +0300 running
+Virsh display info about a snapshot
+To retrieve more information about a domain, use:
+
+$ sudo virsh snapshot-info --domain test --snapshotname test_vm_snapshot1
+Name:           test_vm_snapshot1
+Domain:         test
+Current:        yes
+State:          running
+Location:       internal
+Parent:         test_fresh
+Children:       0
+Descendants:    0
+Metadata:       yes
+Virsh revert vm snapshot
+Here we’ll create another snapshot called test_vm_snapshot2, then revert to snapshot test_vm_snapshot1
+
+$ sudo virsh snapshot-create-as \
+--domain test --name "test_vm_snapshot2" \
+--description "test vm snapshot 2-working"
+
+Domain snapshot test_vm_snapshot2 created
+Let’s revert the snapshot we created before:
+
+$ sudo virsh snapshot-list test
+ Name                 Creation Time             State
+ ------------------------------------------------------------
+  1489689679           2017-03-16 21:41:19 +0300 shutoff
+  test_fresh           2017-03-16 22:11:48 +0300 shutoff
+  test_vm_snapshot1    2017-03-18 02:15:58 +0300 running
+  test_vm_snapshot2    2017-03-18 02:23:29 +0300 running
+
+$ sudo virsh snapshot-revert --domain test  --snapshotname test_vm_snapshot1  --running
+Virsh delete snapshot
+Let’s delete the two snapshots we created:
+
+$ sudo  virsh snapshot-delete --domain test --snapshotname  test_vm_snapshot2
+Domain snapshot test_vm_snapshot2 deleted
+
+$ sudo  virsh snapshot-delete --domain test --snapshotname  test_vm_snapshot1
+Domain snapshot test_vm_snapshot1 deleted
+
+$ sudo virsh snapshot-list test
+ Name                 Creation Time             State
+ ------------------------------------------------------------
+  1489689679           2017-03-16 21:41:19 +0300 shutoff
+  test_fresh           2017-03-16 22:11:48 +0300 shutoff
+Virsh clone a vm
+Domain with devices to clone must be paused or shutoff. So let’s shut it down:
+
+$ sudo virsh destroy test
+Domain test destroyed
+Then clone a vm, do it as shown below:
+
+$ sudo virt-clone --connect qemu:///system \
+--original test \
+--name test_clone \
+--file /var/lib/libvirt/images/test_clone.qcow2 
+
+Allocating 'test_clone.qcow2'       |  10 GB  00:00:06
+
+Clone 'test_clone' created successfully.
+
+$ sudo virsh dominfo test_clone
+Id:             -
+Name:           test_clone
+UUID:           be0621fd-51b5-4d2b-a05c-ce76e59baafa
+OS Type:        hvm
+State:          shut off
+CPU(s):         1
+Max memory:     1048576 KiB
+Used memory:    1048576 KiB
+Persistent:     yes
+Autostart:      disable
+Managed save:   no
+Security model: none
+Security DOI:   0
+Virsh manage VM vcpus
+This virsh commands cheatsheet section covers how to add additional virtual cpus to a virtual machine:
+
+sudo virsh setvcpus --domain test --maximum 2 --config
+sudo virsh setvcpus --domain test --count 2 --config
+sudo virsh reboot test
+
+ Domain test is being rebooted
+Confirm that the number of vcpu has changed, the previous was 1, the current value is 2:
+
+$ virsh dominfo test
+Id:             -
+Name:           test
+UUID:           a943ed42-ba62-4270-a41d-7f81e793d754
+OS Type:        hvm
+State:          shut off
+CPU(s):         2
+Max memory:     1048576 KiB
+Used memory:    1048576 KiB
+Persistent:     yes
+Autostart:      disable
+Managed save:   no
+Security model: none
+Security DOI:   0
+Virsh manage VM ram
+Also on virsh commands cheatsheet is managing RAM with virsh. To adjust the total ram used by the guest operating system, the following commands are used:
+
+ sudo virsh setmaxmem test 2048 --config
+ sudo virsh setmem test 2048 --config
+ sudo virsh reboot test
+
+ Domain test is being rebooted
+Check domain info to confirm the current RAM allocated to the VM.
+
+virsh dominfo test                     
+Id:             9
+Name:           test
+UUID:           a943ed42-ba62-4270-a41d-7f81e793d754
+OS Type:        hvm
+State:          running
+CPU(s):         2
+CPU time:       70.7s
+Max memory:     2048 KiB
+Used memory:    2048 KiB
+Persistent:     yes
+Autostart:      disable
+Managed save:   no
+Security model: none
+Security DOI:   0
+Notice that the current ram allocated to the VM is 2048
+
+Mount Virtual Disk
+You can mount a virtual disk on KVM for offline administration. For this, we have a ready article which you can reference from the link below:
+
+How to mount VM virtual disk on KVM hypervisor
+
+ls a directory in a virtual machine
+To ls a directory on a running VM, you need the libguestfs-tools installed. Check the article  Install KVM on CentOS 7 / Ubuntu 16.04 / Debian 9 / SLES 12 / Arch Linux for how to install it on CentOS, Ubuntu, Debian, Arch Linux and SLES.
+
+The run:
+
+# virt-ls -l -d <domain>  <directory>
+E.g
+
+# virsh list
+ Id Name State
+----------------------------------------------------
+ 10 allot_netxplorer_01 running
+ 19 sg-ve-01 running
+
+# virt-ls -l -d allot_netxplorer_01 /root
+total 28
+dr-xr-x---. 2 root root 135 Mar 22 14:26 .
+dr-xr-xr-x. 17 root root 224 Mar 21 10:37 ..
+-rw-------. 1 root root 385 Mar 22 14:26 .bash_history
+-rw-r--r--. 1 root root 18 Dec 29 2013 .bash_logout
+-rw-r--r--. 1 root root 176 Dec 29 2013 .bash_profile
+-rw-r--r--. 1 root root 176 Dec 29 2013 .bashrc
+-rw-r--r--. 1 root root 100 Dec 29 2013 .cshrc
+-rw-r--r--. 1 root root 129 Dec 29 2013 .tcshrc
+-rw-------. 1 root root 1447 Mar 21 10:38 anaconda-ks.cfg
+Common options are:
+
+-R |--recursive --> Recursive listing
+-h |--human-readable --> Human-readable sizes in output
+-d |--domain guest --> Add disks from libvirt guest
+-l |--long --> Long listing
+cat a file in a virtual machine
+You can as well cat a file without doing ssh to the VM or accessing it via the console. You need the libguestfs tools installed on the hypervisor for this to work.
+
+# virt-cat -d <domain>  <file_path>
+# virt-cat -d sg-ve-01 /etc/redhat-release
+CentOS Linux release 7.1.1503 (Core)
+# virt-cat -d sg-ve-01 /etc/redhat-release > check_os
+# cat check_os 
+CentOS Linux release 7.1.1503 (Core)
+For this, make sure libguestfs-tools is installed on your system ->   Install KVM on CentOS 7 / Ubuntu 16.04 / Debian 9 / SLES 12 / Arch Linux
+
+Edit a file in a virtual machine
+After installing libguestfs-tools on the hypervisor, use the virsh-edit command:
+
+# virt-edit -d sg-ve-01 /etc/hosts
+Display VM disk usage
+Use the virt-df command:
+
+# virt-df -d sg-ve-01 
+Filesystem 1K-blocks Used Available Use%sg-ve-01:/dev/sda1 20469760 3954792 16514968 20%
+sg-ve-01:/dev/sda2 27739924 173828 27566096 1%
+List filesystems, partitions, block devices, LVM
+in a virtual machine or disk image
+# virt-filesystems -l -d sg-ve-01
+Name Type VFS Label Size Parent
+/dev/sda1 filesystem xfs - 20971520000 -
+/dev/sda2 filesystem xfs - 28419555328 -
+
+# virt-filesystems -l -h -d sg-ve-01
+Name Type VFS Label Size Parent
+/dev/sda1 filesystem xfs - 20G -
+/dev/sda2 filesystem xfs - 26G -
+
+# virt-filesystems -l -h -d sg-ve-01 --partitions
+Name       Type    MBR Size Parent
+/dev/sda1 partition 83 20G /dev/sda
+/dev/sda2 partition 83 26G /dev/sda
+/dev/sda3 partition 82 4.0G /dev/sda
+
+# virt-filesystems -d sg-ve-01 --all --long --uuid -h
+Name Type VFS Label MBR Size Parent UUID
+/dev/sda1 filesystem xfs - - 20G - 97074514-612e-4d1c-8433-935dbb3ec775
+/dev/sda2 filesystem xfs - - 26G - 8cc9e0cd-282d-46a4-9a37-069dfb93c4f2
+/dev/sda3 filesystem swap - - 4.0G - ad7dcd49-fe1a-4938-8600-f7299a59c57a
+/dev/sda1 partition - - 83 20G /dev/sda -
+/dev/sda2 partition - - 83 26G /dev/sda -
+/dev/sda3 partition - - 82 4.0G /dev/sda -
+/dev/sda device - - - 100G - -
+Show stats of virtualized domains
+Use virt-top to display stats of virtualized domains. You can filter by CPU, RAM e.t.c and save the output to a CSV file.
+
+# virt-top
+# virt-top --csv file.csv
+You can also send debug and error messages to a filename. To send error messages to syslog you can do:
+
+# virt-top --debug >(logger -t virt-top)
+Display log files from a virtual machine
+“virt-log” is a command line tool to display the log files from the named virtual machine (or disk image). This tool understands and displays both plain text log files (eg. /var/log/messages) and binary formats such as the systemd journal.
+
+# virt-log -d <domain> | less
+# virt-log -d <domain> | grep 'dhclient.*bound to'
+Virsh Manage networking
+To wrap up our virsh commands cheatsheet content, please read my previous article:
+
+Configure KVM Networking With virsh, nmcli and brctl in Linux
+
+for how to use virsh to manage KVM networking.
+
+
