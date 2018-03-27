@@ -1,0 +1,138 @@
+http://www.fibrevillage.com/sysadmin/320-pacemaker-and-pcs-on-linux-example-configuring-cluster-resource
+
+Pacemaker and pcs on Linux example, configuring cluster resource
+Once the cluster and nodes stonith devices configuration is done, then we can start create resource in the cluster.
+
+In this example, there are 3 SAN based storage LUNs, all accessible by the nodes in the cluster, we create filesystem resources to let cluster to manage them, any of them fail to access the resource, the filesystem will float to other nodes.
+
+Resource Creation
+Create a filesystem based resource, resource id is fs11
+
+#pcs resource create fs11 ocf:heartbeat:Filesystem params device=/dev/mapper/LUN11 directory=/lun11 fstype="xfs" 
+Normally we want gracefully stop the filesystem, and kill the processes that accessing the filesystems when stopping the resource. And have filesystem monitor enabled.
+
+#pcs resource create fs11 ocf:heartbeat:Filesystem params device=/dev/mapper/LUN11 directory=/lun11 fstype="xfs" fast_stop="no" force_unmount="safe" op stop on-fail=stop timeout=200 op monitor on-fail=stop timeout=200 OCF_CHECK_LEVEL=10
+
+From the left, the options are:
+- the name of the filesystem resource, also called resource id(fs11)
+- the resource agent to use (ocf:heartbeat:Filesystem)
+- the block device for the filesystem (e.g. /dev/mapper/lun11)
+- the mount point for the filesystem (e.g. /lun11)
+- the filesystem type (xfs)
+- fast_stop="no" force_unmount="safe" are to help the filesystem stop and unmount filesystem
+- op monitor on-fail=stop timeout=200 OCF_CHECK_LEVEL=10: similar to stop, also the check level does a read test to see if the filesystem is readable for its monitor probe
+To List the created resource fs11
+
+# pcs resource 
+ fs11    (ocf::heartbeat:Filesystem):    Started 
+
+# pcs resource show fs11       
+ Resource: fs11 (class=ocf provider=heartbeat type=Filesystem)
+  Attributes: device=/dev/mapper/LUN11 directory=/lun11 fstype=xfs fast_stop=no force_unmount=safe 
+  Operations: start interval=0s timeout=60 (fs11-start-timeout-60)
+              stop on-fail=stop interval=0s timeout=200 (fs11-stop-on-fail-stop-timeout-200)
+              monitor on-fail=stop interval=60s timeout=200 OCF_CHECK_LEVEL=10 (fs11-monitor-on-fail-stop-timeout-200)
+There are 4 properties to identify a resource,
+
+id:         the id in the cluster to identify a particular service -- >  fs11
+
+Rest 3 just after resource id in the command line, seperated by : ocf:heartbeat:Filesystem
+ocf:        Rresource standard 
+heartbeat:  Provider
+Filesystem: type
+To check all available resources provided by pacemaker by categories.
+
+#pcs resource list        # list all available resources
+#pcs resource standards   # list resource standards
+#pcs resource providers   # list all available resource providers
+#pcs resource list string # it works as a filter, for example, you want to list resource Filesystem
+#pcs resource list Filesystem
+ocf:heartbeat:Filesystem - Manages filesystem mounts
+Delete resource
+Want delete a resource ? here is it.
+
+#pcs resource delete fs11
+Resource-Specific Parameters
+To check resource type Filesystem parameters, all the parameters can be set and updated
+
+# pcs resource describe Filesystem
+ocf:heartbeat:Filesystem - Manages filesystem mounts
+
+Resource script for Filesystem. It manages a Filesystem on a shared storage medium. The standard monitor operation of depth 0 (also known as probe) checks if the filesystem is mounted. If you want deeper tests, set OCF_CHECK_LEVEL to one of the following values: 10: read first 16 blocks of the device (raw read) This doesn't exercise the filesystem at all, but the device on which the filesystem lives. This is noop for non-block devices such as NFS, SMBFS, or bind mounts. 20: test if a status file can be written and read The status file must be writable by root. This is not always the case with an NFS mount, as NFS exports usually have the "root_squash" option set. In such a setup, you must either use read-only monitoring (depth=10), export with "no_root_squash" on your NFS server, or grant world write permissions on the directory where the status file is to be placed.
+
+Resource options:
+  device (required): The name of block device for the filesystem, or -U, -L options for mount,
+  or NFS mount specification.
+  directory (required): The mount point for the filesystem.
+  fstype (required): The type of filesystem to be mounted.
+  options: Any extra options to be given as -o options to mount. For bind mounts, add "bind" 
+           here and set fstype to "none". We will do the right thing for options such as "bind,ro".
+  statusfile_prefix: The prefix to be used for a status file for resource monitoring with depth 20. If you don't specify
+                     this parameter, all status files will be created in a separate directory.
+  run_fsck: Specify how to decide whether to run fsck or not. "auto" : decide to run fsck depending on the fstype(default)
+            "force" : always run fsck regardless of the fstype "no" : do not run fsck ever.
+  fast_stop: Normally, we expect no users of the filesystem and the stop operation to finish quickly. If you cannot
+             control the filesystem users easily and want to prevent the stop action from failing, then set this parameter
+             to "no" and add an appropriate timeout for the stop operation.
+  force_clones: The use of a clone setup for local filesystems is forbidden by default. For special setups like glusterfs,
+                cloning a mount of a local device with a filesystem like ext4 or xfs independently on several nodes is a
+                valid use case. Only set this to "true" if you know what you are doing!
+  force_unmount: This option allows specifying how to handle processes that are currently accessing the mount directory.
+                 "true" : Default value, kill processes accessing mount point "safe" : Kill processes accessing mount
+                 point using methods that avoid functions that could potentially block during process detection "false" :
+                 Do not kill any processes. The 'safe' option uses shell logic to walk the /procs/ directory for pids
+                 using the mount point while the default option uses the fuser cli tool. fuser is known to perform
+                 operations that can potentially block if unresponsive nfs mounts are in use on the system.
+Resource Meta Options
+The resource meta options can be updated anytime, for example, by now, the fs resource can be started on any node, if you prefer to have resource has a preferred node, then
+
+#pcs status | grep fs11
+fs11    (ocf::heartbeat:Filesystem):    Started nodeC
+#pcs resource meta fs11 stickness=500
+Set nodeC to standby, the resource fs11 will float to other nodes
+
+#pcs cluster standby nodeC
+#pcs status | grep fs11
+fs11    (ocf::heartbeat:Filesystem):    Started nodeA
+Set nodeC to unstandby, the resource fs11 will float back
+
+pcs cluster unstandby nodeC
+#pcs status | grep fs11
+fs11    (ocf::heartbeat:Filesystem):    Started nodeC
+Resource Operations
+You can either add operations to a resource when resource creation, or later add the operations, but
+
+#pcs resource op add 
+Displaying Configured Resources
+To list all resources4
+
+# pcs resource show
+ fs11    (ocf::heartbeat:Filesystem):    Started 
+ fs12    (ocf::heartbeat:Filesystem):    Started 
+To list a resource and its full attributes, meta and operations configurations
+
+# pcs resource show fs11
+ Resource: fs11 (class=ocf provider=heartbeat type=Filesystem)
+  Attributes: device=/dev/mapper/LUN11 directory=/lun11 fstype=xfs fast_stop=no force_unmount=safe 
+  Meta Attrs: stickness=500 
+  Operations: start interval=0s timeout=60 (fs11-start-timeout-60)
+              stop on-fail=stop interval=0s timeout=200 (fs11-stop-on-fail-stop-timeout-200)
+              monitor on-fail=stop interval=60s timeout=200 OCF_CHECK_LEVEL=10 (fs11-monitor-on-fail-stop-timeout-200)
+To show all resource in full list mode
+
+#pcs resource show --full
+Enabling and Disabling Cluster Resources
+To disable a resource on a node and don't want this resource start on other nodes
+
+#pcs resource disable fs11 
+# pcs resource 
+ fs11    (ocf::heartbeat:Filesystem):    Stopped 
+To enable the resource
+
+#pcs resource enable fs11 
+# pcs resource 
+ fs11    (ocf::heartbeat:Filesystem):    Started 
+Cluster Resources Cleanup
+When a resource messed up, showing some error on start, stop or other situation, to clean up the mess,
+
+#pcs resource cleanup <resource id>
