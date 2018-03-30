@@ -1,0 +1,47 @@
+ave you ever dealt with a system that wasn’t partitioned properly when it was built and now it has gone into production? You’ll probably be hard pressed to find the time and patience to rebuild the system any time soon. Luckily there is a way to step around many of the limitations of a poorly partitioned system using bind mounts.
+
+Bind mounts are quite simple. Instead of mounting a device (with a file system) on a particular path you are mounting one path into another path.
+
+For example: Let’s say you have a small /var but a very large /opt partition and you need additional space for your growing log files.
+
+First, shut down the services writing to log files, then…
+
+mv /var/log /opt/var_log
+mkdir /var/log
+mount -o bind /opt/var_log /var/log
+You will now see this reflected when running the mount command:
+
+# mount | grep var
+/opt/var_log on /var/log type none (rw,bind)
+At this point you are ready to restart the previously stopped services.
+
+If you want this to persist across reboots, you’ll just need to update your /etc/fstab with the bind mount as well.
+
+# /etc/fstab
+/opt/var_log              /var/log                 none    bind    0 0
+And there you have it! Its not beautiful, but it will help you keep the lights on until you can get a long-term fix in place.
+
+More details about bind mounts
+From the man page on ‘mount’.
+
+       The bind mounts.
+              Since Linux 2.4.0 it is possible to remount part of the file hierarchy somewhere else. The call is
+                     mount --bind olddir newdir
+              or shortoption
+                     mount -B olddir newdir
+              or fstab entry is:
+                     /olddir /newdir none bind
+ 
+              After this call the same contents is accessible in two places.  One can also remount a single file (on a single file).
+ 
+              This call attaches only (part of) a single filesystem, not possible submounts. The entire file hierarchy including submounts is attached a  sec-
+              ond place using
+                     mount --rbind olddir newdir
+              or shortoption
+                     mount -R olddir newdir
+ 
+              Note that the filesystem mount options will remain the same as those on the original mount point, and cannot be changed by passing the -o option
+              along with --bind/--rbind. The mount options can be changed by a separate remount command, for example:
+ 
+                     mount --bind olddir newdir
+                     mount -o remount,ro newdir
