@@ -1,0 +1,13 @@
+Lustre Components
+
+1. Management Server 
+     -MGS 
+       fs name 
+       ip address 
+       authention 
+      - Metadata Server 
+        - MDS - all information about the file 
+      - Objexct Storage Server - Where the file actually lives 
+         - OSS 
+      - Client 
+

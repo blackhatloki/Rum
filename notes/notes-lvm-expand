@@ -1,0 +1,50 @@
+One aspect of moving towards a highly available, always up system is being able to add space to a server without having to shutdown the applications and without having to unmount file systems.  LVM on HP-UX has been used for many years to provide online file system expansion.  The version of LVM used on Linux has many similar features to the versions used on HP-UX.  LVM and ext4 combined are a giant leap to being able to run mission critical applications on Linux systems.
+
+Figure A
+
+
+Figure A shows a file system mounted on /db01. Currently it is at 95% usage. If more space is requested, then the options are to either add another file system or to grow the existing file system. Suppose the request is for 1GB to be added to the file system. The first step is to run vgdisplay on the volume group to determine how many physical extents are free and what the size of the physical extents is. Figure B is the output from running vgdisplay with no options. The number of free extents is given in the second last line of output. In this case there are 3310 free physical extents. The PE size is also listed and is set at 4MB. The PE size is set when the volume group is created.
+Figure B
+
+
+Figure C is the extra output from running vgdisplay -v. It shows that the logical volume db01 is using 256 extents. Growing db01 to 2GB would take another 256 extents: well within the number of free extents.
+Figure C
+
+
+The process of growing a file system consists of two parts. The first part is to grow the logical volume, whilst the second part is to grow the file system. It is possible to grow a logical volume online; however, earlier file system types were not able to be resized online. Growing the file system required the file system to be un-mounted. This example uses ext4 file systems which can be resized when mounted.
+
+The command used to extend a logical volume is called lvextend. There are a few options that can be used with this command. The main ones used are -L, where the size can be specified in Megabytes, Gigabytes, Terabytes, Petabytes or Exabytes and -l, where the size can be specified in extents. Using a '+' sign in front of the extents or size means that the logical volume is to be grown by the specified size or by the specified number of extents. Omitting the ‘+' means grow the logical volume to the specified size.
+
+For example, typing in
+
+lvextend -L +1024M /dev/vg01/db01
+means grow the logical volume another 1024 Megabytes.
+
+Typing in
+
+lvextend -L 2048M /dev/vg01/db01
+will extend the logical volume size up to 2048 Megabytes. For the purpose of this example, the two commands shown produce the same result: the logical volume is grown to 2048 Megabytes in size. Figure D shows the command string used in this example. The -v option is for verbose output.
+Figure D
+
+
+The extension of the logical volume can be verified by running lvdisplay <logical volume name> as shown in Figure E.
+Figure E
+
+
+The logical volume is now 2GB. The next step is to use fsadm to grow the file system online.  For this example, fsadm is run with the options shown in Figure F. Note that if the size is omitted, fsadm will grow the file system up to the same amount occupied by the logical volume.  Again, the -v option is for verbose and can be omitted.
+
+Figure F
+
+
+After running fsadm, run a df -kl on the file system; it will have grown to the new size, as can be seen in Figure G.
+Figure G
+
+
+In summary, LVM and fsadm can be used to grow ext4 file systems without incurring an outage. For Linux, this is a substantial feature, as it allows highly critical applications to keep running even when the underlying file system is being expanded.
+
+RELATED TOPICS: SOFTWARE  SECURITY  DEVELOPER  ENTERPRISE SOFTWARE INNOVATION
+5
+ 
+About Scott Reeves
+Scott Reeves has worked for Hewlett Packard on HP-UX servers and SANs, and has worked in similar areas in the past at IBM. Currently he works as an independent IT consultant, specializing in Wi-Fi networks and SANs.
+

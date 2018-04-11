@@ -1,0 +1,43 @@
+To use yum to install or update packages from an ISO file, a repository will need to be created:
+
+Create the directory that will hold the repository:
+
+Raw
+# mkdir -p /var/www/html/repo    
+There are two ways to create a repository:
+
+Move the rpms for the repository into the directory, then run createrepo against that:
+
+Raw
+# cp *.rpm /var/www/html/repo
+# createrepo /var/www/html/repo
+Or, reposync against an existing repository:
+
+Raw
+# reposync -p /var/www/html/repo -r <REPOID> -l
+# createrepo /var/www/html/repo    
+Start apache, and confirm access to the repodata files:
+
+Raw
+# wget http://localhost/repo/repomd.xml
+# wget http://myfqdn.com/repo/repomd.xml    
+If both of the above commands were successful, configure a httpd based yum repository, which can be used by this server and another server.
+If packages need to be added to the repo at a later date, add the new RPMs to the directory and run this command:
+
+Raw
+# createrepo --update  /var/www/html/repo  
+Before seeing the updates on yum clients you may need to:
+
+Raw
+# rm -rf /var/cache/yum/*
+# yum clean all
+NOTE:
+
+When synchronizing repositories from Red Hat Satellite or Red Hat Subscription Management itself, only repositories that the server is subscribed to can be synchronized. The following command shows repositories accessible through a chosen plugin. YUMPLUGIN variable can be replaced with a plugin name:
+
+Raw
+# YUMPLUGIN=rhnplugin; cd /etc/yum/pluginconf.d/ && echo *.conf|sed "s/$YUMPLUGIN.conf//"|sed 's/\([0-9a-zA-Z\-]*\).conf/--disableplugin=\1/g'|xargs yum repolist && cd - >/dev/null
+In order to have the commands createrepo and repo-sync available, install the packages createrepo and yum-utils respectively, which are not available in the default RHEL setup:
+
+Raw
+# yum install -y createrepo yum-utils

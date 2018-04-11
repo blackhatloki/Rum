@@ -1,0 +1,330 @@
+https://nold.in/doku.php?id=linux:pacemaker:corosync.conf
+
+corosync.conf examples
+Single-ring using UDP-Unicast and secauth
+multicast & single ring
+unicast & multiple rings
+corosync.conf examples
+Single-ring using UDP-Unicast and secauth
+totem {
+        version: 2
+
+        # How long before declaring a token lost (ms)
+        token: 3000
+
+        # How many token retransmits before forming a new configuration
+        token_retransmits_before_loss_const: 10
+
+        # How long to wait for join messages in the membership protocol (ms)
+        join: 60
+
+        # How long to wait for consensus to be achieved before starting a new round of membership configuration (ms)
+        consensus: 3600
+
+        # Turn off the virtual synchrony filter
+        vsftype: none
+
+        # Number of messages that may be sent by one processor on receipt of the token
+        max_messages: 20
+
+        # Limit generated nodeids to 31-bits (positive signed integers)
+        clear_node_high_bit: yes
+
+        # Encryption
+        secauth: on
+
+        # How many threads to use for encryption/decryption, 
+        # 0 = singlecore
+        # On multicore systems use count of cores here
+        threads: 4
+
+        # Optionally assign a fixed node id (integer)
+        # nodeid: 1234
+
+        # This specifies the mode of redundant ring, which may be none, active, or passive.
+        rrp_mode: none
+
+        interface {
+              # The following values need to be set based on your environment
+              member {
+                           memberaddr: 192.168.1.201
+               }
+              member {
+                          memberaddr: 192.168.1.202
+               }
+              ringnumber: 0
+              bindnetaddr: 192.168.1.0
+              mcastport: 5405
+         }
+        transport: udpu
+
+}
+
+amf {
+        mode: disabled
+}
+
+service {
+        # Load the Pacemaker Cluster Resource Manager
+        ver:       0
+        name:      pacemaker
+}
+
+aisexec {
+        user:   root
+        group:  root
+}
+
+logging {
+        fileline: off
+        to_stderr: yes
+        to_logfile: no
+        to_syslog: yes
+        syslog_facility: daemon
+        debug: off
+        timestamp: on
+        logger_subsys {
+                subsys: AMF
+                debug: off
+                tags: enter|leave|trace1|trace2|trace3|trace4|trace6
+        }
+}
+multicast & single ring
+# Please read the corosync.conf.5 manual page
+compatibility: whitetank
+
+aisexec {
+        # Run as root - this is necessary to be able to manage
+        # resources with Pacemaker
+        user:           root
+        group:          root
+}
+
+service {
+        # Load the Pacemaker Cluster Resource Manager
+        ver:            0
+        name:           pacemaker
+        use_mgmtd:      yes
+        use_logd:       yes
+}
+
+totem {
+        # The only valid version is 2
+        version: 2
+
+        # How long before declaring a token lost (ms)
+        token:          5000
+
+        # How many token retransmits before forming a new configuration
+        token_retransmits_before_loss_const: 10
+
+        # How long to wait for join messages in the membership protocol (ms)
+        join:           60
+
+        # How long to wait for consensus to be achieved before starting
+        # a new round of membership configuration (ms)
+        consensus:      6000
+
+        # Turn off the virtual synchrony filter
+        vsftype:        none
+
+        # Number of messages that may be sent by one processor on
+        # receipt of the token
+        max_messages:   20
+
+        # Limit generated nodeids to 31-bits (positive signed integers)
+        # you would set it to 'yes', the new option 'new' means wiping
+        # off the highest bit in network order to avoid possible nodeid
+        # conflicting.
+        clear_node_high_bit: new
+
+        # secauth: Enable mutual node authentication. If you choose to
+        # enable this ("on"), then do remember to create a shared
+        # secret with "corosync-keygen".
+        secauth: off
+
+        # How many threads to use for encryption/decryption
+        threads: 0
+
+        # Optionally assign a fixed node id (integer)
+        # nodeid: 124
+
+        # interface: define at least one interface to communicate
+        # over. If you define more than one interface stanza, you must
+        # also set rrp_mode.
+        interface {
+                # Rings must be consecutively numbered, starting at 0.
+                ringnumber: 0
+                # This is normally the *network* address of the
+                # interface to bind to. This ensures that you can use
+                # identical instances of this configuration file
+                # across all your cluster nodes, without having to
+                # modify this option.
+                bindnetaddr: 192.168.1.0
+                # However, if you have multiple physical network
+                # interfaces configured for the same subnet, then the
+                # network address alone is not sufficient to identify
+                # the interface Corosync should bind to. In that case,
+                # configure the *host* address of the interface
+                # instead:
+                # bindnetaddr: 192.168.1.1
+                # When selecting a multicast address, consider RFC
+                # 2365 (which, among other things, specifies that
+                # 239.255.x.x addresses are left to the discretion of
+                # the network administrator). Do not reuse multicast
+                # addresses across multiple Corosync clusters sharing
+                # the same network.
+                mcastaddr: 239.255.1.1
+                # Corosync uses the port you specify here for UDP
+                # messaging, and also the immediately preceding
+                # port. Thus if you set this to 5405, Corosync sends
+                # messages over UDP ports 5405 and 5404.
+                mcastport: 5405
+                # Time-to-live for cluster communication packets. The
+                # number of hops (routers) that this ring will allow
+                # itself to pass. Note that multicast routing must be
+                # specifically enabled on most network routers.
+                ttl: 1
+        }
+}
+
+logging {
+        # Log the source file and line where messages are being
+        # generated. When in doubt, leave off. Potentially useful for
+        # debugging.
+        fileline: off
+        # Log to standard error. When in doubt, set to no. Useful when
+        # running in the foreground (when invoking "corosync -f")
+        to_stderr: no
+        # Log to a log file. When set to "no", the "logfile" option
+        # must not be set.
+        to_logfile: no
+        #logfile: /var/log/cluster/corosync.log
+        # Log to the system log daemon. When in doubt, set to yes.
+        to_syslog: yes
+        syslog_facility: daemon
+        # Log debug messages (very verbose). When in doubt, leave off.
+        debug: off
+        # Log messages with time stamps. When in doubt, set to on
+        # (unless you are only logging to syslog, where double
+        # timestamps can be annoying).
+        timestamp: off
+        logger_subsys {
+                subsys: AMF
+                debug: off
+        }
+}
+unicast & multiple rings
+aisexec {
+        #Group to run aisexec as. Needs to be root for Pacemaker
+        group:  root
+
+        #User to run aisexec as. Needs to be root for Pacemaker
+        user:   root
+
+}
+service {
+        #Default to start mgmtd with pacemaker
+        use_mgmtd:      yes
+
+        #Use logd for pacemaker
+        use_logd:       yes
+
+        ver:    0
+        name:   pacemaker
+}
+totem {
+        #The mode for redundant ring. None is used when only 1 interface specified, otherwise, only active or passive may be choosen
+        rrp_mode:      passive
+
+        #How long to wait for join messages in membership protocol. in ms
+        join:   60
+
+        #The maximum number of messages that may be sent by one processor on receipt of the token.
+        max_messages:   20
+
+        #The virtual synchrony filter type used to indentify a primary component. Change with care.
+        vsftype:        none
+
+        #Timeout for a token lost. in ms
+        token:  5000
+
+        #How long to wait for consensus to be achieved before starting a new round of membership configuration.
+        consensus:      6000
+
+        #HMAC/SHA1 should be used to authenticate all message
+        secauth:        on
+
+        #How many token retransmits should be attempted before forming a new configuration.
+        token_retransmits_before_loss_const:    10
+
+        #How many threads should be used to encypt and sending message. Only have meanings when secauth is turned on
+        threads:        8
+
+        transport:      udpu
+
+        #The only valid version is 2
+        version:        2
+
+        interface {
+                #Network Address to be bind for this interface setting
+                bindnetaddr:    10.10.0.0
+
+                member {
+                        memberaddr:     10.10.0.2
+                }
+                member {
+                        memberaddr:     10.10.0.3
+                }
+
+                #The multicast port to be used
+                mcastport:      5406
+
+                #The ringnumber assigned to this interface setting
+                ringnumber:     0
+        }
+
+        interface {
+                bindnetaddr:    10.0.0.0
+
+                member {
+                        memberaddr:     10.0.0.2
+                }
+                member {
+                        memberaddr:     10.0.0.3
+                }
+
+                mcastport: 5405
+                ringnumber: 1
+        }
+
+        #To make sure the auto-generated nodeid is positive
+        clear_node_high_bit:    new
+
+}
+logging {
+        #Log to a specified file
+        to_logfile:     no
+
+        #Log to syslog
+        to_syslog:      yes
+
+        #Whether or not turning on the debug information in the log
+        debug:  off
+
+        #Log timestamp as well
+        timestamp:      off
+
+        #Log to the standard error output
+        to_stderr:      no
+
+        #Logging file line in the source code as well
+        fileline:       off
+
+        #Facility in syslog
+        syslog_facility:        daemon
+}
+amf {
+        #Enable or disable AMF
+        mode:   disable
+}

@@ -1,0 +1,18 @@
+show power 
+show fan 
+show temperature 
+
+show pd 
+show pd fault 
+show pd failed 
+
+
+show contoller=0 fault=critical
+
+login,passwd:user,user 
+login,passwd:diag,diag 
+
+shpw pd [all] 
+show enclosure [all] 
+show vd * counters rates 
+show job * 

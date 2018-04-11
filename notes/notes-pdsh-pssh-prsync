@@ -1,0 +1,182 @@
+Parallel SSH execution and a single shell to control them all
+Author: Ben Martin
+
+Many people use SSH to log in to remote machines, copy files around, and perform general system administration. If you want to increase your productivity with SSH, you can try a tool that lets you run commands on more than one remote machine at the same time. Parallel ssh, Cluster SSH, and ClusterIt let you specify commands in a single terminal window and send them to a collection of remote machines where they can be executed.
+
+Why you would need a utility like this when, using openSSH, you can create a file containing your commands and use a bash for loop to run it on a list of remote hosts, one at a time? One advantage of a parallel SSH utility is that commands can be run on several hosts at the same time. For a short-running task this might not matter much, but if a task needs an hour to complete and you need to run it on 20 hosts, parallel execution beats serial by a mile. Also, if you want to interactively edit the same file on multiple machines, it might be quicker to use a parallel SSH utility and edit the file on all nodes with vi rather than concoct a script to do the same edit.
+
+Many of these parallel SSH tools include support for copying to many hosts at once (a parallel version of scp) or using rsync on a collection of hosts at once. Because the parallel SSH implementations know about all the hosts in a group, some of them also offer the ability to execute a command "on one host" and will work out which host to pick using load balancing. Finally, some parallel SSH projects let you use barriers so that you can execute a collection of commands and explicitly have each node in the group wait until all the nodes have completed a stage before moving on to the next stage of processing.
+
+Parallel ssh (pssh)
+The Parallel ssh project includes parallel versions of the shell (pssh), scp (pscp), rsync (prsync), and kill (pnuke).
+
+pssh is packaged for openSUSE as a 1-Click install, is available in Ubuntu Hardy Universe and the Fedora 9 repositories. I used the 64-bit package from the Fedora 9 repositories.
+
+All of the Parallel ssh commands have the form command -h hosts-file options, where the hosts-file contains a list of all the hosts that you want to have the command executed on. For example, the first pssh command below will execute the date command on p1 and p2 as the ben user. The optional -l argument specifies the username that should be used to log in to the remote machines.
+
+# cat hosts-file
+p1
+p2
+
+# pssh -h hosts-file -l ben date
+[1] 21:12:55 [SUCCESS] p2 22
+[2] 21:12:55 [SUCCESS] p1 22
+
+# pssh -h hosts-file -l ben -P date
+p2: Thu Oct 16 21:14:02 EST 2008
+p2: [1] 21:13:00 [SUCCESS] p2 22
+p1: Thu Sep 25 15:44:36 EST 2008
+p1: [2] 21:13:00 [SUCCESS] p1 22
+
+Normally the standard output from the remote hosts is not shown to you. The -P option in the last invocation displays the output from both remote hosts as well as the exit status. If you are running more complex commands you might like to use -i instead to see each remote host's output grouped nicely under its hostname rather than mixed up as the output comes in from the hosts. You can also use the --outdir pssh option to specify the path of a directory that should be used to save the output from each remote host. The output for each host is saved in separate file named with the remote machine's hostname.
+
+You can use the --timeout option to specify how long a command can take. It defaults to 60 seconds. This means that if your command fails to complete within 60 seconds on a host, pssh will consider it an error and report it as such, as shown below. You can increase the timeout to something well above what might be acceptable (for example to 24 hours) to avoid this problem.
+
+# pssh -h hosts-file -l ben -i "sleep 65; date"
+[1] 21:19:26 [FAILURE] p1 22 Timeout
+[2] 21:19:26 [FAILURE] p2 22 (4, 'Interrupted system call')
+The pscp command takes the same -h, -l, and --timeout options and includes a --recursive option to enable deep copying from the local host. At the end of the command you supply the local and remote paths you would like to copy. The first pscp command in the example below copies a single file to two remote hosts in parallel. The following ssh command checks that the file exists on the p1 machine. The second pscp command fails in a verbose manner without really telling you the simple reason why. Knowing that I was trying to copy a directory over, I added the --recursive option to the command and it executed perfectly. The final ssh command verifies that the directory now exists on the p1 remote host.
+
+$ mkdir example-tree
+$ date > example-tree/df1.txt
+$ date > example-tree/df2.txt
+$ mkdir example-tree/subdir1
+$ date > example-tree/subdir1/df3.txt
+
+$ pscp -h hosts-file -l ben example-tree/df1.txt /tmp/df1.txt
+[1] 21:28:36 [SUCCESS] p1 22
+[2] 21:28:36 [SUCCESS] p2 22
+
+$ ssh p1 "cat /tmp/df1.txt"
+Thu Oct 16 21:27:25 EST 2008
+
+$ pscp -h hosts-file -l ben example-tree /tmp/example-tree
+...
+python: Python/ceval.c:2918: set_exc_info: Assertion `frame != ((void *)0)' failed.
+Aborted
+
+$ pscp -h hosts-file -l ben --recursive example-tree /tmp/example-tree
+[1] 21:29:57 [SUCCESS] p1 22
+[2] 21:29:57 [SUCCESS] p2 22
+
+$ ssh p1 "ls -l /tmp/example-tree"
+total 24
+-rw-r--r-- 1 ben ben 29 2008-09-25 16:01 df1.txt
+-rw-r--r-- 1 ben ben 29 2008-09-25 16:01 df2.txt
+drwxr-xr-x 2 ben ben 4096 2008-09-25 16:01 subdir1
+
+The prsync command uses only a handful of the command-line options from rsync. In particular, you cannot use the verbose or dry-run options to get details or see what would have been done. The command shown below will rsync the example-tree into /tmp/example-tree on the remote hosts in a manner similar to the final command in the pscp example.
+
+$ prsync -h hosts-file -l ben -a --recursive example-tree /tmp
+The main gain of the prsync command over using the normal rsync command with pssh is that prsync gives a simpler command line and lets you sync from the local machine to the remote hosts directly. Using pssh and rsync, you are running the rsync command on each remote machine, so the remote machine will need to connect back to the local machine in order to sync.
+
+The pslurp command is sort of the opposite to the pscp in that it grabs a file or directory off all the remote machines and copies it to the local machine. The below command grabs the example-tree directory from both p1 and p2 and stores them into /tmp/outdir. The -r option is shorthand for --recursive. As you can see, for each remote host a new directory is created with the name of the host, and inside that directory a copy of example-tree is made using the local directory name supplied as the last argument to pslurp.
+
+# mkdir /tmp/outdir
+# pslurp -h hosts-file -L /tmp/outdir -l ben -r /tmp/example-tree example-tree
+
+# l /tmp/outdir
+drwxr-xr-x 3 root root 4.0K 2008-10-16 21:47 p1/
+drwxr-xr-x 3 root root 4.0K 2008-10-16 21:47 p2/
+# l /tmp/outdir/p2
+drwxr-xr-x 3 root root 4.0K 2008-10-16 21:47 example-tree/
+# l /tmp/outdir/p2/example-tree/
+-rw-r--r-- 1 root root 29 2008-10-16 21:47 df10.txt
+-rw-r--r-- 1 root root 29 2008-10-16 21:47 df1.txt
+...
+drwxr-xr-x 2 root root 4.0K 2008-10-16 21:47 subdir1/
+
+You can use environment variables to make things easier with Parallel ssh. You can use the PSSH_HOSTS variable to name the hosts file instead of using the -h option. Likewise, the PSSH_USER environment variable lets you set the username to log in as, like the -l pssh command line option.
+
+Cluster SSH
+Cluster SSH works a little differently from Parallel ssh. Instead of using a single terminal to issue commands to multiple machines, it creates an xterm for each node in the cluster and a controlling window to let you give input for all the nodes in the cluster.
+
+Cluster SSH is available in Ubuntu Hardy Universe, the Fedora 9 repositories, and as a 1-Click install for openSUSE 11. I used the 64-bit package from the Fedora 9 repositories.
+
+You specify one or more machines to connect to on the command line, and Cluster SSH opens a new xterm window for each connection and a single Tk window to let you control Cluster SSH and send input to all the xterm windows at once. The windows generated by running cssh p1 p2, where p1 and p2 are remote machines, is shown in the screenshot below. When it starts up, Cluster SSH will position the xterm windows in a tiled formation for you as shown.
+
+
+
+The Cluster SSH File menu lets you see the history of the input you have provided. The history display expands the Cluster SSH window to contain a text area that displays only your input. You can also quit your session from the File menu. Closing the Cluster SSH window will also end the session and close all the xterm windows associated with it.
+
+The Hosts menu lets you Retile Hosts, which repositions your xterms and the main control window in a manner similar to the one used at startup. The Hosts menu also lets you add a new connection to another host to the current session, as well as disable and enable any of the hosts in the current session. The latter option is useful if you are administering a collection of several machines and you want to run a command on all machines except one. For example, you might want to run commands on client machines but when you are playing with iptables rules you might want to exclude the firewall machine temporarily.
+
+Cluster SSH has two machine-wide configuration files, /etc/clusters and /etc/csshrc, which are used to define the machines in a cluster (just a group of hosts you want to connect to) and general settings respectively. You can also have ~/.csshrc as a per-user configuration file. There is no corresponding ~/.clusters file, but you can use the extra_cluster_file configuration directive in your ~/.csshrc file to tell Cluster SSH where to look for your personal version of /etc/clusters.
+
+The clusters file has the form: groupname user1@host1 user2@host2 ... where the usernames are optional. With a clusters file you can simply specify cssh groupname to connect to all the hosts in that group. The below commands show a personal clusters file and a ~/.csshrc file that tells Cluster SSH to use that clusters file. The final line invokes Cluster SSH to connect to the specified hosts as various users.
+
+# cat /root/.cssh-clusters
+rougenet p1 ben@p2
+
+# cat /root/.csshrc
+extra_cluster_file = ~/.cssh-clusters
+
+# cssh rougenet
+
+The software defines four hotkeys, which you can rebind to other keys in your csshrc file. Ctrl-q closes the current session, Ctrl-+ lets you add a new host to the current session, Alt-n pastes the remote hostname into each xterm when the main Cluster SSH window is active, and Alt-r retiles the xterm windows. As an example of Alt-n, if you typed echo Alt-n into the CSSH window in the screenshot, the left terminal would show echo vfedora864prx1 in its xterm, and the right terminal would show echo vfedora864prx2. There is no keybinding to insert the hostname that you are running Cluster SSH from; that might be handy if you were rsyncing data from your controlling machine to all the nodes in the session.
+
+You can specify the user to log in to the remote hosts with using the -l option. A username specified this way has higher priority than any usernames specified in your clusters file.
+
+A collection of terminal configuration parameters for your csshrc file let Cluster SSH use a different terminal than xterm for the connections. Unfortunately, getting gnome-terminal or konsole to work as the terminal is not as trivial as specifying terminal = konsole because Cluster SSH sends information to the terminal with the assumption that it will accept xterm options. I found that terminal = Eterm works as a drop-in replacement if you are fond of that terminal. However, issues like Cluster SSH always passing -font options when starting the terminal make gnome-terminal unsuitable as a drop-in replacement. To get other terminals to work you might have to create a wrapper script that forwards to the terminal only arguments that will not upset it.
+
+ClusterIt
+The third application, ClusterIt, provides much more than a way to control many SSH sessions from a single console. While it includes parallel versions of cp (pcp), rm (prm), top (dtop), and df (pdf), it also provides directives for running a command on any node of the cluster (run), issuing a collection of commands over different nodes in the cluster (seq), and ensuring that only a single job is run on any node at any one time (jsh).
+
+There are no ClusterIT packages for openSUSE, Ubuntu Hardy, or Fedora 9. I built ClusterIt 2.5 from source on a 64-bit Fedora 9 machine using ./configure && make && sudo make install.
+
+ClusterIt uses the dvt command to open a terminal to all the nodes in a cluster. Unlike Cluster SSH, ClusterIt does not tile the new windows for you, so you might have to manually arrange the terminals unless your window manager gives you a pleasant layout by default. The controlling window in ClusterIt also has fewer options than the one in Cluster SSH. To start a terminal on every node in a cluster with ClusterIt, use the -w option and specify the host names in a comma-separated list, as shown below. The screenshot shows the resulting terminals and control window. Closing the controlling window, the one with dtv in its title, does not close all the terminal windows -- you have to click on the quit button in the dvt window to close all the terminals in the session.
+
+$ dvt -w p1,p2
+
+
+For most of the ClusterIt commands, you specify the groups to connect to with -g, the nodes with -w, and can exclude nodes with -x.
+
+Use the pcp command to copy files to all the nodes in your cluster either serially (the default) or in parallel (using the -c option). Copying in parallel can be quicker if you have the bandwidth to talk to all the nodes at once. If you copy in parallel, you can set the fanout using the -f option. The default is 64, meaning that a copy to 64 nodes will run in parallel.
+
+Some of the options to cp-a option commonly used with cp, which is an alias for -cdpR, is not. The cp -c option has a different meaning in pcp, and there is no -d option in pcp. The -p and -R options work the same in pcp as in cp.
+
+Some other commonly used options are missing from some of the other ClusterIt commands. For instance, the -h option to df is missing in the ClusterIt parallel (pdf) implementation. Seeing the disk space in 1K blocks might be interesting for a computer, but you're likely more interested in knowing you have 140MB of free space on /var than the exact number of disk blocks.
+
+In the commands below, I first recursively copy a directory tree to /tmp on both the hosts. If you want to copy to up to your fanout nodes all at once, include the -c option in the pcp line. The ssh invocation after this verifies that one of the files in the example-tree exists on the p1 host. As you can see, the output of pdf is not as easily digestible as a df -h would be. The prm command is then used to remove the tree on both hosts.
+
+# pcp -pr -w p1,p2 example-tree /tmp/
+df10.txt ... 100% 29 0.0KB/s 00:00
+df1.txt ... 100% 29 0.0KB/s 00:00
+...
+# ssh p1 cat /tmp/example-tree/df10.txt
+Thu Oct 16 21:45:50 EST 2008
+
+# pdf -w p1,p2 /tmp
+Node Filesystem 1K-Blks Used Avail Cap Mounted On
+p1 : /dev/mapper/VolGrou 15997880 3958792 11213336 27% /
+p2 : /dev/mapper/VolGrou 15997880 3536648 11635480 24% /
+
+# prm -rf -w p1,p2 /tmp/example-tree
+
+The main strong point of ClusterIt is the support for job scheduling and barriers. Barriers allow you to write a script that runs on many nodes, and wait until all of the nodes are at the barrier before proceeding to execute the next part of the script. This sort of synchronization allows common "process then merge" scripting to be written without getting bogged down in the logistics of communicating with other nodes in your scripts. Just use the barrier command from your parallel scripts to wait for all the nodes to be at a given point in the script.
+
+The jsh command can execute a command on any node of the cluster, with the restriction that only one command can be running on any node at any one point in time. This restriction prevents a node from becoming bogged down when the script using ClusterIt keeps issuing commands to be run on the cluster but the previous commands have not completed yet. For example, if you are compiling code using ClusterIt, perhaps there are a few source files that take much longer to compile than others. Without intelligent scheduling or the one-job-per-node restriction, the parallel compile might continue to give new jobs to a node that is still trying to compile a difficult file. Using jsh, nodes that need to take longer to work on a particular job can do so without having new jobs handed to them.
+
+Using jsh is simple. You first execute the daemon jsd on the controlling host -- say, your desktop machine -- and then use jsh to issue commands. You can use the -g, -w, and -x options to tell the daemon what nodes are in the cluster, and then you can use jsh without any special arguments. An example of jsh usage is shown below. First the daemon is started and then a command is run with jsh. Running two calls to jsh and putting them into the background means that a job will be sent to both hosts, as the output shows at the end of the example.
+
+# jsd -w p1,p2
+jsd started with pid 24615
+
+# jsh hostname
+p2: vfedora864prx2
+
+# jsh "sleep 10; hostname" &
+[1] 24648
+
+# jsh "sleep 10; hostname" &
+[2] 24650
+
+p2: vfedora864prx2
+p1: vfedora864prx1
+
+Instead of using the -g, -w, or -x options, you can set the CLUSTER environment variable to the name of a file that contains a newline-separated list of hosts. The FANOUT variable controls how many nodes should be contacted in parallel for a job.
+
+Final words
+Each of these three applications has its strong points. If you are interested in issuing commands to a cluster and having some load balancing, ClusterIt should be your first choice. If you want a group of xterms and a single window to control them all, Cluster SSH provides the most user-friendly multiterminal of the three, allowing you to also disable a node temporarily or directly interact with just a single host before switching back to controlling them all. Parallel ssh includes a parallel rsync command and lets you control multiple hosts from a single terminal. You don't get to see your input mirrored to multiple xterms with Parallel ssh, but if you have a heterogeneous group of machines and frequently issue the same commands on them all, Parallel ssh will give you a single interactive terminal to them all without cluttering your display with individual xterms for each node.
+
+
