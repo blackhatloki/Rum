@@ -1,0 +1,6 @@
+#!/bin/bash 
+VM=$1
+virsh shutdown $VM
+virsh net-destroy $VM
+virsh net-undefine $VM 
+
