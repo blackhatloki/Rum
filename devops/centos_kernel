@@ -1,0 +1,7 @@
+https://wiki.centos.org/HowTos/I_need_the_Kernel_Source
+yum install kernel-devel
+mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
+echo '%_topdir %(echo $HOME)/rpmbuild' > ~/.rpmmacros
+yum install rpm-build redhat-rpm-config asciidoc hmaccalc perl-ExtUtils-Embed pesign xmlto 
+yum install audit-libs-devel binutils-devel elfutils-devel elfutils-libelf-develyum install ncurses-devel newt-devel numactl-devel pciutils-devel python-devel zlib-devel
+
