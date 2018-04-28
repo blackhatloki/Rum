@@ -1,0 +1,20 @@
+Required Command Levels (1, 2, 3) 	Optional name=value pairs
+omconfig storage pdisk 	action=blink controller=id pdisk=<PDISKID>
+  	action=unblink controller=id pdisk=<PDISKID>
+  	action=remove controller=id pdisk=<PDISKID>
+  	action=instantsecureerase controller=id pdisk=<PDISKID>
+  	action=cryptographicerase controller=id pdisk=<PDISKID>
+  	action=initialize controller=id pdisk=<PDISKID>
+  	action=offline controller=id pdisk=<PDISKID>
+  	action=online controller=id pdisk=<PDISKID>
+  	action=assignglobalhotspare controller=id pdisk=<PDISKID> assign=<yes | no>
+  	action=rebuild controller=id pdisk=<PDISKID>
+  	action=cancelrebuild controller=id pdisk=<PDISKID>
+  	action=cancelreplacemember controller=id pdisk=<PDISKID>
+  	action=clear controller=id pdisk=<PDISKID>
+  	action=cancelclear controller=id pdisk=<PDISKID>
+  	action=enabledevicewritecache controller=id pdisk=<PDISKID>
+  	action=disabledevicewritecache controller=id pdisk=<PDISKID>
+  	action=exportreliabilitylog controller=id pdisk=<PDISKID>
+  	action=convertraidtononraid controller=id pdisk=<PDISKID>
+  	action=convertnonraidtoraid controller=id pdisk=<PDISKID>

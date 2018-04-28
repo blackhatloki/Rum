@@ -1,0 +1,109 @@
+---
+  - hosts: all
+    strategy: free
+    tasks:
+    - name : Copy  /etc/resolv.conf
+      copy : 'src=/etc/resolv.conf  dest=/etc/resolv.conf  owner=root group=root mode=644'
+    - name: Install common software requirements
+      yum: pkg={{ item }} state=installed
+      with_items:
+      - epel-release
+      - vim
+      - xterm
+      - git
+      - perl 
+      - perl-Crypt-DES
+      - perl-Digest-HMAC
+      - perl-Digest-SHA1
+      - perl-Socket6
+      - tcpdump
+      - openssl
+      - nmap 
+      - gcc
+      - telnet
+      - ftp
+      - wget
+      - curl
+      - wireshark
+      - mailx
+      - sysstat 
+      - traceroute
+      - ipmitool
+      - iotop
+      - strace
+      - lftp 
+      - syslinux
+      - vsftpd 
+      - iptables
+      - vnc
+      - libnl
+      - pciutils 
+      - lsof
+      - gtk2
+      - gcc-gfortran
+      - tk
+      - libxml2-python
+      - tcsh
+      - unzip
+      - kernel-devel 
+      - rpm-build
+      - libtool
+      - libselinux-devel
+      - expect
+      - sg3_utils
+      - attr
+      - libvdpau
+    - name: "Enable Services"
+      service: name={{item}} state=started enabled=yes
+      with_items:
+      - crond
+      - postfix
+      - chronyd
+    - name: "Disable Unused Services"
+      service: name={{item}} state=stopped enabled=no
+      with_items:
+#      - httpd
+      - firewalld
+      - tuned
+      - NetworkManager
+      - irqbalance
+      - messagebus
+      - netconsole
+      - rdisc
+#      - nfslock
+    - name: Adding several users
+      user: name={{ item.name }} state=present uid={{ item.uid }} comment={{ item.comment }} groups={{ item.groups }} password={{ item.password }} update_password=on_create createhome=yes
+      with_items:
+      - { name: 'stratos', uid: '16689', comment: 'Efstratios Efstathiadis', groups: 'wheel', password: '$6$CA.s1Hk6$WwEWeoUrQ7EWbFbpxyByM5ubEQhk5UeVCqgJCNepznkAovoD.0tfqgsDyWd8ZW1ZWMP8SfcZ4CWKrVdR5cTCU1' }
+      - { name: 'peskin', uid: '16871',  comment: 'Eric Robert Peskin', groups: 'wheel', password: '$6$gBJmvtqY$VpujI3emVWjU9V.6uHoBwW9cnKej36Z2zueDihI9Ng1WzpMAQm6ALtUsHOiLZKtTfmsjayQPS1dBJQdupySJV.' }
+      - { name: 'teague', uid: '17281',  comment: 'Tony Teague', groups: 'wheel', password: '$6$sR4Fx.e2$DAZc7LXa6LH0iI/FaUXzzrTdrTgy/vaq3c9cWxUUnVRYY8LT7Iygc5v116hDXa6l1fqu5rQxoT5DNAZUicTel/'  }
+      - { name: 'deng', uid: '16848',    comment: 'Wensheng Deng', groups: 'wheel', password: '$6$Qt7viPgF$z.Si1./OgTkixygYr509hpAMFJogWUxzJmrceEi7uvmKWv98p94b3r48IBYKRY9MgUfOi7ornXgLHLneWAltL0'  }
+      - { name: 'polunina', uid: '17176',comment: 'Tatiana Polunina', groups: 'wheel', password: '$6$JGCmVSZ2$IxdAOURS7LaOPL.yIKGZnAGzwtNSyHZP/Rk8w6smBxo/DnARS3jGvcocIxjZOtxWAo4uOIoPzDCYxOCPkNFkI1' }
+      - { name: 'wang', uid: '17189',    comment: 'Shenglong Wang', groups: 'wheel', password: '$1$gjmBa1LD$iMHLWl4I0uVQ8j/rmWHiq/' }
+    - name: Change Root Password
+      user: name=root update_password=always password="$6$WQxE8dZZ8nTC2FuX$ilLNL30zkltlbRnZO7IQfQvQL/f162N19KINL2nNyZb591EDHAP9OOvjxQlZAU1./tZ0aUJU6c0yRXill2sm81"
+    - name: yum upgrade all packages
+      yum: >
+        update_cache=yes
+        name=*
+        state=latest
+        update_cache=yes
+      when: >
+        ansible_distribution == 'CentOS'
+        or
+        ansible_distribution == 'RedHat'
+    - name: Check for reboot hint.
+      shell: LAST_KERNEL=$(rpm -q --last kernel | awk 'NR==1{sub(/kernel-/,""); print $1}'); CURRENT_KERNEL=$(uname -r); if [ $LAST_KERNEL != $CURRENT_KERNEL ]; then echo 'reboot'; else echo 'no'; fi
+      ignore_errors: true
+      register: reboot_hint
+    - name: Rebooting ...
+      command: shutdown -r now "Reboot required for updated kernel"
+      async: 0
+      poll: 0
+      sudo: true
+      ignore_errors: true
+      when: reboot_hint.stdout.find("reboot") != -1
+      register: rebooting
+    - name: Wait for thing to reboot...
+      pause: seconds=45
+      when: rebooting|changed
