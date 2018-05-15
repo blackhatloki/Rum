@@ -1,0 +1,135 @@
+Example: Allow root login from from 192.168.2.5 with ssh-key but disallow everyone else
+Append the following in your /etc/ssh/sshd_config:
+
+## Block root login to every one ##
+PermitRootLogin no
+ 
+## No more password login  ##
+PermitEmptyPasswords no
+PasswordAuthentication no
+ 
+## Okay allow root login with public ssh key for 192.168.2.5 ##
+Match Address 192.168.2.5
+        PermitRootLogin yes
+Verify sshd configuration by passing the -T option:
+$ sshd -T
+
+Reload/restart your sshd server, run:
+$ sudo /etc/init.d/ssh reload
+
+OR (Debian/Ubuntu Linux)
+$ sudo systemctl reload ssh
+
+OR (CentOS/RHEL/Fedora Linux)
+$ sudo systemctl reload sshd
+
+OR (OpenBSD)
+$ doas /etc/rc.d/sshd restart
+
+OR (FreeBSD)
+$ sudo service sshd restart
+
+YOU CAN SETUP MULTIPLE IP ADDRESS/CIDR AS FOLLOWS:
+PermitRootLogin no
+PermitEmptyPasswords no
+PasswordAuthentication no
+Match Address 192.168.184.8,202.54.1.1,192.168.1.0/24
+        PermitRootLogin yes
+How do I setup conditional username along with an IP address?
+You can combine User and Address condition as follows so that you can allow password login (a bad idea) including tunnel:
+
+### somewhere already disabled everything ###
+PasswordAuthentication no
+PermitTunnel no
+### but we are allowing user vivek from 192.168.1.0/24 CIDR ###
+Match User vivek Address 192.168.1.0/24
+    PermitTunnel yes
+    PasswordAuthentication yes
+Using * and ! pattern
+You can use the following patterns:
+
+* – It matches matches zero or more characters.
+? – It matches exactly one character.
+! – Patterns within pattern-lists may be negated with !.
+Let us see some common examples of pattern matching
+
+## Match 192.168.1.1 to 192.168.1.9 ##
+Match Address 192.168.1.?
+   PermitRootLogin yes
+ 
+## Match 192.168.1.{2,3....}  ##
+Match Address 192.168.2.* 
+    X11Forwarding no
+ 
+## Allow any host in the ".home.lan" set of domains ##
+Match Host *.home.lan
+    X11Forwarding yes
+ 
+## Allow everyone except foo user ##
+Match User *,!foo
+      X11Forwarding yes
+      PermitTunnel yes
+      PermitTTY no
+A list of keywords that you can use following a Match condition
+From the man page ~ available keywords are
+
+AcceptEnv
+AllowAgentForwarding
+AllowGroups
+AllowStreamLocalForwarding
+AllowTcpForwarding
+AllowUsers
+AuthenticationMethods
+AuthorizedKeysCommand
+AuthorizedKeysCommandUser
+AuthorizedKeysFile
+AuthorizedPrincipalsCommand
+AuthorizedPrincipalsCommandUser
+AuthorizedPrincipalsFile
+Banner
+ChrootDirectory
+DenyGroups
+DenyUsers
+ForceCommand
+GatewayPorts
+GSSAPIAuthentication
+HostbasedAcceptedKeyTypes
+HostbasedAuthentication
+HostbasedUsesNameFromPacketOnly
+IPQoS
+KbdInteractiveAuthentication
+KerberosAuthentication
+MaxAuthTries
+MaxSessions
+PasswordAuthentication
+PermitEmptyPasswords
+PermitOpen
+PermitRootLogin
+PermitTTY
+PermitTunnel
+PermitUserRC
+PubkeyAcceptedKeyTypes
+PubkeyAuthentication
+RekeyLimit
+RevokedKeys
+RhostsRSAAuthentication
+RSAAuthentication
+StreamLocalBindMask
+StreamLocalBindUnlink
+TrustedUserCAKeys
+X11DisplayOffset
+X11Forwarding
+X11UseLocalHost
+A note about using firewall
+You can always use iptables or pf firewall but can not match user names and other information to control access to the default sshd tcp port 22:
+
+## Allow our subnet to access for 22 on this box using ufw ##
+sudo ufw allow from 192.168.1.0/24 to any port 22
+ 
+## Allow (insert rule) my workstation to access port 22 on this server ##
+iptables -I INPUT -s 192.168.2.5 -p tcp -m tcp --dport 22 -j ACCEPT
+ 
+## Allow port 22 (append rule) ##
+iptables -A INPUT -s 192.168.1.5 -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p tcp --dport 22 -j ACCEPT
+
