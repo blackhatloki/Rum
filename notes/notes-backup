@@ -1,13 +1,185 @@
-As root, in a shell prompt, run dsmc
+ Tivoli Storage Manager Client Commands (dsmc commands)
 
-Then you will be prompted for the "USERID", that is the TSM node name, in this case it should be prince-master0.hpc.nyu.edu (case no sensitive).  You can hit return key to take the default.
+Submitted by root on Fri, 10/21/2011 - 18:16
+root's picture
 
-Then you will be prompted for the password, it should be the TSM node name prefixed with tsm: tsmprince-master0.hpc.nyu.edu
+These are just some hints. For more details please check dsmc manual.
 
-Then you can start the daemon "dsmc sched" in the background.  There should be no error in the dsmerror.log, and the next scheduled backup in the dsmsched.log.
+How to enter to TSM client:
+root@gz~# dsmc
 
-To start the daemon "dsmc sched" in the background, in a shell script:
-nohup /usr/bin/dsmc sched </dev/null > /dev/null 2>&1 &
+How to check where are the configuration files (usually is /usr/tivoli/tsm/client/ba/bin):
+root@gz~# echo $DSM_DIR
 
-your dsmc link could be in a different path such as /usr/dsmc
+How to check when last backup ran:
+root@gz~# dsmc q fi
+
+How to check schedule (use "-se" if you want to check it for a specific server):
+root@gz~# dsmc q sched
+root@gz~# dsmc q sched -se=tsmserver1
+
+How to look for files under some directory:
+root@gz~# dsmc q b -subdir=yes -inactive "/data/stuff/*"
+
+How to look for files under some directory on the backup server for a host:
+root@gz~# dsmc q b -inactive -subdir=yes -se=&ltclient> "/data/stuff/*"
+
+How to restore from incremental backup all files in /data/stuff directory, including the deleted ones active or inactive:
+root@gz~# dsmc restore -subdir=yes -latest "/data/stuff/*"
+
+How to restore files to /tmp/oldfiles:
+root@gz~# dsmc restore -pick -subdir=yes "/data/stuff/*" /tmp/oldfiles/
+
+How to restore inactive files:
+root@gz~# dsmc restore -inactive -pick -subdir=yes "/data/stuff/*" /tmp/oldfiles/
+
+How to restore without overwriting existing files:
+root@gz~# dsmc restore -verbose -subdir=yes –rep=no /data/stuff/
+
+How to look for all *.arc files between specific days mm/dd/yyyy:
+root@gz~# dsmc q b -inactive -dateformat=1 -subdir=yes "/oracle/archives/*.arc" -FROMdate=01/03/2010 -TODate=01/03/2010
+
+How to run a backup now:
+root@gz~# dsmc incr -ver
+
+How to backup a single file:
+root@gz~# dsmc backup "/etc/filesystems"
+
+How to restore /exploit/ to a point in time:
+root@gz~# dsmc restore -subdir=y -ina -pitdate="10/08/11" "/exploit/*" /tmp/exploit-restore/
+
+How to restore some files between dates:
+root@gz~# dsmc restore -subdir=y -ina "/exploit/*" /tmp/exploit-restore/ -FROMdate=05/03/2010 -TODate=06/03/2010
+
+How to display a list of all your backups on /home/ (use the detail option to display the last modification date and the creation date of each file):
+root@gz~# dsmc q backup -sub=yes -detail "/home/*"
+
+How to display a list of all your backed up files with dateformat and timeformat options:
+root@gz~# dsmc q b -date=1 -time=4 -su=y "/home/*"
+
+How to include the timeformat option in a command (it must precede the fromtime, pittime, and totime options):
+root@gz~# dsmc q b -date=1 -timeformat=4 -fromd=05/01/2006 -fromt=11:59AM /
+
+How to display a list of active and inactive backup versions of files from which you can select versions to restore:
+root@gz~# dsmc restore "/user/project/*"-pick -inactive
+
+How to restore all files in the /home/ directory to their state as of 3:00 PM on March 10, 2010:
+root@gz~# dsmc restore -pitd=3/10/2010 -pitt=15:00:00 /home/
+
+How to restore from archive:
+1. List the backups:
+
+root@gzaix # dsmc q arch /home/user/important.txt
+IBM Tivoli Storage Manager
+Command Line Backup/Archive Client Interface
+  Client Version 5, Release 3, Level 5.4  
+  Client date/time: 02/23/12   13:44:54
+(c) Copyright by IBM Corporation and other(s) 1990, 2007. All Rights Reserved.
+
+Node Name: GZAIX
+Session established with server GZTSMSERV: AIX-RS/6000
+  Server Version 5, Release 5, Level 5.2
+  Server date/time: 02/23/12   13:44:54  Last access: 02/23/12   13:44:47
+
+             Size  Archive Date - Time    File - Expires on - Description
+             ----  -------------------    -------------------------------
+    12,892,074  B  03/02/11   06:22:39    /home/user/important.txt 03/01/12   Archive Date: 03/02/11
+    14,837,646  B  04/02/11   06:19:00    /home/user/important.txt 04/01/12   Archive Date: 04/02/11
+    16,764,897  B  05/02/11   05:48:05    /home/user/important.txt 05/01/12   Archive Date: 05/02/11
+    25,636,989  B  06/02/11   06:10:06    /home/user/important.txt 06/01/12   Archive Date: 06/02/11
+    31,112,013  B  07/02/11   06:18:35    /home/user/important.txt 07/01/12   Archive Date: 07/02/11
+    29,823,633  B  08/02/11   06:43:03    /home/user/important.txt 08/01/12   Archive Date: 08/02/11
+    22,432,587  B  09/02/11   09:01:12    /home/user/important.txt 09/01/12   Archive Date: 09/02/11
+    20,339,856  B  10/05/11   11:57:45    /home/user/important.txt 10/04/12   Archive Date: 10/05/11
+    20,339,856  B  10/05/11   11:57:45    /home/user/important.txt 10/04/12   Archive Date: 10/05/11
+    13,886,136  B  11/02/11   05:51:21    /home/user/important.txt 11/01/12   Archive Date: 11/02/11
+     7,927,674  B  12/07/11   05:37:25    /home/user/important.txt 12/06/12   Archive Date: 12/07/11
+     8,516,901  B  01/03/12   12:03:54    /home/user/important.txt 01/02/13   Archive Date: 01/03/12
+     2,150,058  B  02/02/12   06:15:12    /home/user/important.txt 02/01/13   Archive Date: 02/02/12
+
+2. Run the restore command
+If you do not specify the target path (/tmp/bm/ in our example), the file will be restored on its original location):
+
+root@gzaix # dsmc retrieve /home/user/important.txt /tmp/bm/ -FROMdate=09/02/11 -TODate=09/02/11
+IBM Tivoli Storage Manager
+Command Line Backup/Archive Client Interface
+  Client Version 5, Release 3, Level 5.4  
+  Client date/time: 02/23/12   14:58:31
+(c) Copyright by IBM Corporation and other(s) 1990, 2007. All Rights Reserved.
+
+Retrieve function invoked.
+
+Node Name: GZAIX
+Session established with server GZTSMSERV: AIX-RS/6000
+  Server Version 5, Release 5, Level 5.2
+  Server date/time: 02/23/12   14:58:31  Last access: 02/23/12   14:55:43
+
+
+Total number of objects retrieved:        2
+Total number of objects failed:           0
+Total number of bytes transferred:    21.39 MB
+Data transfer time:                    0.24 sec
+Network data transfer rate:        88,638.33 KB/sec
+Aggregate data transfer rate:        179.85 KB/sec
+Elapsed processing time:           00:02:01
+
+3. List the result:
+
+root@gzaix # ls -la /tmp/bm/user/important.txt
+-rw-rw-rw-   1 root     cft        22432587 Sep 02 06:10 /tmp/bm/user/important.txt
+
+How to show the TSM Server Connection Information:
+
+root@gzaix # dsmc q sess
+IBM Tivoli Storage Manager
+Command Line Backup/Archive Client Interface - Version 5, Release 2, Level 2.9 
+(c) Copyright by IBM Corporation and other(s) 1990, 2003. All Rights Reserved.
+
+Node Name: GZAIX
+Session established with server GZTSM-199: AIX
+  Server Version 6, Release 3, Level 3.100
+  Server date/time: 06.11.2013 10:22:29  Last access: 06.11.2013 10:22:25
+
+TSM Server Connection Information
+
+Server Name.............: GZTSM-199
+Server Type.............: AIX
+Server Version..........: Ver. 6, Rel. 3, Lev. 3.100
+Last Access Date........: 06.11.2013 10:22:29
+Delete Backup Files.....: "Yes"
+Delete Archive Files....: "Yes"
+
+Node Name...............: GZAIX
+User Name...............: root
+
+How to display the TSM exclusion list:
+
+root@gzaix # dsmc query inclexcl
+IBM Tivoli Storage Manager
+Command Line Backup-Archive Client Interface
+  Client Version 6, Release 2, Level 2.3  
+  Client date/time: 11/06/13   14:45:35
+(c) Copyright by IBM Corporation and other(s) 1990, 2010. All Rights Reserved.
+
+Node Name: GZAIX
+Session established with server GZTSM-199: AIX
+  Server Version 6, Release 3, Level 3.100
+  Server date/time: 11/06/13   14:44:37  Last access: 11/06/13   14:41:37
+
+*** FILE INCLUDE/EXCLUDE ***
+Mode Function  Pattern (match from top down)  Source File
+---- --------- ------------------------------ -----------------
+No exclude filespace statements defined.
+Excl Directory /var/spool/qdaemon             Server
+Excl Directory /var/spool/lpd                 Server
+Excl Directory /proc                          Server
+Excl Directory /mnt                           Server
+Excl Directory /media*                        Server
+Excl Directory /cdrom*                        Server
+Excl Directory /.../*.tmp                     Server
+Excl Directory /.../*.temp                    Server
+Excl Directory /.../tmp                       Server
+Excl Directory /.../temp                      Server
+Excl Directory /.../iso                       Server
+No DFS include/exclude statements defined.
 

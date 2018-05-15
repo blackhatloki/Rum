@@ -1,0 +1,85 @@
+Querying what partitions have been backed up
+- q fi 
+Querying what files have been backed up
+- q ba /home/ians/projects
+
+Restoring selected files
+rest /home/ians/myfile.txt  /home/ians/restore/ 
+
+
+* spring.es.its.nyu.edu  
+/boot/vmlinuz-3.10.0-693.2.2.el7.x86_64
+/home/vm-images/houston.img 
+dsmc restore /boot/vmlinuz-3.10.0-693.2.2.el7.x86_64 /home/restore/vmlinuz-3.10.0-693.2.2.el7.x86_6
+dsmc restore /home/vm-images/houston.img /home/restore/houston.img
+
+* soho.es.its.nyu.edu 
+dsmc restore /etc/passwd /export/restore/
+dsmc restore /export/home/wang/glib-2.40/glib-2.40.0/gio/tests/apps /export/restore/
+dsmc restore /var/log/dell/updatepackage/log /export/restore/
+
+* greene.es.its.nyu.edu 
+dsmc restore /boot/vmlinuz-2.6.32-696.13.2.el6.x86_64  /home/restore/vmlinuz-2.6.32-696.13.2.el6.x86_64
+dsmc restore /home/teague/.bash_profile  /home/restore/.bash_profile
+
+* babar.es.its.nyu.edu 
+dsmc restore  /etc/group /export/restore/ 
+dsmc restore  /boot/vmlinuz-2.6.32-431.11.2.el6.x86_64  /export/restore/
+dsmc restore  /export/apps/anaconda3/4.3.1/lib/python3.6/site-packages/seaborn/tests  /export/restore/
+dsmc restore  /var/www/icons/small/sound2.gif /export/restore/
+dsmc restore  /hdfs/hadoop/zookeeper/version-2/log.3013305f8 /export/restore/
+
+
+* prince-master0.hpc.nyu.edu 
+dsmc restore /etc/warewulf/ /mnt/home/restore/
+dsmc restore /boot/vmlinuz-3.10.0-327.36.3.el7.x86_64.debug /mnt/home/restore/
+dsmc restore /mnt/home/images/centos7.2/usr/lib/modules/3.10.0-327.36.3.el7.x86_64/kernel/drivers/net/bonding /mnt/home/restore/
+
+
+* prince-master1.hpc.nyu.edu 
+dsmc restore /etc/sysconfig/sshd /var/log/restore/
+dsmc restore /boot/vmlinuz-0-rescue-629e2814f0374660a620d4fb95b44808 /var/log/restore/
+dsmc restore /var/www/html/bootstrap.min.css /var/log/restore/
+dsmc restore /var/lib/mysql/cmdaemon_mon/MonData.MYD /var/log/restore/
+dsmc restore /var/log/sssd/sssd.log /var/log/restore/
+dsmc restore /state/partition1/var/log/sa/sar31 /var/log/restore/
+
+* home-0.hpc.nyu.edu 
+dsmc restore /etc/sysconfig/  /state/partition1/restore/
+dsmc restore /boot/grub2/locale/es.mo  /state/partition1/restore/
+dsmc restore /state/partition1/msm659.txt   /state/partition1/restore/
+dsmc restore /home/tst722/  /state/partition1/restore/
+
+* home-1.hpc.nyu.edu 
+dsmc restore /etc/fstab /state/partition1/restore/ 
+dsmc restore /boot/symvers-3.10.0-327.36.3.el7.x86_64.debug.gz /state/partition1/restore/
+dsmc restore /share/apps/firefox /state/partition1/restore/
+
+
+* hathi.es.its.nyu.edu 
+dsmc restore /etc/yum.repos.d /state/partition1/restore/
+dsmc restore /var/cache/salt/master/jobs/58/03e75ed85a13f57b29663a36002a6c7f02b9ee6b1be56a31df4e0a43277f80/compute-1-3.local /state/partition1/restore/
+dsmc restore /state/partition1/cloudera/parcels/Anaconda-4.3.1/lib/python2.7/site-packages/notebook/static/components/codemirror/mode/markdown /state/partition1/restore/
+
+* c14-04
+dsmc restore /etc/shadow /state/partition1/restore/
+dsmc restore /var/log/sa/sa07 /state/partition1/restore/
+dsmc restore /boot/initramfs-3.10.0-514.10.2.el7.x86_64.img /state/partition1/restore/
+
+
+scratch 
+dsmc restore /scratch/cgsb/bonneau/xchen/uw/zinbhg19genome200by100mappablenoywgEncodeUwDnaseWi38OhtamAlnRep2Cut5Clip5000Params /state/partition1/restore/ 
+dsmc restore /scratch/cgsb/carlton/sally/Tvag_smallRNA/clean_smallRNAs/uniques_aligned_genome_g3_small3.fasta /state/partition1/restore/
+dsmc restore /scratch/cgsb/coruzzi/testDir/TAIR10_chrM.fas /state/partition1/restore/
+dsmc restore /scratch/cgsb/egrin/thaliana/Athalroot1/Sample_Athalroot/SampleSheet.csv /state/partition1/restore/
+dsmc restore /scratch/cgsb/ercan/scripts/rna/Initial_DESeq2_Analysis.R /state/partition1/restore/
+dsmc restore /scratch/cgsb/gencore-raw/du/2012-02-24T15:35:15_111004_SN911_0079_BD053MACXX.txt /state/partition1/restore/
+dsmc restore /scratch/cgsb/gresham/siyu/topalign.pbs /state/partition1/restore/
+dsmc restore /scratch/cgsb/gunsiano/sean/Out_TGACCA_Female7_R2.fastq /state/partition1/restore/
+dsmc restore /scratch/cgsb/local/bin/bbcp /state/partition1/restore/
+dsmc restore /scratch/cgsb/ncbi/Rfam/formatdb.log /state/partition1/restore/
+dsmc restore /scratch/cgsb/rockman/open/WS235.cewi.gtkHC.F.vcf.zip /state/partition1/restore/
+dsmc restore /scratch/cgsb/seqcore/Ercan/Sample_CJ10_I05ACAGTG /state/partition1/restore/
+dsmc restore /scratch/cgsb/sequme/log/2010-12-14_hudson_alpha_downloads.log /state/partition1/restore/
+dsmc restore /scratch/cgsb/sm4431/demux_20121121/Unaligned/Basecall_Stats_C1E9UACXX/Matrix /state/partition1/restore/
+dsmc restore /scratch/cgsb/smith/sra/SRR364783_1.fastq /state/partition1/restore/
