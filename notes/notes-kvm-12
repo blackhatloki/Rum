@@ -1,0 +1,94 @@
+yum -y install vim   pciutils 
+yum -y install kvm libvirt python-virtinst qemu-kvm   
+systemctl mask firewalld
+systemctl stop firewalld
+
+systemctl stop NetworkManager
+systemctl disable NetworkManager 
+
+vi /etc/selinux/config      SELINUX=disabled
+
+systemctl start libvirtd 
+systemctl enable libvirtd 
+chkconfig libvirtd on
+#check if it is installed/running    virsh -c qemu:///system list
+chkconfig network on
+service network restart
+yum -y erase NetworkManager
+yum -y install virt-manager libvirt qemu-system-x86 openssh-askpass
+virsh net-destroy default
+virsh net-undefine default
+service libvirtd restart
+
+yum -y install wget openssl-devel kernel-devel
+yum groupinstall "Development Tools"
+adduser ovswitch
+su - ovswitch
+wget http://openvswitch.org/releases/openvswitch-2.3.0.tar.gz
+tar xfz openvswitch-2.3.0.tar.gz
+mkdir -p ~/rpmbuild/SOURCES
+
+sed 's/openvswitch-kmod, //g' openvswitch-2.3.0/rhel/openvswitch.spec > openvswitch-2.3.0/rhel/openvswitch_no_kmod.spec
+
+
+cp openvswitch-2.3.0.tar.gz rpmbuild/SOURCES/
+rpmbuild -bb --without check ~/openvswitch-2.3.0/rhel/openvswitch_no_kmod.spec
+exit
+yum localinstall /home/ovswitch/rpmbuild/RPMS/x86_64/openvswitch-2.3.0-1.x86_64.rpm
+reboot
+systemctl start openvswitch
+ovs-vsctl show
+
+ovs-vsctl add-br WAN
+ovs-vsctl add-br LAN
+ovs-vsctl add-br DMZ
+
+############ Needs to be done for the uplink bridge ##############
+ vi /etc/sysconfig/network-scripts/ifcfg-WAN
+
+DEVICE=WAN
+ONBOOT=yes
+DEVICETYPE=ovs
+TYPE=OVSBridge
+HOTPLUG=no
+USERCTL=no
+
+############## on the physical interface (I use the interface enp9s0f2 )
+cp /etc/sysconfig/network-scripts/ifcfg-enp9s0f2 /etc/sysconfig/network-scripts/ifcfg-enp9s0f2_orig
+
+vi /etc/sysconfig/network-scripts/ifcfg-enp9s0f2
+
+DEVICE=enp9s0f2
+ONBOOT=yes
+NETBOOT=yes
+IPV6INIT=no
+BOOTPROTO=none
+NAME=enp9s0f2
+DEVICETYPE=ovs
+TYPE=OVSPort
+OVS_BRIDGE=WAN
+
+# service network restart
+# service ebtables stop
+# chkconfig ebtables off
+# ovs-vsctl show
+
+### Create a WAN.xml ###########
+
+vi WAN.xml
+
+<network>
+  <name>WAN</name>
+  <forward mode='bridge'/>
+  <bridge name='WAN'/>
+  <virtualport type='openvswitch'/>
+  <portgroup name='vlan-01' default='yes'>
+  </portgroup>
+</network>
+
+###### Do the same for the rest of your bridges ###########
+
+virsh net-define WAN.xml
+virsh net-destroy default
+virsh net-start WAN
+virsh net-autostart WAfdi   
