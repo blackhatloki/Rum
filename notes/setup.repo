@@ -1,0 +1,204 @@
+How To Create Local YUM repository on CentOS 7 / RHEL 7 using DVD
+
+By Raj  Last updated Jun 15, 2018
+ 9
+ 3 3
+
+ 
+YUM is the package management tool that helps you to install or update the package through the network or local, at the same time it provides an easy method to install a package with its dependent packages.
+
+Repository sources can be created either using the createrepo package or mounting the DVD on the directory. Mounting the DVD/CD ROM will lead to saving the space on HDD used by being copied to HDD.
+
+Local YUM with DVD
+Create Source
+Mount the CD/DVD ROM on any directory of your wish. For testing, mount it on /cdrom.
+
+# mkdir /cdrom
+# mount /dev/cdrom /cdrom
+Create Repo file
+Before creating a repo file, move your existing repo files present in /etc/yum.repos.d directory, if not required.
+
+mv /etc/yum.repos.d/*.repo /tmp/
+Create the new repo file called cdrom.repo under /etc/repos.d directory.
+
+# vi /etc/yum.repos.d/local.repo
+Add the following details.
+
+[LocalRepo]
+name=LocalRepository
+baseurl=file:///cdrom
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+Where,
+
+[LocalRepo] – Name of the Section.
+name = Name of the repository
+baseurl = Location of the package
+Enabled = Enable repository
+gpgcheck= Enable secure installation
+gpgkey = Location of the key
+gpgcheck is optional (If you set gpgcheck=0, there is no need to mention gpgkey)
+Install Package from Local DVD YUM repository
+Clear the repository cache by issuing the following command.
+# yum clean all
+Let’s install the vsftpd package from the local repository.
+
+# yum install vsftpd
+The output will be like below; it will try to cache the package information. When you give yes to download the package, it will prompt you to accept gpg signing key.
+
+Loaded plugins: fastestmirror
+LocalRepo                                                | 3.6 kB     00:00
+(1/2): LocalRepo/group_gz                                  | 157 kB   00:00
+(2/2): LocalRepo/primary_db                                | 2.7 MB   00:00
+Determining fastest mirrors
+Resolving Dependencies
+--> Running transaction check
+---> Package vsftpd.x86_64 0:3.0.2-9.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+================================================================================
+Package         Arch            Version               Repository          Size
+================================================================================
+Installing:
+vsftpd          x86_64          3.0.2-9.el7           LocalRepo          165 k
+
+Transaction Summary
+================================================================================
+Install  1 Package
+
+Total download size: 165 k
+Installed size: 343 k
+Is this ok [y/d/N]: y
+Downloading packages:
+warning: /cdrom/Packages/vsftpd-3.0.2-9.el7.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY
+Public key for vsftpd-3.0.2-9.el7.x86_64.rpm is not installed
+Retrieving key from file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+Importing GPG key 0xF4A80EB5:
+Userid     : "CentOS-7 Key (CentOS 7 Official Signing Key) <security@centos.org>"
+Fingerprint: 6341 ab27 53d7 8a78 a7c2 7bb1 24c6 a8a7 f4a8 0eb5
+Package    : centos-release-7-0.1406.el7.centos.2.3.x86_64 (@anaconda)
+From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+Is this ok [y/N]: y
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+Installing : vsftpd-3.0.2-9.el7.x86_64                                    1/1
+Verifying  : vsftpd-3.0.2-9.el7.x86_64                                    1/1
+
+Installed:
+vsftpd.x86_64 0:3.0.2-9.el7
+
+Complete!</security@centos.org>
+You have successfully configured the local repository on the machine, but it is limited to a single machine where the CD or DVD is mounted.
+
+Local YUM with FTP or HTTP
+If you have quite number machines and all of them connected over intranet, then this is the best option for you.
+
+Host RPM Packages
+Normally YUM server uses FTP or Apache as the medium to transfer packages. So, install either FTP or Apache on your yum server.
+
+You can use either FTP or Apache, not both.
+
+Mount the DVD on /cdrom.
+
+mkdir /cdrom;mount /dev/cdrom /cdrom
+Copy packages from DVDROM to /var/ftp or /var/www/html receptively for FTP and Apache.
+
+FTP
+
+Copy the packages from the DVD-ROM to FTP folder.
+
+cp -a /cdrom/Packages/* /var/ftp
+Apache
+
+Copy packages from the DVD-ROM to Apache home directory.
+
+cp -a /cdrom/Packages/* /var/www/html/
+Edit Apache configuration file to enable the indexes.
+
+vi /etc/httpd/conf/httpd.conf
+From
+
+Options Indexes FollowSymLinks
+To
+
+Options All Indexes FollowSymLinks
+Remove the welcome page.
+
+rm -rf /etc/httpd/conf.d/welcome.conf
+Restart service.
+
+### FTP ###
+
+systemctl restart vsftpd
+
+### Apache ###
+
+systemctl restart httpd
+Firewall
+You need to allow FTP and HTTP port on the firewall so that client machines can able to get packages from YUM server.
+
+### For HTTP ###
+
+firewall-cmd --permanent --add-port=80/tcp
+firewall-cmd --reload
+
+### For FTP ###
+
+firewall-cmd  --permanent --add-port=21/tcp 
+firewall-cmd --reload
+SELinux
+Consider disabling SELinux on CentOS / RHEL.
+
+Verify Services
+Verify the accessibility using the web browser by visiting respective service.
+
+FTP:
+
+ftp://ip-address
+Apache:
+
+http://ip-address
+Creating Repository
+After hosting the packages, we need to create the repository of packages that we have copied from the disc. createrepo is the tool that helps you to create the XML based rpm meta-structure repository, like an index file that points to rpm files.
+
+cd /cdrom/Packages
+rpm -ivh createrepo-*el7.noarch.rpm libxml2-python-*.x86_64.rpm deltarpm-*.el7.x86_64.rpm python-deltarpm-*el7.x86_64.rpm
+FTP
+
+createrepo /var/ftp
+Apache
+
+createrepo /var/www/html
+Create Repo File
+Once created the repository, just go on to the client machine and add the repository file under the /etc/yum.repos.d directory.
+
+Before creating a repo file, move the existing repo files present in /etc/yum.repos.d directory, if not required.
+
+mv /etc/yum.repos.d/*.repo /tmp/
+Create remote.repo file.
+
+vi /etc/yum.repos.d/remote.repo
+Create a repo entry like below, depends on the protocol you are using. Change ipadress to your server ip address.
+
+FTP
+
+[remote]
+name=RHEL FTP
+baseurl=ftp://192.168.1.10
+enabled=1
+gpgcheck=0
+Apache
+
+[remote]
+name=RHEL Apache
+baseurl=http://192.168.1.10
+enabled=1
+gpgcheck=0
+Install Package from Local YUM repository
+Now you can install packages using the yum command.
+yum install mysql-server

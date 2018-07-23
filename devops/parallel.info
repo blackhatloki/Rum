@@ -1,0 +1,8 @@
+parallel
+  315  30.05.18. 20:35:39 parallel echo ::: a b c
+  317  30.05.18. 20:37:14 parallel -a main --colsep ' ' ping -c {1} 3
+  318  30.05.18. 20:37:32 parallel -a main --colsep ' ' ping -c  3 {1}
+  319  30.05.18. 20:38:12 parallel -a main --colsep ' ' ./idrac-powercycle.sh {1}-ipmi
+  322  30.05.18. 20:39:11 parallel -a main --colsep ' ' ./idrac-powercycle.sh {1}-ipmi
+  324  30.05.18. 20:48:07 parallel --citation -a main --colsep ' ' ./idrac-powercycle.sh {1}-ipmi
+  325  30.05.18. 20:48:37 parallel  -a main --colsep ' ' ./idrac-powercycle.sh {1}-ipmi
