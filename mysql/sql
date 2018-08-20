@@ -1,0 +1,20 @@
+select * from inventory; 
+select site,room,row,cabinet,cluster,hostname,serial,production from inventory; 
+default select country="US",site="SDC",cabinet,Cluster="Prince",Monitoring="compute",serial,Status="Production" from inventory;
+default select country="US",site="SDC",row,cabinet,type="server",Cluster="Prince",Monitoring="compute",serial,Status="Production" from inventory;
+
+inventory.pl  
+         default select country="US"
+                        site="SDC"
+                        row
+                        cabinet
+                        uposition
+                        type="server|network|bladechassis"
+                        Cluster="Prince|Dumbo"
+                        Monitoring="compute*|gpu|storage|bastion|master|login|home"
+                        serial
+                        Status="Production"
+                   from inventory;
+        
+
+
