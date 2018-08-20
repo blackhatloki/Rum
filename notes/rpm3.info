@@ -1,0 +1,2 @@
+  rpm -qa | sort  | sed -e 's/.el7.noarch//g' | sed -e 's/.el7.x86_64//g' | sed
+  -e 's/el7_3.1.x86_64//g' | sed -e 's/centos.noarch//g'

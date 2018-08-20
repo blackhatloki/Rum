@@ -1,0 +1,97 @@
+yum list installed 
+
+
+yum --showduplicates list httpd | expand
+yum --showduplicates list kernel | expand
+
+
+yum --downloadonly <package>
+sudo yum localinstall <path to rpm>
+
+nstall    4 Packages (+24 Dependent packages)
+Upgrade  369 Packages
+
+
+kernel-headers                        x86_64 3.10.0-862.9.1.el7
+updates 7.1 M
+ kernel-tools                          x86_64 3.10.0-862.9.1.el7
+ updates 6.3 M
+  kernel-tools-libs                     x86_64 3.10.0-862.9.1.el7
+  updates 6.2 M
+
+
+  Preventing Yum from Updating the Kernel
+  However, if you don’t ever want to just blindly have the kernel updated, you
+  can add the following to your /etc/yum.conf file:
+
+  exclude=kernel*
+
+  Or, if you insist on using a vanilla configuration file and control
+  everything via the CLI, use
+
+  #yum –exclude=kernel* update
+
+  Both of these methods will eliminate the kernel from being updated or even
+  included in the potential update listing.
+
+yum –exclude Command Line Option
+Finally, you can skip yum command updates on command line itself using
+following syntax:
+# yum --exclude=package\* update
+# yum --exclude=php\* update
+# yum --exclude=kernel\* update
+# yum -x 'kernel*' -x 'php*' update
+
+
+
+
+
+
+
+
+
+
+Summary of yum command
+Command name    Description/usage
+yum check-update    Display list of available package updates
+yum update
+yum update pkg1 Update all packages or update the pkg1 package
+yum install pkg Install a package
+yum localinstall pkg.rpm    Install a package from a file named pkg.rpm
+yum erase pkg   Remove a package
+yum remove pkg  Same as above
+yum autoremove  Free disk space by removing unwanted packages
+yum reinstall pkg   Reinstall a package
+yum downgrade pkg   Downgrade a package to an older version
+yum check   Check rpm database for errors/problems
+yum clean packages  Delete cached packages database
+yum clean all   Delete out all packages and meta data from disk cache
+yum list
+yum list installed
+yum list php
+yum list available  List package names
+yum deplist pkg1    Show dependencies for a pkg1
+yum info pkg    Show info about a package
+yum search pkg
+yum search regex    Search package names
+yum provides string
+yum whatprovides string List package that provides the given file or other info
+yum history list    Show a list of all yum command history action such as
+install/update/erase
+yum history info ID Get info of yum action ID
+yum history undo ID Undo the yum command action from ID
+yum history redor ID    Redot the yum command action from ID
+yum grouplist   List package groups
+yum groupinstall ‘Group Name’   Install all packages in the given group name
+yum groupinfo ‘Group Name’  See packages in the given group name
+yum groupremove ‘Group Name’    Remove/Delete all packages in the selected
+group
+yum repolist    Show a list of all enabled repositories
+yum repoinfo repoID Show info about repoID
+yum repo-pkgs repoID list   Show packages from repoID repo
+yum repo-pkgs repoID install    Install all packages from repoID repo
+yum repo-pkgs repoID remove Erase all packages from repoID repo
+yum repo-pkgs repoID reinstall  Reinstall all packages from repoID repo
+yum help
+yum help command
+man yum Show help about yum command or read yum command man page

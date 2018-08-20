@@ -1,0 +1,56 @@
+I see at least three possibilities to get the production image into the new Warewulf:
+
+1)  rsync from the existing image dir:
+
+On new warewulf VM:
+
+time nohup sudo rsync -avzAX --delete prince-master0:/mnt/home/images/gold-new-lustre /local/image/collection
+
+
+
+=== OR ===
+
+2)  rsync directly from golden node:
+
+On new warewulf VM:
+
+scp -p prince:/home/peskin/kernel-upgrade/to-exclude .
+NODE=cxx-yy # Some node that you have just provisioned with old warewulf, but NOT yet ansibleized
+time nohup sudo rsync -avzAX --delete --exclude-from=to-exclude ${NODE}:/ /local/image/collection/gold-new-lustre
+
+
+=== OR ===
+
+3)  Use Warewulf's golden-node script.  See https://dokuwiki.wesleyan.edu/doku.php?id=cluster:144
+
+a) On $NODE, unmount all remote volumes
+
+b) On new warewulf VM:
+sudo su - # become root
+mkdir /local/image/collection
+cd /local/image/collection
+NODE=cxx-yy # Some node that you have just provisioned with old warewulf, but NOT yet ansibleized
+SOURCEADDR=${NODE} wwmkchroot golden-system  /local/image/collection/gold-new-lustre
+
+Now might need to check in /local/image/collection/gold-new-lustre/var/log/ and create any missing directories.
+
+
+======
+No matter which of these you did (1 or 2 or 3), you'll have to build the vnfs and the bootstrap:
+On new warewulf VM:
+sudo wwvnfs gold-new-lustre --chroot=/local/image/collection/gold-new-lustre
+wwbootstrap --output=gold-new-lustre.wwbs --chroot=/local/image/collection/gold-new-lustre 3.10.0-514.10.2.el7.x86_64
+sudo wwsh bootstrap import gold-new-lustre.wwbs --name=gold-new-lustre
+
+sudo wwsh provision set newtestnode --vnfs=gold-new-lustre --bootstrap=gold-new-lustre --bootlocal=normal
+
+Get console on newtestnode.
+Make sure no one is running.
+Reboot...
+
+Back on prince-master0
+ansible-playbook --limit=newtestnode /etc/ansible/prince.yml
+
+On console on newtestnode
+Make sure no one is running.
+Reboot from local disk.

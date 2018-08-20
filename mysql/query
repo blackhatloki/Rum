@@ -1,0 +1,11 @@
+select hostname and model from inventory; 
+
+select hostname and svctag from inventory; 
+
+select hostname and cabinet from inventory; 
+
+select cabinet and rows from inventory; 
+
+select hostname and cabinet, row from inventory; 
+
+select hostname and cluster from inventory; 

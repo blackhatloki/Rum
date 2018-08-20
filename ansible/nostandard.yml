@@ -53,8 +53,9 @@
       - sg3_utils
       - attr
       - libvdpau
-#      - pdsh
-#       - pssh 
+      - unison
+      - pdsh
+      - pssh 
       - ansible
     - name: "Enable Services"
       service: name={{item}} state=started enabled=yes
@@ -85,28 +86,4 @@
       - { name: 'wang', uid: '17189',    comment: 'Shenglong Wang', groups: 'wheel', password: '$1$gjmBa1LD$iMHLWl4I0uVQ8j/rmWHiq/' }
     - name: Change Root Password
       user: name=root update_password=always password="$6$WQxE8dZZ8nTC2FuX$ilLNL30zkltlbRnZO7IQfQvQL/f162N19KINL2nNyZb591EDHAP9OOvjxQlZAU1./tZ0aUJU6c0yRXill2sm81"
-    - name: yum upgrade all packages
-      yum: >
-        update_cache=yes
-        name=*
-        state=latest
-        update_cache=yes
-      when: >
-        ansible_distribution == 'CentOS'
-        or
-        ansible_distribution == 'RedHat'
     - name: Check for reboot hint.
-      shell: LAST_KERNEL=$(rpm -q --last kernel | awk 'NR==1{sub(/kernel-/,""); print $1}'); CURRENT_KERNEL=$(uname -r); if [ $LAST_KERNEL != $CURRENT_KERNEL ]; then echo 'reboot'; else echo 'no'; fi
-      ignore_errors: true
-      register: reboot_hint
-    - name: Rebooting ...
-      command: shutdown -r now "Reboot required for updated kernel"
-      async: 0
-      poll: 0
-      sudo: true
-      ignore_errors: true
-      when: reboot_hint.stdout.find("reboot") != -1
-      register: rebooting
-    - name: Wait for thing to reboot...
-      pause: seconds=45
-      when: rebooting|changed

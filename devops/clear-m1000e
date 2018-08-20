@@ -1,0 +1,6 @@
+Viewing Hardware Logs Using RACADM
+To view the hardware log using RACADM, open a serial/Telnet/SSH text console to
+CMC, log in, and type:
+racadm getsel
+To clear the hardware log, type:
+racadm clrsel

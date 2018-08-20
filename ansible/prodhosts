@@ -558,5 +558,7 @@ warewulf
 ha1
 ha2
 dev01
+dev02
 devstack
 gpu-90
+ks

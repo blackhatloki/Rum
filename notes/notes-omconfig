@@ -1,2 +1,219 @@
-Error! Options should be specified at the end.  
+omconfig chassis biossetup -?
+Network Settings
+-----------------------------------
+attribute=PxeDev1EnDis                 setting=<Enabled><Disabled>
+attribute=PxeDev2EnDis                 setting=<Enabled><Disabled>
+attribute=PxeDev3EnDis                 setting=<Enabled><Disabled>
+attribute=PxeDev4EnDis                 setting=<Enabled><Disabled>
+attribute=HttpDev1EnDis                setting=<Enabled><Disabled>
+attribute=HttpDev2EnDis                setting=<Enabled><Disabled>
+attribute=HttpDev3EnDis                setting=<Enabled><Disabled>
+attribute=HttpDev4EnDis                setting=<Enabled><Disabled>
+attribute=IscsiInitiatorName           setting=<string value>
+attribute=IscsiDev1EnDis               setting=<Enabled><Disabled>
 
+Memory Settings
+-----------------------------------
+attribute=MemTest                      setting=<Enabled><Disabled>
+attribute=MemOpMode                    setting=<OptimizerMode><SingleRankSpareMode><MirrorMode><FaultResilientMode>
+attribute=NodeInterleave               setting=<Enabled><Disabled>
+attribute=CorrEccSmi                   setting=<Enabled><Disabled>
+attribute=OppSrefEn                    setting=<Enabled><Disabled>
+
+    Persistent Memory
+    -----------------------------------
+    No Properties
+
+Processor Settings
+-----------------------------------
+attribute=LogicalProc                  setting=<Enabled><Disabled>
+attribute=CpuInterconnectBusSpeed      setting=<MaxDataRate><10GTps><9GTps>
+attribute=ProcVirtualization           setting=<Enabled><Disabled>
+attribute=ProcAdjCacheLine             setting=<Enabled><Disabled>
+attribute=ProcHwPrefetcher             setting=<Enabled><Disabled>
+attribute=DcuStreamerPrefetcher        setting=<Enabled><Disabled>
+attribute=DcuIpPrefetcher              setting=<Enabled><Disabled>
+attribute=SubNumaCluster               setting=<Enabled><Disabled>
+attribute=UpiPrefetch                  setting=<Enabled><Disabled>
+attribute=ControlledTurbo              setting=<Enabled><Disabled><ControlledTurboLimitMinus1><ControlledTurboLimitMinus2><ControlledTurboLimitMinus3>
+attribute=ProcCores                    setting=<All><1><2><4><6><8><10><12><14><16><18>
+
+SATA Settings
+-----------------------------------
+attribute=EmbSata                      setting=<AhciMode><RaidMode><Off>
+attribute=SecurityFreezeLock           setting=<Enabled><Disabled>
+attribute=WriteCache                   setting=<Enabled><Disabled>
+
+Boot Settings
+-----------------------------------
+attribute=BootMode                     setting=<Bios><Uefi>
+attribute=BootSeqRetry                 setting=<Enabled><Disabled>
+
+    UEFI Boot Settings
+    -----------------------------------
+    attribute=UefiBootSeq                  sequence=<NIC.PxeDevice.1-1><NonRAID.Slot.6-1><Unknown.Unknown.3-1><Unknown.Unknown.4-1>
+
+    One-Time Boot
+    -----------------------------------
+    attribute=OneTimeBootMode              setting=<Disabled><OneTimeUefiBootSeq>
+    attribute=OneTimeUefiBootSeqDev        setting=<NonRAID.Slot.6-1><NIC.PxeDevice.1-1><Unknown.Unknown.3-1><Unknown.Unknown.4-1>
+
+Integrated Devices
+-----------------------------------
+attribute=UsbPorts                     setting=<AllOn><OnlyBackPortsOn><AllOff><AllOffDynamic>
+attribute=InternalUsb                  setting=<On><Off>
+attribute=UsbManagedPort               setting=<On><Off>
+attribute=IntegratedNetwork1           setting=<Enabled><DisabledOs>
+attribute=IntNic1Port1BootProto        setting=<Unknown><None><Pxe><Iscsi>
+attribute=IntNic1Port2BootProto        setting=<Unknown><None><Pxe><Iscsi>
+attribute=IntNic1Port3BootProto        setting=<Unknown><None><Pxe><Iscsi>
+attribute=IntNic1Port4BootProto        setting=<Unknown><None><Pxe><Iscsi>
+attribute=IoatEngine                   setting=<Enabled><Disabled>
+attribute=EmbVideo                     setting=<Enabled><Disabled>
+attribute=SriovGlobalEnable            setting=<Enabled><Disabled>
+attribute=OsWatchdogTimer              setting=<Enabled><Disabled>
+attribute=MmioAbove4Gb                 setting=<Enabled><Disabled>
+attribute=MemoryMappedIOH              setting=<56TB><12TB><512GB>
+
+    Slot Disablement
+    -----------------------------------
+    attribute=Slot1                        setting=<Enabled><Disabled><BootDriverDisabled>
+    attribute=Slot3                        setting=<Enabled><Disabled><BootDriverDisabled>
+    attribute=Slot4                        setting=<Enabled><Disabled><BootDriverDisabled>
+    attribute=Slot5                        setting=<Enabled><Disabled><BootDriverDisabled>
+    attribute=Slot6                        setting=<Enabled><Disabled>
+    attribute=Slot7                        setting=<Enabled><Disabled><BootDriverDisabled>
+    attribute=Slot8                        setting=<Enabled><Disabled><BootDriverDisabled>
+
+    Slot Bifurcation
+    -----------------------------------
+    attribute=DellAutoDiscovery            setting=<PlatformDefault><AutoDiscovery><ManualControl>
+
+Serial Communication
+-----------------------------------
+attribute=SerialComm                   setting=<OnNoConRedir><OnConRedirAuto><OnConRedirCom1><OnConRedirCom2><Off>
+attribute=SerialPortAddress            setting=<Serial1Com1Serial2Com2><Serial1Com2Serial2Com1>
+attribute=ExtSerialConnector           setting=<Serial1><Serial2><RemoteAccDevice>
+attribute=FailSafeBaud                 setting=<115200><57600><19200><9600>
+attribute=ConTermType                  setting=<Vt100Vt220><Ansi>
+attribute=RedirAfterBoot               setting=<Enabled><Disabled>
+
+System Profile Settings
+-----------------------------------
+attribute=SysProfile                   setting=<PerfPerWattOptimizedDapc><PerfPerWattOptimizedOs><PerfOptimized><PerfWorkStationOptimized><Custom>
+attribute=WorkloadProfile              setting=<NotAvailable><HpcProfile><LowLatencyOptimizedProfile><VtOptimizedProfile><VtPerWattOptimizedProfile><DbOptimizedProfile><DbPerWattOptimizedProfile><SdsOptimizedProfile><SdsPerWattOptimizedProfile>
+
+System Security
+-----------------------------------
+attribute=SysPassword                  setting=<string value>
+attribute=SetupPassword                setting=<string value>
+attribute=PasswordStatus               setting=<Unlocked><Locked>
+attribute=AcPwrRcvry                   setting=<Last><On><Off>
+attribute=AcPwrRcvryDelay              setting=<Immediate><Random><User>
+attribute=UefiVariableAccess           setting=<Standard><Controlled>
+attribute=InBandManageabilityInterface setting=<Enabled><Disabled>
+attribute=SecureBoot                   setting=<Enabled><Disabled>
+attribute=SecureBootPolicy             setting=<Standard><Custom>
+attribute=SecureBootMode               setting=<UserMode><DeployedMode>
+
+Redundant OS Control
+-----------------------------------
+attribute=RedundantOsLocation          setting=<None>
+
+Miscellaneous Settings
+-----------------------------------
+attribute=AssetTag                     setting=<string value>
+attribute=NumLock                      setting=<On><Off>
+attribute=ErrPrompt                    setting=<Enabled><Disabled>
+attribute=ForceInt10                   setting=<Enabled><Disabled>
+attribute=DellWyseP25BIOSAccess        setting=<Enabled><Disabled>
+attribute=PowerCycleRequest            setting=<None><FullPowerCycle>
+
+PXE Device1 Settings
+-----------------------------------
+attribute=PxeDev1Interface             setting=<NIC.Integrated.1-1-1><NIC.Integrated.1-2-1><NIC.Integrated.1-3-1><NIC.Integrated.1-4-1>
+attribute=PxeDev1Protocol              setting=<IPv4><IPv6>
+attribute=PxeDev1VlanEnDis             setting=<Enabled><Disabled>
+attribute=PxeDev1VlanId                setting=<integer value>
+attribute=PxeDev1VlanPriority          setting=<integer value>
+
+HTTP Device1 Settings
+-----------------------------------
+attribute=HttpDev1Uri                  setting=<string value>
+
+HTTP Device2 Settings
+-----------------------------------
+attribute=HttpDev2Uri                  setting=<string value>
+
+HTTP Device3 Settings
+-----------------------------------
+attribute=HttpDev3Uri                  setting=<string value>
+
+HTTP Device4 Settings
+-----------------------------------
+attribute=HttpDev4Uri                  setting=<string value>
+
+ISCSI Device1 Settings
+-----------------------------------
+attribute=IscsiDev1Con1EnDis           setting=<Enabled><Disabled>
+attribute=IscsiDev1Con2EnDis           setting=<Enabled><Disabled>
+attribute=IscsiDev1ConOrder            setting=<Con1Con2><Con2Con1>
+
+    Connection 1 Settings
+    -----------------------------------
+    attribute=IscsiDev1Con1Interface       setting=<NIC.Integrated.1-1-1><NIC.Integrated.1-2-1><NIC.Integrated.1-3-1><NIC.Integrated.1-4-1>
+    attribute=IscsiDev1Con1Protocol        setting=<IPv4><IPv6>
+    attribute=IscsiDev1Con1VlanEnDis       setting=<Enabled><Disabled>
+    attribute=IscsiDev1Con1VlanId          setting=<integer value>
+    attribute=IscsiDev1Con1VlanPriority    setting=<integer value>
+    attribute=IscsiDev1Con1Retry           setting=<integer value>
+    attribute=IscsiDev1Con1Timeout         setting=<integer value>
+    attribute=IscsiDev1Con1DhcpEnDis       setting=<Enabled><Disabled>
+    attribute=IscsiDev1Con1Ip              setting=<string value>
+    attribute=IscsiDev1Con1Mask            setting=<string value>
+    attribute=IscsiDev1Con1Gateway         setting=<string value>
+    attribute=IscsiDev1Con1TgtDhcpEnDis    setting=<Enabled><Disabled>
+    attribute=IscsiDev1Con1TargetName      setting=<string value>
+    attribute=IscsiDev1Con1TargetIp        setting=<string value>
+    attribute=IscsiDev1Con1Port            setting=<integer value>
+    attribute=IscsiDev1Con1Lun             setting=<string value>
+    attribute=IscsiDev1Con1IsId            setting=<string value>
+    attribute=IscsiDev1Con1Auth            setting=<Chap><None>
+    attribute=IscsiDev1Con1ChapType        setting=<OneWay><Mutual>
+    attribute=IscsiDev1Con1ChapName        setting=<string value>
+    attribute=IscsiDev1Con1ChapSecret      setting=<string value>
+    attribute=IscsiDev1Con1RevChapName     setting=<string value>
+    attribute=IscsiDev1Con1RevChapSecret   setting=<string value>
+
+    Connection 2 Settings
+    -----------------------------------
+    attribute=IscsiDev1Con2Interface       setting=<NIC.Integrated.1-1-1><NIC.Integrated.1-2-1><NIC.Integrated.1-3-1><NIC.Integrated.1-4-1>
+    attribute=IscsiDev1Con2Protocol        setting=<IPv4><IPv6>
+    attribute=IscsiDev1Con2VlanEnDis       setting=<Enabled><Disabled>
+    attribute=IscsiDev1Con2VlanId          setting=<integer value>
+    attribute=IscsiDev1Con2VlanPriority    setting=<integer value>
+    attribute=IscsiDev1Con2Retry           setting=<integer value>
+    attribute=IscsiDev1Con2Timeout         setting=<integer value>
+    attribute=IscsiDev1Con2DhcpEnDis       setting=<Enabled><Disabled>
+    attribute=IscsiDev1Con2Ip              setting=<string value>
+    attribute=IscsiDev1Con2Mask            setting=<string value>
+    attribute=IscsiDev1Con2Gateway         setting=<string value>
+    attribute=IscsiDev1Con2TgtDhcpEnDis    setting=<Enabled><Disabled>
+    attribute=IscsiDev1Con2TargetName      setting=<string value>
+    attribute=IscsiDev1Con2TargetIp        setting=<string value>
+    attribute=IscsiDev1Con2Port            setting=<integer value>
+    attribute=IscsiDev1Con2Lun             setting=<string value>
+    attribute=IscsiDev1Con2IsId            setting=<string value>
+    attribute=IscsiDev1Con2Auth            setting=<Chap><None>
+    attribute=IscsiDev1Con2ChapType        setting=<OneWay><Mutual>
+    attribute=IscsiDev1Con2ChapName        setting=<string value>
+    attribute=IscsiDev1Con2ChapSecret      setting=<string value>
+    attribute=IscsiDev1Con2RevChapName     setting=<string value>
+    attribute=IscsiDev1Con2RevChapSecret   setting=<string value>
+
+-----------------------------------
+passwd=<string>            This parameter allows to provide the setup password.
+
+NOTE:To lock a System Password, after you set a System Password, reboot the system and then set Locked state for Password Status attribute.
+
+[root@gpu-90 /]#

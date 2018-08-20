@@ -97,6 +97,10 @@ freshclam -v
 yum install aide -y && /usr/sbin/aide --init && cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz && /usr/sbin/aide --check
 echo "05 4 * * * root /usr/sbin/aide --check" >> /etc/crontab
 
+echo root > /etc/cron.allow
+echo root > /etc/at.allow
+rm -f /etc/at.deny /etc/cron.deny
+
 echo "NOZEROCONF=yes" >> /etc/sysconfig/network
 echo "NETWORKING_IPV6=no" >> /etc/sysconfig/network
 echo "IPV6INIT=no"  >>  /etc/sysconfig/network
@@ -164,6 +168,8 @@ systemctl set-default multi-user.target
 systemctl disable tuned.service
 systemctl disable kdump.service
 systemctl mask kdump.service
+systemctl enable sysstat.service
+systemctl start sysstat.service
 
 echo "Updating the system ..."
 yum -y update

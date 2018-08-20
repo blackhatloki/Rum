@@ -1,0 +1,2 @@
+mysql -h hpcmysql -u tony  hpcinventorydb -P 3306 -p
+

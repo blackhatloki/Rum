@@ -1,0 +1,47 @@
+Create A List Of Installed Packages In CentOS and install them later
+First, we will see how to do it in CentOS system. I tested this guide on CentOS
+7 server edition. However, it this method should work on other YUM based
+distros such as RHEL, Fedora, Scientific Linux etc.
+
+Create the list of installed packages using command:
+
+# rpm -qa | sort > pkglist.txt
+Here,
+
+rpm – RPM Package Manager
+-qa – Query all installed packages
+sort – sort lines of text files
+pkglist.txt – The file where we save the list of installed packages.
+The above command will list of all installed packages on your CentOS 7 machine
+and save them in a file called pkglist.txt in your current working directory.
+
+Recommended Read: ExplainShell – Find What Each Part Of A Linux Command does
+
+Now, we have created the list of installed packages. Keep this list safe. We
+need it later. Go ahead and format your system.
+
+After reinstalling your Linux box, copy the pkglist.txt file to your system.
+You can also copy this file to any remote system using scp command. Just make
+sure you have installed the same version OS on your remote system.
+
+# scp pkglist user@remotesystem:/path/
+Ex:
+
+# scp pkglist.txt root@192.168.43.150:/root/
+Finally, install the packages from the pkglist.txt file using the following
+command as root user:
+
+# yum install $(cat /root/pkglist.txt|xargs)
+Replace the path of /root/pkglist.txt file with your own.
+
+Done! The package manager will install all packages listed in the pkglist.txt
+file on your CentOS box.
+
+
+
+You can use this pkglist.txt file to all systems on your network. Please note
+that the package manager will only install the packages from the default
+official repositories. If you have enabled any other extra repositories on your
+old system, you need to add them first before installing the software.
+
+

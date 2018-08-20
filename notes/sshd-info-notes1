@@ -1,0 +1,23 @@
+# /usr/sbin/sshd
+Could not load host key: /etc/ssh/ssh_host_rsa_key
+Could not load host key: /etc/ssh/ssh_host_dsa_key
+Here is the solution:
+
+
+ssh-keygen -A
+1
+ssh-keygen -A
+If you dont have the -A option which generates the host keys, you can generate
+them like so:
+
+
+ssh-keygen -t dsa -N "" -f /etc/ssh/ssh_host_dsa_key
+ssh-keygen -t rsa -N "" -f /etc/ssh/ssh_host_rsa_key
+ssh-keygen -t ecdsa -N "" -f /etc/ssh/ssh_host_ecdsa_key
+1
+2
+3
+ssh-keygen -t dsa -N "" -f /etc/ssh/ssh_host_dsa_key
+ssh-keygen -t rsa -N "" -f /etc/ssh/ssh_host_rsa_key
+ssh-keygen -t ecdsa -N "" -f /etc/ssh/ssh_host_ecdsa_key
+
