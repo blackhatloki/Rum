@@ -1,0 +1,197 @@
+Ansible has a concept of an inventory file, so what I’ve done here is copied my site.yml file into localhost.localdomain.yml as I’ve told ansible-pull to look for that. In my home lab, VMs come up unnamed to begin with, then once they’re networked and configured I rename them into a more permanent home. This can easily be changed, but this is what I’ve done thus far. To make it easy to fetch the code, in GitLab I’ve created the user ansible, uploaded a public SSH key, and given the user access rights to the repository. Then, my CentOS 7 kickstart file %post section looks like this:
+
+
+%post --log=/root/ks-post.log
+yum install epel-release -y
+yum install ansible git -y
+yum update -y
+
+useradd -p '<hashed and salted ansible user password>' ansible
+echo "ansible ALL=(root) NOPASSWD:ALL" | tee -a /etc/sudoers.d/ansible
+echo "Defaults:ansible !requiretty" | tee -a /etc/sudoers.d/ansible
+chmod 0440 /etc/sudoers.d/ansible
+wget http://<ks-server>/ansible.tar && tar -xvf ansible.tar -C /home/ansible
+echo localhost.localdomain >> /home/ansible/hosts
+chown -R ansible:ansible /home/ansible/.ssh
+
+wget http://<ks-server>/ansible-config-me.sh -O /usr/local/bin/ansible-config-me.sh
+wget http://<ks-server>/ansible-config-me.service -O /etc/systemd/system/ansible-config-me.service
+chmod 0755 /usr/local/bin/ansible-config-me.sh
+chmod 0644 /etc/systemd/system/ansible-config-me.service
+
+systemctl daemon-reload
+systemctl enable ansible-config-me.service
+
+%post --log=/root/ks-post.log
+ 
+yum install epel-release -y
+yum install ansible git -y
+yum update -y
+ 
+useradd -p '<hashed and salted ansible user password>' ansible
+echo "ansible ALL=(root) NOPASSWD:ALL" | tee -a /etc/sudoers.d/ansible
+echo "Defaults:ansible !requiretty" | tee -a /etc/sudoers.d/ansible
+chmod 0440 /etc/sudoers.d/ansible
+wget http://<ks-server>/ansible.tar && tar -xvf ansible.tar -C /home/ansible
+echo localhost.localdomain >> /home/ansible/hosts
+chown -R ansible:ansible /home/ansible/.ssh
+ 
+wget http://<ks-server>/ansible-config-me.sh -O /usr/local/bin/ansible-config-me.sh
+wget http://<ks-server>/ansible-config-me.service -O /etc/systemd/system/ansible-config-me.service
+chmod 0755 /usr/local/bin/ansible-config-me.sh
+chmod 0644 /etc/systemd/system/ansible-config-me.service
+ 
+systemctl daemon-reload
+systemctl enable ansible-config-me.service
+Above:
+
+I make sure ansible and git are installed and the latest versions with the yum commands
+I add the user, and configure it to use sudo without a password and tty
+Then I unroll it’s .ssh/ directory w/ SSH keys and pre-populated known_hosts file, and also populate the ansible inventory file
+Then I grab the script I’ve created that runs ansible-pull, and will be the executable of my systemd unit file
+I grab the custom systemd unit file
+Do a daemon-reload of systemd to trigger reading in my new unit file
+Enable the new ansible service I’ve created
+Now once kickstart is completed, the ansible-pull script will get run via systemd auto-starting the ansible-config-me service. My unit file and script look like this:
+
+
+ansible-config-me.service:
+[Unit]
+Description=Run ansible-pull at first boot to apply environment configuration
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/ansible-config-me.sh
+Type=oneshot
+
+[Install]
+WantedBy=multi-user.target
+
+ansible-config-me.service:
+[Unit]
+Description=Run ansible-pull at first boot to apply environment configuration
+After=network.target
+ 
+[Service]
+ExecStart=/usr/local/bin/ansible-config-me.sh
+Type=oneshot
+ 
+[Install]
+WantedBy=multi-user.target
+In the [Service] section, Type=oneshot tells systemd that the process will be short-lived. This is is useful for for scripts that do a single job, and then exit.
+
+
+ansible-config-me.sh:
+#!/bin/bash
+
+runuser -l ansible -c 'ansible-pull -C master -d /home/ansible/deploy -i /home/ansible/hosts -U git@gitlab.ludwar.ca:aludwar/ansible.git --key-file /home/ansible/.ssh/id_rsa --accept-host-key --purge &gt;&gt; /home/ansible/run.log'
+
+systemctl disable ansible-config-me.service
+
+ansible-config-me.sh:
+#!/bin/bash
+ 
+runuser -l ansible -c 'ansible-pull -C master -d /home/ansible/deploy -i /home/ansible/hosts -U git@gitlab.ludwar.ca:aludwar/ansible.git --key-file /home/ansible/.ssh/id_rsa --accept-host-key --purge &gt;&gt; /home/ansible/run.log'
+ 
+systemctl disable ansible-config-me.service
+To take advantage of the pre-populated SSH keys and access of the ansible user, I run ansible-pull as user ansible, and tell it to pull the master branch, download the code and run it from the deploy directory, use the hosts inventory file which contains the new hosts’ hostname,  give it my git repo, SSH key, and then set the purge flag to delete the local deploy directory and code within it after it’s done. Since I also just want this script run once, I disable the service in systemd.
+
+There you have it! A one-touch provisioning process. And as for the drift management piece, I read most folks are cron’ing this ansible-pull. However, an official drift management feature is coming in the near-future for Ansible Tower.
+
+Oh, and for interest sake, this is the ansible playbook task I’m running:
+
+
+# This playbook contains common plays that will be run on all nodes.
+
+- name: Install chrony
+ yum: name=chrony state=present
+ tags: chrony
+
+- name: Configure chrony.conf file and restart
+ template: src=chrony.conf.j2 dest=/etc/chrony.conf
+ tags: chrony
+ notify: restart chrony
+
+- name: Enable chrony at boot
+ service: name=chronyd state=started enabled=yes
+ tags: chrony
+
+- name: Update motd
+ template: src=etc.motd dest=/etc/motd
+ tags: motd
+
+- name: Add --long-hostname to getty
+ lineinfile: dest=/etc/systemd/system/getty.target.wants/getty@tty1.service regexp="^ExecStart=" line="ExecStart=-/sbin/agetty --long-hostname --noclear %I $TERM" state=present
+
+- name: Deploy hardened SSH client config file (/etc/ssh/ssh_config)
+ template: src=etc.ssh.ssh_config dest=/etc/ssh/ssh_config
+ tags: ssh
+ notify: restart sshd
+
+- name: Deploy hardened SSH server config file (/etc/ssh/sshd_config)
+ template: src=etc.ssh.sshd_config dest=/etc/ssh/sshd_config
+ tags: ssh
+ notify: restart sshd
+
+- name: Add local user aludwar, enable sudo, unroll home directory - Load/copy script
+ template: src=set-aludwar.sh dest=/tmp/set-aludwar.sh mode="u+rwx"
+
+- name: Add local user aludwar, enable sudo, unroll home directory - Run script
+ command: bash /tmp/set-aludwar.sh
+
+- name: Flush and harden firewall(iptables) rules - Load/copy script
+ template: src=set-iptables.sh dest=/tmp/set-iptables.sh mode="u+rwx"
+
+- name: Flush and harden firewall(iptables) rules - Run script
+ command: bash /tmp/set-iptables.sh
+
+# This playbook contains common plays that will be run on all nodes.
+ 
+- name: Install chrony
+ yum: name=chrony state=present
+ tags: chrony
+ 
+- name: Configure chrony.conf file and restart
+ template: src=chrony.conf.j2 dest=/etc/chrony.conf
+ tags: chrony
+ notify: restart chrony
+ 
+- name: Enable chrony at boot
+ service: name=chronyd state=started enabled=yes
+ tags: chrony
+ 
+- name: Update motd
+ template: src=etc.motd dest=/etc/motd
+ tags: motd
+ 
+- name: Add --long-hostname to getty
+ lineinfile: dest=/etc/systemd/system/getty.target.wants/getty@tty1.service regexp="^ExecStart=" line="ExecStart=-/sbin/agetty --long-hostname --noclear %I $TERM" state=present
+ 
+- name: Deploy hardened SSH client config file (/etc/ssh/ssh_config)
+ template: src=etc.ssh.ssh_config dest=/etc/ssh/ssh_config
+ tags: ssh
+ notify: restart sshd
+ 
+- name: Deploy hardened SSH server config file (/etc/ssh/sshd_config)
+ template: src=etc.ssh.sshd_config dest=/etc/ssh/sshd_config
+ tags: ssh
+ notify: restart sshd
+ 
+- name: Add local user aludwar, enable sudo, unroll home directory - Load/copy script
+ template: src=set-aludwar.sh dest=/tmp/set-aludwar.sh mode="u+rwx"
+ 
+- name: Add local user aludwar, enable sudo, unroll home directory - Run script
+ command: bash /tmp/set-aludwar.sh
+ 
+- name: Flush and harden firewall(iptables) rules - Load/copy script
+ template: src=set-iptables.sh dest=/tmp/set-iptables.sh mode="u+rwx"
+ 
+- name: Flush and harden firewall(iptables) rules - Run script
+ command: bash /tmp/set-iptables.sh
+ 
+
+Additional items to work on for an even sleeker provisioning process:
+
+Tweaking my virsh-install script to provide a hostname, and have the OS configure it with ansible
+Finding an appropriately safe, yet public place to pull this ansible code from, so I can use it with cloud providers
+Removing the local ansible user and using LDAP instead for increased security and control
