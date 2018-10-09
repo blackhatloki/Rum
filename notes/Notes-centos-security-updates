@@ -1,0 +1,20 @@
+To check & update the security patches in Centos run the below command but internet connection is required.
+
+# yum updateinfo list security all [To check the available all security updatesl ]
+
+#yum updateinfo list serurity installed [To check the installed security patches ] 
+
+# yum -y update --security [ To installed all available security patches ] 
+
+# yum update-minimal --security -y [To only install the packages that have a security errata use]
+
+# man yum-security [For more commands consult the manual pages of yum-security with]
+
+Note : you will be able to run these commands with yum "updateinfo" when you have installed "yum install yum-plugin-security" on centOS 6. 
+
+If it is already installed check with rpm command 
+
+#rpm -qa |grep 'yum-plugin-security' 
+
+if it is already there you can install & check the security updates. 
+

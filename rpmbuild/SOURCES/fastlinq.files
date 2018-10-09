@@ -1,0 +1,5 @@
+%defattr(644,root,root,755)
+/lib/modules/%2-%1
+/lib/firmware/qed/
+/etc/dracut.conf.d/fastlinq.conf
+/etc/depmod.d/fastlinq.conf

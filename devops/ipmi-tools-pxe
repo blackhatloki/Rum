@@ -1,0 +1,3 @@
+#/bin/bash 
+ipmitool chassis bootdev
+ipmitool chassis power reset 

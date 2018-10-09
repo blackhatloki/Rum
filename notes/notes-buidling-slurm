@@ -1,0 +1,1000 @@
+    4  systemctl status gmond
+    5  systemctl stop gmond
+    6  gmond -d 5 -c /etc/ganglia/gmond.conf 
+    7  systemctl start gmond
+    8  ls
+    9  vim gmond.conf 
+   10  grep 8650 gmond.conf 
+   11  grep 8651 gmond.conf 
+   12  systemctl restart  gmond
+   13  systemctl stop  gmond
+   14  gmond -d 5 -c /etc/ganglia/gmond.conf 
+   15  systemctl start  gmond
+   16  journalctl -u gmond -f
+   17  systemctl stop  gmond
+   18  gmond -d 5 -c /etc/ganglia/gmond.conf 
+   19  ls
+   20  cd tmp/
+   21  ls
+   22  cd ../
+   23  ls
+   24  vim ganglia.hosts 
+   25  gmond -d 5 -c /etc/ganglia/gmond.conf 
+   26  ifconfig 
+   27  gmond -d 5 -c /etc/ganglia/gmond.conf 
+   28  systemctl start  gmond
+   29  systemctl stop gmond
+   30  gmond -d 5 -c /etc/ganglia/gmond.conf 
+   31  systemctl start gmond
+   32  ls
+   33  cd /etc/ganglia/
+   34  ls
+   35  vim ganglia.hosts 
+   36  exit
+   37  cd /opt
+   38  l
+   39  cd ohpc/
+   40  ls
+   41  cd admin 
+   42  ls
+   43  cd images/
+   44  ls
+   45  cd 2018-06-12
+   46  ls
+   47  df
+   48  ls
+   49  pwd
+   50  df
+   51  pwd
+   52  cd var/log 
+   53  ls
+   54  ls -asl 
+   55  ps aux | grep gmond
+   56  systemctl status gmond
+   57  journalctl -u gmond -f
+   58  systemctl status gmond
+   59  ls
+   60  systemctl status gmond
+   61  journalctl -u gmond -f
+   62  telnet 128.122.215.17 8651 | grep -i "HOST NAME"
+   63  ssh dumbo0
+   64  ssh dumbo-0
+   65  exit
+   66  cd /etc/ganglia/
+   67  vim ganglia.hosts 
+   68  vim gmond.conf 
+   69  ls
+   70  systemctl status gmond
+   71  journalctl -u gmond -f
+   72  vim gmond.conf 
+   73  systemctl reload gmond
+   74  systemctl status gmond
+   75  systemctl restart  gmond
+   76  systemctl stop  gmond
+   77  systemctl start  gmond
+   78  vim gmond.conf 
+   79  systemctl start  gmond
+   80  systemctl status gmond
+   81  ls
+   82  vim gmond.conf 
+   83  systemctl stop  gmond
+   84  systemctl status gmond
+   85  systemctl status  gmond
+   86  systemctl start  gmond
+   87  vim gmond.conf 
+   88  systemctl start  gmond
+   89  systemctl stop  gmond
+   90  systemctl status  gmond
+   91  gmond -d 5 -c /etc/ganglia/gmond.conf 
+   92  systemctl start  gmond
+   93  gmond -d 5 -c /etc/ganglia/gmond.conf 
+   94  vim gmond.conf 
+   95  systemctl stop  gmond
+   96  gmond -d 5 -c /etc/ganglia/gmond.conf 
+   97  systemctl start gmond
+   98  exit
+   99  cd /opt/
+  100  ls
+  101  cd ohpc/
+  102  ls
+  103  cd admin 
+  104  ls
+  105  cd images/
+  106  ls
+  107  cd 2018-06-12
+  108  ls
+  109  cd /opt
+  110  ls
+  111  cd ohpc
+  112  ls
+  113  cd admin 
+  114  ls
+  115  cd images
+  116  ls
+  117  cd 2018-06-1
+  118  cd 2018-06-12/
+  119  ls
+  120  pwd
+  121  cd etc
+  122  ls
+  123  vi hosts 
+  124  pwd
+  125  cd ..
+  126  cd var
+  127  cd log 
+  128  ls
+  129  ls -asl 
+  130  pwd
+  131  cd ..
+  132  cd ..
+  133  ls
+  134  cd opt/slurm/etc/
+  135  ks
+  136  ls
+  137  rm slurm.epilog.clean
+  138  mv slurm.epilog.clean.rpmsave slurm.epilog.clean
+  139  ls
+  140  pwd
+  141  ls -asl ../../var/log 
+  142  pwd
+  143  cd ../..
+  144  ls
+  145  cd ..
+  146  ls
+  147  cd var
+  148  cd log 
+  149  ls -asl 
+  150  ls -aslg 
+  151  ls -aslgu 
+  152  ls -aslgui
+  153  grep  munge /etc/passwd
+  154  id
+  155  history | grep  -i vnfs 
+  156   wwvnfs 2018-06-12 --chroot=/opt/ohpc/admin/images/2018-06-12
+  157  grep gpu-73 /etc/hosts 
+  158  ssh log-0 
+  159  exit
+  160  systemctl status dhcpd 
+  161  systemctl dhcpd start 
+  162  systemctl start dhcpd 
+  163  history 
+  164  id
+  165  history | grep undef 
+  166   wwsh -y provision set gpu-73  --bootlocal=exit
+  167  wwsh provision print gpu-73 
+  168  ssh teague@gpu-73 
+  169  vi /etc/hosts 
+  170  cd /opt
+  171  ls
+  172  cd ohpc/
+  173  ls
+  174  cd admin 
+  175  ls
+  176  cd images
+  177  ls
+  178  cd 2018-06-12
+  179  ls
+  180  cd var 
+  181  ls
+  182  pwd
+  183  ls -asl 
+  184  cd log 
+  185  ls
+  186  pwd
+  187  ssh gpu-73
+  188  pwd
+  189  ls
+  190  ssh gpu-73
+  191  exit
+  192  vi vnfs.conf
+  193  if
+  194  id
+  195  history | grep vnfs 
+  196   wwvnfs 2018-06-12 --chroot=/opt/ohpc/admin/images/2018-06-12
+  197  history | grep boot
+  198   wwsh -y provision set gpu-73  --bootlocal=undef
+  199  ls
+  200  vi vnfs.conf 
+  201  ls
+  202  cd vnfs/
+  203  ls
+  204  vi  2018-06-12.conf 2018-06-12.conf
+  205  ls
+  206  cd ..
+  207  ls
+  208  cd defaults/
+  209  ls
+  210  more * 
+  211  ls
+  212  ls
+  213  vi node.conf 
+  214  \\\
+  215  exit
+  216  cd /etc/warewulf/
+  217  ls
+  218  cd filesystem/
+  219  ls
+  220  cp gpu2disks.cmds gpu2disksraid0.cmds
+  221  vi gpu2disksraid0.cmds
+  222  history 
+  223  wwsh -y provision set gpu-73  --bootlocal=undef
+  224  cd /root
+  225  ls
+  226  more f
+  227  wwsh -y provision set --filesystem=gpu2disksraid0
+  228  wwsh -y provision set gpu-73 --filesystem=gpu2disksraid0
+  229  ls
+  230  cd /etc/warewulf/
+  231  ls
+  232  cd filesystem/
+  233  ls
+  234  cd examples/
+  235  ls
+  236  more * 
+  237  ls
+  238  cd ..
+  239  ls
+  240   wwsh -y provision set gpu-73  --filesystem=gpu2disks
+  241  exit
+  242  cp bios.cmds gpu2disks.cmds
+  243  vi gpu2disks.cmds 
+  244  id
+  245  history 
+  246  history  | grep undef
+  247  wwsh -y provision set gpu-73 --bootlocal=undef
+  248  ssh teague@gpu-73 
+  249  ssh teague@gpu-73 
+  250  ssh teague@gpu-73 
+  251  ls
+  252  more gpu2disks.cmds 
+  253  ls
+  254  cd /root
+  255  ls
+  256  more w
+  257  more f 
+  258  id
+  259  cd /etc/warewulf/
+  260  ls
+  261  cd filesystem/
+  262  ls
+  263  wwsh -y provision set --filesystem=gpu2disks gpu-73 
+  264  wwsh provision print gpu-73 
+  265  ssh gpu-73 
+  266  ssh teague@gpu-73 
+  267  ls
+  268  vi gpu2disks.cmds 
+  269  : wwsh -y provision set --filesystem=gpu2disks gpu-73
+  270  wwsh -y provision set --filesystem=gpu2disks gpu-73
+  271   wwsh provision print gpu-73
+  272  ssh teague@gpu-73 
+  273  ssh teague@prince-master0 
+  274  history | grep wwsh 
+  275  wwsh -y provision set gpu-73  --bootlocal=exit
+  276  l
+  277  cd /root 
+  278  ls
+  279  more f
+  280  df
+  281  id
+  282  systemctl dhcpd stop 
+  283  systemctl stop dhcpd 
+  284  exit
+  285  df
+  286  ssh gpu-68 
+  287  exit
+  288  vi 172 
+  289  cd /home/teague
+  290  ls
+  291  vi 172
+  292  cd /root
+  293  ls
+  294  more f
+  295  ssh teague@c01-01 
+  296  exit
+  297  df
+  298  ls
+  299  more f
+  300  ls
+  301  cd /home/teague
+  302  ls
+  303  ls -aslt | head -10 
+  304  more names 
+  305  ls
+  306  ls -aslt | head -10 
+  307  vi 172
+  308  grep c01-01 172 MACS 
+  309  man col 
+  310  grep c01-01 172 MACS  | col 
+  311  exit
+  312  ls
+  313  cd /root
+  314  ls
+  315  more f
+  316  exit
+  317  history 
+  318  wwsh -y provision set --filesystem=gpu2disks gpu-73
+  319  cat /etc/warewulf/filesystem/gpu2disks.cmds 
+  320  wwsh -y provision set --filesystem=gpu2disks gpu-72
+  321  wwsh -y provision set --filesystem=gpu2disks gpu-71
+  322  wwsh -y provision set --filesystem=gpu2disks gpu-70
+  323  wwsh -y provision set --filesystem=gpu2disks gpu-69
+  324  wwsh -y provision set --filesystem=gpu2disks gpu-68 
+  325  ps -ef | grep dhcp 
+  326  systemctl start dhcpd 
+  327  cd devops 
+  328  ping gpu-68
+  329   wwsh -y provision set --bootlocal=undef 
+  330   wwsh -y provision set - wwsh -y provision set gpu-72 --filesystem=gpu2disks
+  331   wwsh -y provision set - wwsh -y provision set gpu-73 --filesystem=gpu2disks
+  332   wwsh -y provision set - wwsh -y provision set gpu-71 --filesystem=gpu2disks
+  333   wwsh -y provision set - wwsh -y provision set gpu-70 --filesystem=gpu2disks
+  334   wwsh -y provision set - wwsh -y provision set gpu-69 --filesystem=gpu2disks
+  335   wwsh -y provision set - wwsh -y provision set gpu-68 --filesystem=gpu2disks
+  336  wwsh -y provision set gpu-72 --filesystem=gpu2disks
+  337  wwsh provision print 
+  338  wwsh -y provision set gpu-72 --filesystem=gpu2disks
+  339  wwsh -y provision set gpu-73 --filesystem=gpu2disks
+  340  wwsh -y provision set gpu-72 --filesystem=gpu2disks
+  341  wwsh -y provision set gpu-71 --filesystem=gpu2disks
+  342  wwsh -y provision set gpu-70 --filesystem=gpu2disks
+  343  wwsh -y provision set gpu-69 --filesystem=gpu2disks
+  344  wwsh -y provision set gpu-68 --filesystem=gpu2disks
+  345  wwsh -y provision set gpu-68 --bootlocal=undef
+  346  wwsh -y provision set gpu-69 --bootlocal=undef
+  347  wwsh -y provision set gpu-70 --bootlocal=undef
+  348  wwsh -y provision set gpu-71 --bootlocal=undef
+  349  wwsh -y provision set gpu-72 --bootlocal=undef
+  350  wwsh -y provision set gpu-73 --bootlocal=undef
+  351  ping gpu-73
+  352  ssh gpu-73 
+  353  ssh prince-master0 
+  354  ssh teague@prince-master0 
+  355  history 
+  356  wwsh -y provision set gpu-68 --bootlocal=exit
+  357  wwsh -y provision set gpu-69 --bootlocal=exit
+  358  wwsh -y provision set gpu-70 --bootlocal=exit
+  359  wwsh -y provision set gpu-71 --bootlocal=exit
+  360  wwsh -y provision set gpu-72 --bootlocal=exit
+  361  wwsh -y provision set gpu-73 --bootlocal=exit
+  362  ssh teague@prince-master0
+  363  cd /root
+  364  ls
+  365  more f
+  366  tail -f /etc/hosts 
+  367  ls
+  368  vi /etc/hosts 
+  369  ssh teague@prince-master0 
+  370  exit
+  371  cd /root/.ssh 
+  372  ls
+  373  more cluster.pub 
+  374  more authorized_keys 
+  375  ssh localhost 
+  376  exit
+  377  cd /root/.ssh 
+  378  ls
+  379  more cluster.pub 
+  380  ping c33-12
+  381  ssh c33-12 
+  382  exit
+  383  ssh prince-master0 
+  384  cd /root/.ssh 
+  385  ls
+  386  cd /opt/ohpc/
+  387  ls
+  388  cd admin 
+  389  ls
+  390  cd images/
+  391  ls
+  392  cd 2018-06-12
+  393  ls
+  394  cd root
+  395  ls
+  396  cd .ssh 
+  397  ls
+  398  vi authorized_keys 
+  399  df
+  400  history 
+  401  history | grep vnfs 
+  402   wwvnfs 2018-06-12 --chroot=/opt/ohpc/admin/images/2018-06-12
+  403  wwsh provision print 
+  404  ping c32-12-ipmi 
+  405  ping c32-01-ipmi 
+  406  exit
+  407  ip a s
+  408  df
+  409  ssh prince-master0 
+  410  exit
+  411  ssh prince-master0 
+  412  df
+  413  df -h 
+  414  lvs
+  415  df
+  416  lsblk 
+  417  cat /etc/fstab 
+  418  cd /state/
+  419  ls
+  420  cd partition1/
+  421  ls
+  422  df -k . 
+  423  pwd
+  424  ls
+  425  cd var
+  426  ls
+  427  cd logs 
+  428  df
+  429  cat /etc/fstab 
+  430  pwd
+  431  cd ..
+  432  ls
+  433  pwd
+  434  cd ..
+  435  ls
+  436  mkdir images 
+  437  ls -asl 
+  438  cd images/
+  439  ls
+  440  pwd
+  441  ls
+  442  pwd
+  443  mkdir 08072018 
+  444  pwd
+  445  cd /opt/ohpc/admin/images/
+  446  ls
+  447  rsync -av 2018-06-12/ /state/partition1/images/2018-08-07 
+  448  df -h 
+  449  ls
+  450  cd /state/partition1/
+  451  ls
+  452  cd images/
+  453  ls
+  454  df
+  455  ls
+  456  rmdir 08072018
+  457  cd 2018-08-07/
+  458  ls
+  459  ls -asl
+  460  cd .root
+  461  ls
+  462  cd root
+  463  ls
+  464  cd .ssh 
+  465  ls
+  466  ls -asl 
+  467  df
+  468  ls
+  469  cd ..
+  470  ls
+  471  df
+  472  pwd
+  473  cd ..
+  474  ls
+  475  cd ..
+  476  ls
+  477  df
+  478  :q!
+  479  exit
+  480  df -h
+  481  wwsh 
+  482  exit
+  483  wwsh provision print 
+  484  wwsh provision print  | more
+  485     w
+  486  ps -ef
+  487  df
+  488  df
+  489  cd /state/partition1/
+  490  ls
+  491  cd images/
+  492  ls
+  493  export CHROOT=/state/partition1/images/centos7.5
+  494  echo $CHROOT
+  495  wwmkchroot centos-7 $CHROOT
+  496  echo $CHROOT
+  497  yum -y --installroot=$CHROOT install ohpc-base-compute
+  498  cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
+  499  yum -y --installroot=$CHROOT install ntp
+  500  yum -y --installroot=$CHROOT install kernel
+  501  yum -y --installroot=$CHROOT install lmod-ohpc
+  502  df
+  503  ls
+  504  df -k 
+  505  cd centos7.5/
+  506  ls
+  507  ls -asl 
+  508  uname -a 
+  509  echo $CHROOT 
+  510  yum -y --installroot=$CHROOT install grub2
+  511  vnfs list 
+  512  wwvnfs list 
+  513  id
+  514  df
+  515  echo $CHROOT
+  516  ls -asl /state/partition1/images/centos7.5
+  517  exit
+  518  wwsh provision list 
+  519  wwsh node  list 
+  520  wwvfs ls 
+  521  wwvfs list 
+  522  wwvnfs list 
+  523  ls -asl /opt/ohpc/admin/images/
+  524  export CHROOT=/opt/ohpc/admin/images/centos7.5
+  525  wwvnfs list 
+  526  wwvnfs list --chroot $CHROOT
+  527  more  /etc/warewulf/vnfs/list.conf
+  528  wwvnfs list 
+  529  wwnvfs help 
+  530  wwvnfs 
+  531  vnfs 
+  532  history 
+  533  history  | grep ww
+  534  ssh gpu-73 
+  535  ssh teague@gpu-73 
+  536  ps -ef | grep wwsh 
+  537  ps -ef | grep ww
+  538  ps -ef | more 
+  539  ps -ef | grep WW
+  540  more  /warewulf/bin/wwgetfiles
+  541  wwsh provision print 
+  542  more  /warewulf/bin/wwgetfiles
+  543  ssh gpu-73
+  544  exit
+  545  ssh gpu-68 
+  546  soho0 
+  547  exit
+  548  wwsh file sync \*
+  549  ssh gpu-68 
+  550  ssh gpu-90 
+  551  wwsh file 
+  552  wwsh file list
+  553  wwsh file show dynamic_hosts
+  554  #### dynamic_hosts #########
+  555  wwsh file show dynamic_hostsçççç
+  556  wwsh file show 
+  557  wwsh file show passwd
+  558  wwsh file show passwd
+  559  wwsh file show passwd | wc -l 
+  560  wwsh provision print 
+  561  wwsh node  print 
+  562  wwsh provision list 
+  563  wwsh provision list 
+  564  w
+  565  ps -ef
+  566  ssh prince-master0 
+  567  ssh log-1 
+  568  ssh tst722@dtn0 
+  569  ssh tst722@dtn0 
+  570  ssh tst722@dtn1
+  571  ls -asl /etc/group 
+  572  more /etc/group 
+  573  grep tst722 /etc/group 
+  574  who 
+  575  ps -ef
+  576  id
+  577  ps -ef
+  578  exit
+  579  wwsh node print 
+  580  wwsh provision  print 
+  581  pssh 
+  582  ssh wolf 
+  583  ssh odin 
+  584  ssh teague@hpcmysql
+  585  crontab -l
+  586  more /root/bin/hpc-dsmcbackup.sh
+  587  ls
+  588  exit
+  589  cd /etc/cron.hourly/
+  590  ls
+  591  more * 
+  592  id
+  593  wwsh file sync passwd 
+  594  vi /etc/shadow
+  595  wwsh file sync shadow 
+  596  ls
+  597  vi wwsh_filesync.sh 
+  598  chmod 755 wwsh_filesync.sh 
+  599  ls -asl 
+  600  ./wwsh_filesync.sh 
+  601  ls -asl /etc/passwd /etc/shadow 
+  602  exit
+  603  more /etc/cron.hourly/
+  604  cd  /etc/cron.hourly/
+  605  ls
+  606  ls -ltrs
+  607  more wwsh_filesync.sh 
+  608  ls /etc/passwd /etc/shadow
+  609  exit
+  610  w
+  611  ps -ef
+  612  cat /etc/group 
+  613  wwsh provision print 
+  614  wwsh node  print 
+  615  wwsh node  list
+  616  wwsh provision   list
+  617  wwsh provision  print 
+  618  ls
+  619  cd /etc/cron.hourly/
+  620  ls
+  621  vi wwsh_filesync.sh 
+  622  ssh teague@gpu-73 
+  623  ls
+  624  ./wwsh_filesync.sh 
+  625  df
+  626  ssh home-1 
+  627  exit
+  628  cd /etc/cron.hourly/
+  629  ls
+  630  more wwsh_filesync.sh 
+  631  cd
+  632  exit
+  633  ssh prince-master0 
+  634  exit
+  635  crontab -l 
+  636  cd /etc/cron.hourly/
+  637  ls
+  638  vi wwsh_filesync.sh 
+  639  wwsh provision print 
+  640  ls
+  641  vi wwsh_filesync.sh 
+  642  df
+  643  ls
+  644  more wwsh_filesync.sh 
+  645  wwsh file sync *
+  646  wwsh file sync *\
+  647  vi wwsh_filesync.sh 
+  648  more wwsh_filesync.sh 
+  649  wwsh file sync dynamic_hosts
+  650  ssh gpu-90 
+  651  ps -ef
+  652  df
+  653  w
+  654  ps -ef
+  655  df
+  656  ssh dtn0 
+  657  exit
+  658  vi /etc/hosts
+  659  w
+  660  ps -ef
+  661  cp load.pm1 /root 
+  662  cd /root
+  663  ls
+  664  more load.pm1 
+  665  ls
+  666  while read n ip mac ; do  echo $n $ip $mac; done < load.pm1 
+  667  while read n ip mac ; do  echo "wwsh -y node new $n --ipaddr=$ip  --hwaddr=$mac -D eth0 --groups=compute"  ; done < load.pm1  
+  668  while read n ip mac ; do  echo "wwsh -y node new $n --ipaddr=$ip  --hwaddr=$mac -D eth0 --groups=compute"  ; done < load.pm1   > update
+  669  vi update 
+  670  while read n ip mac ; do  echo "wwsh -y node new $n --ipaddr=$ip  --hwaddr=$mac -D eth0 --groups=compute" ; echo "wwsh -y provision set $n --bootlocal=normal "  ; done < load.pm1  
+  671  while read n ip mac ; do  echo "wwsh -y node new $n --ipaddr=$ip  --hwaddr=$mac -D eth0 --groups=compute" ; echo "wwsh -y provision set $n --bootlocal=exit "  ; done < load.pm1  
+  672  while read n ip mac ; do  echo "wwsh -y node new $n --ipaddr=$ip  --hwaddr=$mac -D eth0 --groups=compute" ; echo "wwsh -y provision set $n --bootlocal=exit "  ; done < load.pm1  > update
+  673  vi update 
+  674  id
+  675  wwsh 
+  676  wwsh print 
+  677  wwsh node print 
+  678  wwsh privision 
+  679  wwsh provision print 
+  680  history 
+  681  bash -vx ./update 
+  682  systemctl status dhcpd 
+  683  df
+  684  ps -ef | grep dhcp 
+  685  systemctl restart dhcpd 
+  686  systemctl status dhcpd 
+  687  df
+  688  ps -ef
+  689  w
+  690  ps -ef
+  691  ps -ef
+  692  df
+  693  ls
+  694  pwd
+  695  cd .
+  696  cd ..
+  697  ls
+  698  ls -aslR
+  699  df
+  700  ls
+  701  systemctl stop dhcpd 
+  702  wwsh node print gpu-90 
+  703  grep  10.0.3.87 /etc/hosts 
+  704  cd /home/teague/devops/
+  705  ls
+  706  more v100.sh 
+  707  wwsh -y  node set gpu-90 -D ib0 -I 10.0.3.94 
+  708  wwsh -y  node set gpu-90 -D ib7 -I  10.0.7.94  
+  709  wwsh -y  node set gpu-90 -D ib0 -I 10.0.3.97
+  710  wwsh -y  node set gpu-90 -D ib0 -I 10.0.3.87
+  711  wwsh -y  node set gpu-90 -D ib7 -I  10.0.7.87  
+  712  exit
+  713  vi Readme.md 
+  714  ls
+  715  ls
+  716  w
+  717  ls -asl 
+  718  df -h 
+  719  ps -ef
+  720  ip  a  s
+  721  ps -wf
+  722  ps -ef
+  723  df
+  724  df
+  725  df
+  726  uname -a 
+  727  ps -ef
+  728  ps -ef
+  729  df
+  730  ls
+  731  df
+  732  ls
+  733  cd /root
+  734  ls
+  735  cd warewulf/
+  736  ls
+  737  more statefulProvisioning.txt 
+  738  cd /home/teague
+  739  ls
+  740  cd devops/
+  741  ls
+  742  ls -asl wwsh*
+  743  more v100.sh 
+  744  ls
+  745  cp v100.sh slurm0.sh 
+  746  vi slurm0.sh 
+  747  ls
+  748  ls -asl slurm0.sh *
+  749  ls -asl slurm01.sh 
+  750  ls -asl slu*
+  751  more slurm0.sh 
+  752  id
+  753  bash -xv ./slurm0.sh 
+  754  wwsh print 
+  755  ps -ef | grep dhcp 
+  756  systemctl start dhcpd 
+  757  ps -ef | grep dhcp 
+  758  ip a s
+  759  tcpdump -i bond0
+  760  tcpdump -i bond2
+  761  wwsh print slurm0
+  762  wwsh nodde print slurm0
+  763  wwsh nodd print slurm0
+  764  wwsh node print slurm0
+  765  wwsh provisioon print slurm0 
+  766  wwsh print 
+  767  wwsh node print 
+  768  wwsh node print slurm0 
+  769  wwsh node print | grep slurm 
+  770  ls
+  771  more slurm0.sh 
+  772  bash -xv ./slurm0.sh 
+  773  id
+  774  wwsh node 
+  775  vi slurm0.sh 
+  776  wwsh node print | more
+  777  id
+  778  ps -ef
+  779  ps -ef | grep mysql 
+  780  df
+  781  ls
+  782  more slurm0.sh 
+  783  wwsh -y  node clone gpu-90 slurm0
+  784  wwsh node print slurm0 
+  785  wwsh node print c01-01
+  786  wwsh node print gpu-90  
+  787  id
+  788  pwd
+  789  more v100.sh 
+  790  lsls
+  791  ls
+  792  grep wwsh * 
+  793  ls
+  794  cd /root
+  795  ls
+  796  more c 
+  797  more f
+  798  cd /home/teague/devops/
+  799  vi slurm0.sh 
+  800  bash -xv ./slurm0.sh 
+  801  wwsh -y provision set slurm0 --bootlocal=undef
+  802  vi slurm0.sh 
+  803  more slurm0.sh 
+  804  wwsh node delete slurm 
+  805  wwsh node delete slurm0 
+  806  more slurm0.sh 
+  807  bash -xv slurm0.sh 
+  808  ls -asl *idrac8
+  809  ls *idra*
+  810  ./idrac-setrootpasswd.sh 192.168.3.94
+  811  ./idrac-powercycle.sh 192.168.3.94 
+  812  wwsh -y provision set slurm0 --bootlocal=undef 
+  813  vi slurm0.sh 
+  814  wwsh node print slurm0 
+  815  wwsh provision  print slurm0 
+  816  ./idrac-powercycle.sh 192.168.3.94 
+  817  wwsh provision  print slurm0 
+  818  ./idrac-powercycle.sh 192.168.3.94 
+  819  wwsh provision  print slurm0 
+  820  wwsh node  print slurm0 
+  821  ./idrac-powercycle.sh 192.168.3.94 
+  822  vi slurm0.sh 
+  823  wwsh node delete slurm0 
+  824  bash -xv ./slurm0.sh 
+  825   wwsh -y provision set slurm0 --bootlocal=undef
+  826  wwsh node  print slurm0 
+  827  ping 172.16.3.94
+  828  wwsh node delete slurm0 
+  829  vi slurm0.sh 
+  830  bash -xv ./slurm0.sh 
+  831  wwsh -y provision set slurm0 --bootlocal=undef 
+  832  ./idrac-powercycle.sh 192.168.3.94 
+  833  vi slurm0.sh 
+  834  ./idrac-powercycle.sh 192.168.3.94 
+  835  ping slurm0
+  836  ping slurm0 
+  837  ./idrac-powercycle.sh 192.168.3.94 
+  838  ssh prince-master0 
+  839  ./idrac-powercycle.sh 192.168.3.94 
+  840  vi slurm0.sh 
+  841  wwsh node delete slurm0 
+  842  bash -xv ./slurm0.sh 
+  843   wwsh -y provision set slurm0 --bootlocal=undef
+  844  ls
+  845  rm -rf centos7.5/
+  846  df -k . 
+  847  df -h 
+  848  ls
+  849  rm -rf 2018-06-11
+  850  df -k . 
+  851  ls -asl /state/partition1/
+  852  ls -asl /state/partition1/images/
+  853  pwd
+  854  cd  /state/partition1/images/
+  855  ls -asl 
+  856  rm -rf centos7.5
+  857  pwd
+  858  export CHROOT=/state/partition1/images/centos7.5
+  859  echo $CHROOT 
+  860  wwmkchroot centos-7 $CHROOT
+  861  yum -y --installroot=$CHROOT install ohpc-base-compute
+  862   cp -p /etc/resolv.conf $CHROOT/etc/resolv.conf
+  863  yum -y --installroot=$CHROOT install kernel
+  864  yum -y --installroot=$CHROOT install grub2
+  865   wwvnfs --chroot $CHROOT
+  866    wwvnfs ;ist 
+  867    wwvnfs list 
+  868    wwvnfs
+  869  pwd
+  870  ln -s /state/partition1/images/centos7.5 /opt/ohpc/admin/images/centos7.5
+  871  ls -als /opt/ohpc/admin/images/centos7.5
+  872    wwvnfs list 
+  873    wwvnfs 
+  874   wwsh vnfs list
+  875   wwsh bootstrap list
+  876  wwsh bootstrap help
+  877  wwsh  bootstrap import /opt/ohpc/admin/images/centos7.5 --name=centos7.5  --arch=x86_64
+  878  ls -asl /opt/ohpc/admin/images/centos7.5
+  879   wwsh  bootstrap import /state/partition1/images/centos7.5 --name=centos7.5  --arch=x86_64
+  880  ls -asl --name=centos7.5  --arch=x86_64
+  881  wwsh vnfs list 
+  882  wwsh vnfs list
+  883  wwbootstrap 
+  884  wwbootstrap --chroot=/state/partition1/images/centos7.5 3.10.0-862.11.6.el7.x86_64
+  885  wwsh bootstrap list 
+  886  wwsh provision print slurm0 
+  887  wwsh provision set slurm0 --bootstrap=3.10.0-862.11.6.el7.x86_64 --vnfs=centos7.5
+  888  pwd
+  889  cd /home/teague/devops/
+  890  ./idrac-powercycle.sh 192.168.3.94
+  891  wwsh provision print slurm0 
+  892  pwd
+  893  cd /warewulf/
+  894  ls
+  895  cd co
+  896  cd config 
+  897  ls
+  898  ls -asl 
+  899  cd bin 
+  900  ls
+  901  cd ..
+  902  ls
+  903  cd transports/
+  904  ls
+  905  cd http/
+  906  ls
+  907  /srv
+  908  ls
+  909  cd /
+  910  ls
+  911  cd srv
+  912  ls
+  913  cd warewulf/
+  914  ls
+  915  cd bootstrap/
+  916  ls
+  917  cd x86_64/
+  918  ls
+  919  cd 466/
+  920  ls
+  921  ls -asl 
+  922  cd ..
+  923  ls
+  924  cd 1
+  925  ls
+  926  ls -asl 
+  927  cd /home/teague/devops
+  928  ls
+  929  ./idrac-powercycle.sh 192.168.3.94
+  930  ./idrac-powercycle.sh 192.168.3.94
+  931  df -h 
+  932  cd /etc/warewulf/
+  933  ls
+  934  vi bootstrap.conf 
+  935  vi vnfs.conf 
+  936  ls
+  937  vi provision.conf 
+  938  ip a s
+  939  ls
+  940  ls
+  941  vi dhcpd-template.conf 
+  942  cd /warewulf/
+  943  ls
+  944  cd /srv
+  945  ls
+  946  cd warewulf/
+  947  ls
+  948  cd ipxe/
+  949  ls
+  950  cd cfg/
+  951  ls
+  952  ls -asl 
+  953  more f4\:e9\:d4\:76\:2b\:9a 
+  954  ssh teague@dtn0 
+  955  ssh teague@dtn0 
+  956  cd /home/teague/devops/
+  957  ./idrac-powercycle.sh 192.168.3.94 
+  958  pwd
+  959  mkdir orig 
+  960  ls
+  961  mv initfs.gz kernel orig/
+  962  scp robinhood:/boot/initramfs-3.10.0-862.11.6.el7.x86_64.img . 
+  963  scp teague@robinhood:/boot/initramfs-3.10.0-862.11.6.el7.x86_64.img . 
+  964  scp teague@robinhood:/boot/vmlinuz-3.10.0-862.11.6.el7.x86_64 .
+  965  ls
+  966  ls -asl orig
+  967  mv vmlinuz-3.10.0-862.11.6.el7.x86_64  kernel 
+  968  ls -asl 
+  969  cd orig/
+  970  file * 
+  971  id
+  972  ls
+  973  pwd
+  974  ls
+  975  cd ..
+  976  ls
+  977  scp teague@robinhood:/boot/initramfs-3.10.0-862.11.6.el7.x86_64.img . 
+  978  ls
+  979  ls -asl orig 
+  980  mv initramfs-3.10.0-862.11.6.el7.x86_64.img initfs
+  981  ls
+  982  gzip initfs
+  983  ls -asl 
+  984  ls
+  985  cd orig/
+  986  ls
+  987  cp * ../
+  988  ls -asl 
+  989  pwd
+  990  ls
+  991  CHROOT=/state/partition1/images/centos7.5
+  992  export CHROOT
+  993  echo $CHROOT
+  994  ls -asl /state/partition1/images/centos7.5
+  995  yum -y --installroot=$CHROOT install yum perl python 
+  996  yum -y --installroot=$CHROOT install yum perl python 
+  997  yum -y --installroot=$CHROOT install gcc
+  998  yum -y --installroot=$CHROOT install make
+  999  yum -y --installroot=$CHROOT install tcpdump ping vim git openssl wget curl wireshark mailx sysstat ipmitool iotop strace vnc libnl pciutils lsof gtk2 gcc-gfortran tk libxml2-python tcsh unzip  kernel-devel rpm-build libtool libselinux-devel expect  sg3_utils  attr libvdpau
+ 1000  yum -y --installroot=$CHROOT install epel-release xterm
+ 1001  history 
+ 1002  pwd
+ 1003  history > buildingslurm

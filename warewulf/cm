@@ -1,0 +1,85 @@
+
+
+wwsh  node new n0000 --netdev=eth0 --hwaddr=00:00:00:00:00:00 --ipaddr=10.0.1.0 --groups=newnodes
+Warewulf> provision set --lookup groups newnodes --vnfs=rhel-6 --bootstrap=2.6.32-71.18.2.el6.x86_64
+wwsh -y node new newnode  --ipaddr=172.16.0.142 --hwaddr=00:8c:fa:f7:04:6c -D eno1
+wwsh -y node set newnode -D ib0 -I 10.0.0.142
+wwsh -y object modify -s IPMI_IPADDR=192.168.0.142 c18-04
+wwsh -y node set newnode -D ib7 -I  10.0.4.142 -M 255.255.252.0
+
+
+#### phi-01-04 ################################################################
+      phi-01-04: BOOTSTRAP        = gold-new-lustre
+      phi-01-04: VNFS             = gold-new-lustre
+      phi-01-04: FILES            = cgroup.conf,dynamic_hosts,group,ifcfg-ib0,ifcfg-ib0_0,munge.key,network,passwd,plugstack.conf,prolog.sh,shadow,slurm.conf,slurm.epilog.clean,srunprolog.sh,taskprolog.sh,topology.conf
+      phi-01-04: PRESHELL         = FALSE
+      phi-01-04: POSTSHELL        = FALSE
+      phi-01-04: CONSOLE          = UNDEF
+      phi-01-04: PXELINUX         = UNDEF
+      phi-01-04: SELINUX          = DISABLED
+      phi-01-04: KARGS            = "quiet"
+      phi-01-04: FILESYSTEMS      = mountpoint=/boot:dev=sda1:type=ext4:size=512,dev=sda2:type=swap:size=2048,mountpoint=/:dev=sda3:type=ext4:size=fill,mountpoint=/state/partition1:dev=sdb1:type=ext4:size=fill
+      phi-01-04: DISKFORMAT       = sda1,sda2,sda3,sda4,sdb1
+      phi-01-04: DISKPARTITION    = sda,sdb
+      phi-01-04: BOOTLOADER       = sda
+      phi-01-04: BOOTLOCAL        = TRUE
+
+
+
+
+scp -p /opt/slurm/etc/cgroup.conf warewulf:/opt/slurm/etc/cgroup.conf
+scp -p /opt/slurm/etc/gres.conf  warewulf:/opt/slurm/etc/gres.conf 
+scp -p /etc/group warewulf:/etc/group
+scp -p ifcfg-ib0 warewulf:/etc/sysconfig/network-scripts/ifcfg-ib0
+scp -p ifcfg-ib0_0 warewulf:/etc/sysconfig/network-scripts/ifcfg-ib0_0
+scp -p ifcfg-ib1 warewulf:/etc/sysconfig/network-scripts/ifcfg-ib1
+scp -p ifcfg-ib2 warewulf:/etc/sysconfig/network-scripts/ifcfg-ib2
+scp -p ifcfg-ib3 warewulf:/etc/sysconfig/network-scripts/ifcfg-ib3
+scp -p ifcfg-ib7 warewulf:/etc/sysconfig/network-scripts/ifcfg-ib7
+scp -p /etc/sysconfig/job_submit.lua warewulf:/opt/slurm/etc/job_submit.lua
+scp -p /etc/munge/munge.key warewulf:/etc/munge/munge.key
+scp -p /etc/sysconfig/network warewulf:/etc/sysconfig/network
+scp -p /opt/slurm/etc/plugstack.conf warewulf:/opt/slurm/etc/plugstack.conf
+scp -p /root/warewulf/wwgetscripts/postInstall.sh warewulf:/root/warewulf/wwgetscripts/postInstall.sh
+scp -p /opt/slurm/etc/prolog.sh warewulf:/opt/slurm/etc/prolog.sh
+scp -p /opt/slurm/etc/slurm.conf warewulf:/opt/slurm/etc/slurm.conf
+scp -p /opt/slurm/etc/srunprolog.sh warewulf:/opt/slurm/etc/srunprolog.sh
+scp -p /opt/slurm/etc/taskprolog.sh warewulf:/opt/slurm/etc/taskprolog.sh
+scp -p /opt/slurm/etc/topology.conf warewulf:/opt/slurm/etc/topology.conf
+
+
+wwsh file import /opt/slurm/etc/cgroup.conf
+wwsh file import dynamic_hosts /etc/hosts
+wwsh file import /opt/slurm/etc/gres.conf
+wwsh file import /etc/group
+wwsh file import /etc/sysconfig/network-scripts/ifcfg-ib0
+wwsh file import /etc/sysconfig/network-scripts/ifcfg-ib0_0
+wwsh file import /etc/sysconfig/network-scripts/ifcfg-ib1
+# wwsh file import /etc/sysconfig/network-scripts/ifcfg-ib2
+wwsh file import /etc/sysconfig/network-scripts/ifcfg-ib3
+wwsh file import /etc/sysconfig/network-scripts/ifcfg-ib7
+wwsh file import /opt/slurm/etc/job_submit.lua
+wwsh file import /etc/munge/munge.key
+wwsh file import /etc/sysconfig/network
+wwsh file import /etc/passwd 
+wwsh file import /opt/slurm/etc/plugstack.conf
+# wwsh file import /root/warewulf/wwgetscripts/postInstall.sh
+wwsh file import /opt/slurm/etc/prolog.sh
+wwsh file import /etc/shadow
+wwsh file import /opt/slurm/etc/slurm.conf
+wwsh file import /opt/slurm/etc/slurm.epilog.clean
+wwsh file import /opt/slurm/etc/srunprolog.sh
+wwsh file import /opt/slurm/etc/taskprolog.sh
+wwsh file import /opt/slurm/etc/topology.conf
+
+
+
+wwsh -y node new c31-15  --ipaddr=172.16.3.188 --hwaddr=4c:76:25:57:d5:f7 -D eth0 --groups=compute 
+wwsh -y node set c31-15 -D ib0 -I 10.0.3.188 -M  255.255.252.0
+wwsh -y object modify -s IPMI_IPADDR=192.168.1.22 c31-15
+wwsh -y node set c31-15 -D ib7 -I 10.0.7.188 -M 255.255.252.0
+wwsh -y provision set c31-15 --vnfs=centos7.4 --bootstrap=`uname -r`  --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network,ifcfg-ib0,ifcfg-ib0_0,ifcfg-ib1,ifcfg-ib3,ifcfg-ib7,topology.conf,srunprolog.sh,taskprolog.sh,prolog.sh,plugstack.conf
+wwsh -y provision set c31-15 --vnfs=gold-new-lustre --bootstrap=3.10.0-514.10.2.el7.x86_64  --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network,ifcfg-ib0,ifcfg-ib0_0,ifcfg-ib1,ifcfg-ib3,ifcfg-ib7,topology.conf,srunprolog.sh,taskprolog.sh,prolog.sh,plugstack.conf
+wwsh -y provision set --filesystem=bios c31-15
+wwsh -y provision set --bootloader=sda c31-15
+wwsh -y provision set c31-15 --bootlocal=normal
