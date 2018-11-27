@@ -1,0 +1,15 @@
+$ORIGIN 0.168.192.in-addr.arpa.
+$TTL 86400              ; 1 day
+@       IN      SOA     prince-master0.hpc.nyu.edu. root.hpc.nyu.edu. (
+                  1     ; Serial
+               7200     ; refresh (2 hous)
+               7200     ; retry (2 hours)
+            2419200     ; expire (5 weeks 6 days 16 hours)
+              86400 )   ; minimum (1 day)
+
+0.168.192.in-addr.arpa. IN NS prince-master0.hpc.nyu.edu.
+0.168.192.in-addr.arpa. IN NS prince-master1.hpc.nyu.edu.
+0.168.192.in-addr.arpa. IN NS hpcadmin.hpc.nyu.edu.
+
+
+

@@ -1,0 +1,179 @@
+//
+// named.conf
+//
+// Provided by Red Hat bind package to configure the ISC BIND named(8) DNS
+// server as a caching only nameserver (as a localhost DNS resolver only).
+//
+// See /usr/share/doc/bind*/sample/ for example named configuration files.
+//
+// See the BIND Administrator's Reference Manual (ARM) for details about the
+// configuration located in /usr/share/doc/bind-{version}/Bv9ARM.html
+
+acl "trusted-recursion" {
+        localhost;
+        localnets;
+        172.16.0.0/22;
+        10.0.0.0/22;
+        192.168.0.0/22;
+};
+
+
+options {
+        listen-on port 53 { any; };
+//        listen-on-v6 port 53 { ::1; };
+        directory       "/var/named";
+        dump-file       "/var/named/data/cache_dump.db";
+        statistics-file "/var/named/data/named_stats.txt";
+        memstatistics-file "/var/named/data/named_mem_stats.txt";
+        allow-query     { any; };
+        allow-recursion { trusted-recursion; };
+        allow-query-cache { trusted-recursion; };
+        /*
+         - If you are building an AUTHORITATIVE DNS server, do NOT enable recursion.
+         - If you are building a RECURSIVE (caching) DNS server, you need to enable
+           recursion.
+         - If your recursive DNS server has a public IP address, you MUST enable access
+           control to limit queries to your legitimate users. Failing to do so will
+           cause your server to become part of large scale DNS amplification
+           attacks. Implementing BCP38 within your network would greatly
+           reduce such attack surface
+        */
+        /* recursion yes; */
+
+        dnssec-enable no;
+        dnssec-validation no;
+        /*  Because it is an internal network I turn off dnssec */
+
+        /* Path to ISC DLV key */
+//        bindkeys-file "/etc/named.iscdlv.key";
+        bindkeys-file "/var/named/etc/named.iscdlv.key";
+
+        managed-keys-directory "/var/named/dynamic";
+
+        pid-file "/run/named/named.pid";
+        session-keyfile "/run/named/session.key";
+
+        # Setup NYU Core dns as forwarders
+        forwarders {
+                128.122.253.79;
+                128.122.253.24;
+        };
+};
+
+logging {
+        channel default_debug {
+                file "data/named.run";
+                severity dynamic;
+        };
+};
+
+zone "." IN {
+        type hint;
+        file "named.ca";
+};
+
+include "/var/named/etc/named.rfc1912.zones";
+include "/var/named/etc/named.root.key";
+
+zone "hpcint.hpc.nyu.edu" {
+    type slave;
+    file "dynamic/hpcint.hpc.nyu.edu"; # zone file path
+    masters { 172.16.0.1; };
+};
+
+zone "0.16.172.in-addr.arpa" in {
+        type slave;
+        file "dynamic/0.16.172.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "1.16.172.in-addr.arpa" in {
+        type slave;
+        file "dynamic/1.16.172.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "2.16.172.in-addr.arpa" in {
+        type master;
+        file "dynamic/2.16.172.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "3.16.172.in-addr.arpa" in {
+        type slave;
+        file "dynamic/3.16.172.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "0.168.192.in-addr.arpa" in {
+        type slave;
+        file "dynamic/0.168.192.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "1.168.192.in-addr.arpa" in {
+        type slave;
+        file "dynamic/1.168.192.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "2.168.192.in-addr.arpa" in {
+        type slave;
+        file "dynamic/2.168.192.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "3.168.192.in-addr.arpa" in {
+        type slave;
+        file "dynamic/3.168.192.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "0.0.10.in-addr.arpa" in {
+        type slave;
+        file "dynamic/0.0.10.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "1.0.10.in-addr.arpa" in {
+        type slave;
+        file "dynamic/1.0.10.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "2.0.10.in-addr.arpa" in {
+        type slave;
+        file "dynamic/2.0.10.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "3.0.10.in-addr.arpa" in {
+        type slave; 
+        file "dynamic/3.0.10.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "4.0.10.in-addr.arpa" in {
+        type slave;
+        file "dynamic/4.0.10.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "5.0.10.in-addr.arpa" in {
+        type slave;
+        file "dynamic/5.0.10.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "6.0.10.in-addr.arpa" in {
+        type slave;
+        file "dynamic/6.0.10.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
+zone "7.0.10.in-addr.arpa" in {
+        type slave;
+        file "dynamic/7.0.10.in-addr.arpa.zone";
+        masters { 172.16.0.1; };
+};
+
