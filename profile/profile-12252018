@@ -1,0 +1,118 @@
+# Author: T. Teague 
+# .profile/.bashrc configs files 
+# 
+#
+export ANSIBLE_SSH_PIPELINING=1
+PS1="`hostname`:`/usr/bin/whoami` -> : "
+export PS1
+PATH=$PATH:/home/teague/bin:/home/teague/devops:/usr/local/cuda-8.0/bin
+export PATH 
+export HISTTIMEFORMAT="%d.%m.%y. %T "
+
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-8.0/lib64
+export LD_LIBRARY_PATH
+
+# unalias vi 
+#unalias ls 
+# wwsh node list   | awk -F" " ' { print $1 } ' |  egrep "^c|gpu" > cpu_gpu.lst
+# 
+# Metric VM 
+alias metrics-toor="ssh teague@prince.hpc.nyu.edu -t ssh root@metrics.hpc.nyu.edu"
+alias metrics="ssh -X teague@prince.hpc.nyu.edu -t ssh -X teague@metrics.hpc.nyu.edu"
+
+alias tt=`export TERM=vt100; tset ` 
+# Prince Cluster Aliases 
+alias work="ssh tst722@dsd01w-0057s.cfs.its.nyu.edu"
+alias pm0="ssh hpc.nyu.edu -t ssh teague@prince.hpc.nyu.edu "
+alias log-0="ssh hpc.nyu.edu -t ssh teague@prince.hpc.nyu.edu "
+alias log-0-xt="ssh -X hpc.nyu.edu -t ssh -X teague@prince.hpc.nyu.edu "
+alias log-1="ssh hpc.nyu.edu -t ssh teague@prince1.hpc.nyu.edu "
+alias log-1-xt="ssh teague@prince1.hpc.nyu.edu "
+alias pm-0="ssh teague@hpc.nyu.edu -t ssh teague@prince-master0.hpc.nyu.edu "
+alias pm-1="ssh teague@hpc2.nyu.edu -t ssh teague@prince-master1.hpc.nyu.edu "
+alias phm-0="ssh hpc.nyu.edu -t ssh teague@prince-master0.hpc.nyu.edu -t ssh teague@home-0 "
+alias phm-1="ssh teague@prince-master0.hpc.nyu.edu -t ssh teague@home-1 "
+alias rsyncp='rsync -av -e "ssh -A -t teague@prince.hpc.nyu.edu  ssh teague@prince-master0" src/ :/tmp/dest '
+alias rsyncbkcp='rsync -av -e "ssh -A -t teague@prince.hpc.nyu.edu  ssh teague@prince-master0"  :/tmp/src dest/ '
+alias check_ssh='pdsh -w^check_sudo_ssh_hosts "ps -ef | grep ssh | grep sudo"'
+alias kill-log0='pdsh -w log-0 "kill -9 $1 $2"'
+alias kill-log1='pdsh -w log-1 "kill -9 $1 $2"'
+alias jssh='/usr/bin/ssh -o UserKnownHostsFile=/dev/null' 
+alias ssh='/usr/bin/ssh -o UserKnownHostsFile=/dev/null' 
+
+# Mercer
+alias soho="ssh -A teague@hpc.nyu.edu -t ssh teague@soho "
+alias soho-hp2="ssh teague@hpc2.nyu.edu -t ssh teague@soho "
+alias soho-alt="ssh teague@hpc.nyu.edu -t ssh teague@soho "
+alias mercer0-hpc="ssh teague@hpc.nyu.edu -t ssh teague@mercer0 "
+alias mercer1-hpc="ssh teague@hpc.nyu.edu -t ssh teague@mercer1 "
+alias mercer0-hpc2="ssh teague@hpc2.nyu.edu -t ssh teague@mercer0 "
+alias mercer1-hpc2="ssh teague@hpc2.nyu.edu -t ssh teague@mercer1 "
+
+# Dumbo 
+alias babar="ssh teague@hpc.nyu.edu -t ssh teague@babar "
+alias babar-hp2="ssh teague@hpc2.nyu.edu -t ssh teague@babar "
+alias babar-alt="ssh teague@hpc.nyu.edu -t ssh teague@babar "
+alias dumbo-hpc="ssh teague@hpc.nyu.edu -t ssh teague@dumbo "
+alias dumbo1-hpc="ssh teague@hpc.nyu.edu -t ssh teague@dumbo1 "
+alias dumbo-hpc2="ssh teague@hpc2.nyu.edu -t ssh teague@dumbo "
+alias dumbo1-hpc2="ssh teague@hpc2.nyu.edu -t ssh teague@dumbo1 "
+
+
+## pass options to free ##
+alias meminfo='free -m -l -t'
+ 
+## get top process eating memory
+alias psmem='ps auxf | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+ 
+## get top process eating cpu ##
+alias pscpu='ps auxf | sort -nr -k 3'
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+ 
+## Get server cpu info ##
+alias cpuinfo='lscpu'
+ 
+## older system use /proc/cpuinfo ##
+##alias cpuinfo='less /proc/cpuinfo' ##
+ 
+## get GPU ram on desktop / laptop##
+alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
+
+## this one saved by butt so many times ##
+alias ff4='/opt/firefox4/firefox'
+alias ff13='/opt/firefox13/firefox'
+alias chrome='/opt/google/chrome/chrome'
+alias opera='/opt/opera/opera'
+ 
+#default ff
+alias ff=ff13
+ 
+#my default browser
+alias browser=chrome
+# Dev Cluster 
+
+#Tunnel
+# ssh -L 443:localhost:443 -L 5900:localhost:5900 -L 5901:localhost:5901 teague@prince.hpc.nyu.edu -t sudo ssh -L 443:$dracip:443 -L 5900:$dracip:5900 -L 5901:$dracip:5901 teague@prince-master0
+
+# Prince 1GE Switches - admin
+# 
+# 172.16.0.21
+# 172.16.0.22
+# 172.16.0.23
+# 172.16.0.24
+# 172.16.0.25
+# 172.16.0.26
+
+# Prince 10G Switches - admin 
+
+# DTM Conntrollers
+# 4 Paths and 2 controlers  
+# 192.168.120.226
+# 192.168.120.228 
+
+LANGUAGE="en_US.UTF-8"
+LC_ALL="C"
+LANG="en_US.UTF-8"
+SUPPORTED="en_IN.utf8:en_IN:en_US.UTF-8:en_US:en"
+SYSFONT="latarcyrheb-sun16"
