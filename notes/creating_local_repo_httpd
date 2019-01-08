@@ -1,0 +1,160 @@
+Create a Local Repository
+The first step involves copying the iso file from the Centos 7 installation DVD
+into the system.
+
+It is important to install ‘createrepo’ package to successfully create local
+repository database. This is achieved by the following command.
+
+
+yum install createrepo
+
+yum install createrepo
+The next logical step is simply to create a directory.
+
+
+mkdir –p /repos/centos/7/Packages
+
+mkdir –p /repos/centos/7/Packages
+Mount the iso file inside /repos/centos/7/Packages folder.
+
+
+Mount iso-file-path /repos/centos/7/Packages
+
+Mount iso-file-path /repos/centos/7/Packages
+We make use of Apache web server and install it.
+
+
+yum install httpd
+
+yum install httpd
+We should create a directory in the web server folder to store packages from
+the /repos/centos/7/Packages folder
+
+Please use the following command to make a directory /var/www/html in the
+webserver folder.
+
+
+mkdir –p /var/www/html/centos
+
+mkdir –p /var/www/html/centos
+Copy the packages in /repos/centos/7/Packages to the directory /var/www/html
+created in the above step.
+
+
+cp -ar /repos/centos/7/Packages/* /var/www/html/centos
+
+cp -ar /repos/centos/7/Packages/* /var/www/html/centos
+If all the packages are successfully copied you can unmount the iso file from
+/repos/centos/7/Packages folder using the following command.
+
+
+umount /repos/centos/7/Packages
+
+umount /repos/centos/7/Packages
+ 
+
+ The next obvious step is to create a repository file called “localrepo.repo”
+ in /etc/yum.repos.d/ directory. Please note that you can name this file as per
+ your wish.
+
+
+ vi /etc/yum.repos.d/localrepo.repo
+
+ vi /etc/yum.repos.d/localrepo.repo
+ Add the following lines in the repository file “localrepo.repo”.
+
+
+ [localrepo]
+ name=polyglotit Repository
+ baseurl=file:///var/www/html/centos
+ gpgcheck=0
+ enabled=1
+ 
+ [localrepo]
+ name=polyglotit Repository
+ baseurl=file:///var/www/html/centos
+ gpgcheck=0
+ enabled=1
+ Now you should initialize & update the repository on the web server folder
+ using the ‘createrepo’ command as follows
+
+
+ createrepo -v /var/www/html/centos
+
+ createrepo --update /var/www/html/centos
+ 
+ createrepo -v /var/www/html/centos
+  
+ createrepo --update /var/www/html/centos
+  The next step is to list out the repositories using the command as shown
+  below.
+
+
+  yum repolist
+  yum repolist
+  Make use of Apache in publishing a repository over HTTP
+  We have already installed the apache web server (httpd), hence we move
+  forward with the following steps.
+
+  Clean the yum cache and update the repository lists.
+
+
+  sudo yum clean all
+
+  sudo yum –y update
+  sudo yum clean all
+   
+   sudo yum –y update
+   Firewall should not block httpd, hence we provide httpd access through the
+   firewall.
+
+
+   firewall-cmd --permanent --add-port=80/tcp
+
+   sudo firewall-cmd --permanent --add-port=443/tcp
+
+   systemctl restart firewalld
+   
+   firewall-cmd --permanent --add-port=80/tcp
+    
+   sudo firewall-cmd --permanent --add-port=443/tcp
+     
+   systemctl restart firewalld
+   Please start and make to enable the httpd service on boot.
+
+
+   systemctl start httpd
+
+   systemctl enable httpd
+   systemctl start httpd
+        
+   systemctl enable httpd
+   Configuration on a Client side
+   Navigate to repository file location
+
+
+   cd  /etc/yum.repos.d
+   
+  cd  /etc/yum.repos.d
+  Create a configuration file local.repo with the following command
+  line as shown.
+
+
+  vi local.repo
+  
+  vi local.repo
+  Please add the following lines in the configuration file created in
+  the above step.
+
+
+  [mylocalrepo]
+  name=localcentosrepo
+  baseurl=http://ip-address-of-the-server-computer/centos
+  gpgcheck=0
+  enabled=1
+          
+  [mylocalrepo]
+  name=localcentosrepo
+  baseurl=http://ip-address-of-the-server-computer/centos
+  gpgcheck=0
+  enabled=1

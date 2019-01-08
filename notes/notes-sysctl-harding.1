@@ -1,0 +1,70 @@
+Securing and Hardening the Kernel
+To make the changes permanent, we will have to add these values to a configuration file. Use the configuration file CentOS provides by default, /etc/sysctl.conf.
+
+Open the file with your favorite editor.
+
+By default, you should see something similar to this.
+
+# sysctl settings are defined through files in
+# /usr/lib/sysctl.d/, /run/sysctl.d/, and /etc/sysctl.d/.
+#
+# Vendors settings live in /usr/lib/sysctl.d/.
+# To override a whole file, create a new file with the same in
+# /etc/sysctl.d/ and put new settings there. To override
+# only specific settings, add a file with a lexically later
+# name in /etc/sysctl.d/ and put new settings there.
+#
+# For more information, see sysctl.conf(5) and sysctl.d(5).
+Let's improve the system memory management first.
+
+We are going to minimize the amount of swapping we need to do, increase the size of file handles and inode cache, and restrict core dumps.
+
+# Minimizing the amount of swapping
+vm.swappiness = 20
+vm.dirty_ratio = 80
+vm.dirty_background_ratio = 5
+
+# Increases the size of file handles and inode cache & restricts core dumps
+fs.file-max = 2097152
+fs.suid_dumpable = 0
+Next, lets tune the network optimized performance.
+
+We are going to change the amount of incoming connections and incoming connections backlog, increase the maximum amount of memory buffers, and increase the default and maximum send/receive buffers.
+
+# Change the amount of incoming connections and incoming connections backlog
+net.core.somaxconn = 65535
+net.core.netdev_max_backlog = 262144
+
+# Increase the maximum amount of memory buffers
+net.core.optmem_max = 25165824
+
+# Increase the default and maximum send/receive buffers
+net.core.rmem_default = 31457280
+net.core.rmem_max = 67108864
+net.core.wmem_default = 31457280
+net.core.wmen_max = 67108864
+Finally, we are going to improve general network security.
+
+We are going to enable TCP SYN cookie protection, IP spoofing protection, ignoring ICMP requests, ignoring broadcast requests, and logging to spoofed packets, source routed packets and redirect packets. Along with that, we are going to disable IP source routing and ICMP redirect acceptance.
+
+# Enable TCP SYN cookie protection
+net.ipv4.tcp_syncookies = 1
+
+# Enable IP spoofing protection
+net.ipv4.conf.all.rp_filter = 1
+
+# Enable ignoring to ICMP requests and broadcasts request
+net.ipv4.icmp_echo_ignore_all = 1
+net.ipv4.icmp_echo_ignore_broadcasts = 1
+
+# Enable logging of spoofed packets, source routed packets and redirect packets
+net.ipv4.conf.all.log_martians = 1
+
+# Disable IP source routing
+net.ipv4.conf.all.accept_source_route = 0
+
+# Disable ICMP redirect acceptance
+net.ipv4.conf.all.accept_redirects = 0
+Save and close the file, and then load the file using the sysctl -p command.
+
+

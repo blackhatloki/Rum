@@ -1,0 +1,8 @@
+ssh tst722@128.122.173.14
+[tst722@undercloud:~]$ history
+    1  sudo /bin/su - stack
+    2  history
+ 1001  source stackrc
+ 1002  nova list
+ 1003  ssh heat-admin
+ 1004  ssh heat-admin@10.0.1.159

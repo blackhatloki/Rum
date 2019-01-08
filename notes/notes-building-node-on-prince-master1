@@ -1,0 +1,136 @@
+#!/bin/bash
+# wwsh node delete gpu-90
+wwsh -y node new gpu-90  --ipaddr=172.16.3.87 --hwaddr=24:6e:96:ca:cb:e8 -D
+eth2 --groups=gpu
+wwsh -y node set gpu-90 -D ib0 -I 10.0.3.87 -M  255.255.252.0
+wwsh -y object modify -s IPMI_IPADDR=192.168.3.87 gpu-90
+wwsh -y node set gpu-90 -D ib7 -I 10.0.7.87 -M 255.255.252.0
+wwsh -y provision set gpu-90 --vnfs=centos7.5 --bootstrap=`uname -r`
+#  wwsh -y provision set gpu-90 --vnfs=centos7.4 --bootstrap=`uname -r`
+#  --files=dynamic_hosts,passwd,group,shadow,slurm.conf,munge.key,network,ifcfg-ib0,ifcfg-ib0_0,ifcfg-ib1,ifcfg-ib3,ifcfg-ib7,topology.conf,srunprolog.sh,taskprolog.sh,prolog.sh,plugstack.conf
+wwsh -y provision set --filesystem=bios gpu-90
+wwsh -y provision set --bootloader=sda gpu-90
+wwsh -y provision set gpu-90 --bootlocal=normal
+
+
+#!/bin/bash
+# wwsh node delete c36-13
+wwsh -y node new c36-13  --ipaddr=172.16.2.200 --hwaddr=f0:1f:af:93:85:bd -D
+eth0 --groups=compute
+wwsh -y node set c36-13 -D ib0 -I 10.0.2.200 -M  255.255.252.0
+wwsh -y object modify -s IPMI_IPADDR=192.168.2.200 c36-13
+wwsh -y node set c36-13 -D ib7 -I 10.0.6.200 -M 255.255.252.0
+wwsh -y provision set c36-13 --vnfs=2018-06-11
+--bootstrap=3.10.0-514.10.2.el7.x86_64
+wwsh -y provision set --filesystem=bios c36-13
+wwsh -y provision set --bootloader=sda c36-13
+wwsh -y provision set c36-13 --bootlocal=undef
+
+#!/bin/bash
+# wwsh node delete c13-03
+wwsh -y node new c13-03  --ipaddr=172.16.0.121 --hwaddr=7c:d3:0a:ba:6b:e6 -D
+eth0 --groups=compute
+wwsh -y node set c13-03 -D ib0 -I 10.0.0.121 -M  255.255.252.0
+wwsh -y object modify -s IPMI_IPADDR=192.168.0.121 c13-03
+wwsh -y node set c13-03 -D ib7 -I 10.0.4.121 -M 255.255.252.0
+wwsh -y provision set c13-03 --vnfs=2018-06-11
+--bootstrap=3.10.0-514.10.2.el7.x86_64
+wwsh -y provision set --filesystem=bios c13-03
+wwsh -y provision set --bootloader=sda c13-03
+wwsh -y provision set c13-03 --bootlocal=undef
+
+#!/bin/bash
+wwsh -y node new gpu-68  --ipaddr=172.16.3.88 --hwaddr=24:6e:96:dd:35:1e -D
+eth2 --groups=gpu
+wwsh -y node set gpu-68 -D ib0 -I 10.0.3.88 -M  255.255.252.0
+wwsh -y object modify -s IPMI_IPADDR=192.168.3.88 gpu-68
+wwsh -y node set gpu-68 -D ib7 -I 10.0.7.88 -M 255.255.252.0
+wwsh -y provision set gpu-68 --vnfs=2018-06-12 --bootstrap=`uname -r`
+--files=dynamic_hosts,passwd,group,shadow,network,ifcfg-ib0,ifcfg-ib0_0
+wwsh -y provision set --filesystem=bios gpu-68
+wwsh -y provision set --bootloader=sda gpu-68
+wwsh -y provision set gpu-68 --bootlocal=normal
+
+wwsh -y node new gpu-69  --ipaddr=172.16.3.89 --hwaddr=24:6e:96:dd:75:ee -D
+eth2 --groups=gpu
+wwsh -y node set gpu-69 -D ib0 -I 10.0.3.89 -M  255.255.252.0
+wwsh -y object modify -s IPMI_IPADDR=192.168.3.89 gpu-69
+wwsh -y node set gpu-69 -D ib7 -I 10.0.7.89 -M 255.255.252.0
+wwsh -y provision set gpu-69 --vnfs=2018-06-12 --bootstrap=`uname -r`
+--files=dynamic_hosts,passwd,group,shadow,network,ifcfg-ib0,ifcfg-ib0_0
+wwsh -y provision set --filesystem=bios gpu-69
+wwsh -y provision set --bootloader=sda gpu-69
+wwsh -y provision set gpu-69 --bootlocal=normal
+
+wwsh -y node new gpu-70  --ipaddr=172.16.3.90 --hwaddr=24:6e:96:dd:6e:3a -D
+eth2 --groups=gpu
+wwsh -y node set gpu-70 -D ib0 -I 10.0.3.90 -M  255.255.252.0
+wwsh -y object modify -s IPMI_IPADDR=192.168.3.90 gpu-70
+wwsh -y node set gpu-70 -D ib7 -I 10.0.7.90 -M 255.255.252.0
+wwsh -y provision set gpu-70 --vnfs=2018-06-12 --bootstrap=`uname -r`
+--files=dynamic_hosts,passwd,group,shadow,network,ifcfg-ib0,ifcfg-ib0_0
+wwsh -y provision set --filesystem=bios gpu-70
+wwsh -y provision set --bootloader=sda gpu-70
+wwsh -y provision set gpu-70 --bootlocal=normal
+
+wwsh -y node new gpu-71  --ipaddr=172.16.3.91 --hwaddr=24:6e:96:dd:6c:80 -D
+eth2 --groups=gpu
+wwsh -y node set gpu-71 -D ib0 -I 10.0.3.91 -M  255.255.252.0
+wwsh -y object modify -s IPMI_IPADDR=192.168.3.91 gpu-71
+wwsh -y node set gpu-71 -D ib7 -I 10.0.7.91 -M 255.255.252.0
+wwsh -y provision set gpu-71 --vnfs=2018-06-12 --bootstrap=`uname -r`
+--files=dynamic_hosts,passwd,group,shadow,network,ifcfg-ib0,ifcfg-ib0_0
+wwsh -y provision set --filesystem=bios gpu-71
+wwsh -y provision set --bootloader=sda gpu-71
+wwsh -y provision set gpu-71 --bootlocal=normal
+
+wwsh -y node new gpu-72  --ipaddr=172.16.3.92 --hwaddr=24:6e:96:dd:34:b8 -D
+eth2 --groups=gpu
+wwsh -y node set gpu-72 -D ib0 -I 10.0.3.92 -M  255.255.252.0
+wwsh -y object modify -s IPMI_IPADDR=192.168.3.92 gpu-71
+wwsh -y node set gpu-72 -D ib7 -I 10.0.7.92 -M 255.255.252.0
+wwsh -y provision set gpu-72 --vnfs=2018-06-12 --bootstrap=`uname -r`
+--files=dynamic_hosts,passwd,group,shadow,network,ifcfg-ib0,ifcfg-ib0_0
+wwsh -y provision set --filesystem=bios gpu-72
+wwsh -y provision set --bootloader=sda gpu-72
+wwsh -y provision set gpu-72 --bootlocal=normal
+
+wwsh -y node new gpu-73  --ipaddr=172.16.3.93 --hwaddr=24:6e:96:dd:67:52 -D
+eth2 --groups=gpu
+wwsh -y node set gpu-73 -D ib0 -I 10.0.3.93 -M  255.255.252.0
+wwsh -y object modify -s IPMI_IPADDR=192.168.3.93 gpu-73
+wwsh -y node set gpu-73 -D ib7 -I 10.0.7.93 -M 255.255.252.0
+wwsh -y provision set gpu-73 --vnfs=2018-06-12 --bootstrap=`uname -r`
+--files=dynamic_hosts,passwd,group,shadow,network,ifcfg-ib0,ifcfg-ib0_0
+wwsh -y provision set --filesystem=bios gpu-73
+wwsh -y provision set --bootloader=sda gpu-73
+wwsh -y provision set gpu-73 --bootlocal=normal
+
+#!/bin/bash
+for i in `cat list` ; do
+echo $i
+wwsh -y provision set $i --bootstrap=3.10.0-514.10.2.el7.x86_64
+wwsh -y provision set $i --vnfs=2018-09-24
+wwsh -y provision set $i --files=dynamic_hosts,group,ifcfg-ib0,ifcfg-ib0_0,network,passwd,shadow
+wwsh -y provision set --bootloader=sda $i
+wwsh -y provision set --filesystem=bios $i
+wwsh -y provision set $i --bootlocal=exit
+done
+
+
+[root@prince-master1 ~]# more w
+ 669  SOURCEADDR=c31-16
+   682  export SOURCEADDR=c31-16
+     816  SOURCEADDR=c31-14 wwmkchroot golden-system
+     /opt/ohpc/admin/images/c31-14
+       819  SOURCEADDR=c31-14 wwmkchroot golden-system
+       /opt/ohpc/admin/images/c31-14
+         820  SOURCEADDR=c31-14 wwmkchroot golden-system
+         /opt/ohpc/admin/images/c31-14
+           823  SOURCEADDR=c31-14 wwmkchroot golden-system
+           /opt/ohpc/admin/images/c31-14
+             835  SOURCEADDR=c26-04  wwmkchroot golden-system
+             /opt/ohpc/admin/images/c26-04:wq
+             :wq
+
+

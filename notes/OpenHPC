@@ -1,0 +1,56 @@
+systemctl disable firewalld
+systemctl stop firewalld
+
+yum install http://build.openhpc.community/OpenHPC:/1.3/CentOS_7/x86_64/ohpc-release-1.3-1.el7.x86_64.rpm
+
+# Install base meta-packages
+[sms]# yum -y install ohpc-base
+[sms]# yum -y install ohpc-warewulf
+
+# Configure Warewulf provisioning to use desired internal interface
+perl -pi -e "s/device = eth1/device = ${sms_eth_internal}/" /etc/warewulf/provision.conf # Enable tftp service for compute node image distribution
+ perl -pi -e "s/^\s+disable\s+= yes/ disable = no/" /etc/xinetd.d/tftp
+# Enable internal interface for provisioning
+# # ifconfig ${sms_eth_internal} ${sms_ip} netmask ${internal_netmask} up
+ # Restart/enable relevant services to support provisioning
+systemctl restart xinetd
+systemctl enable mariadb.service
+systemctl restart mariadb
+systemctl enable httpd.service
+systemctl restart httpd
+systemctl enable dhcpd.service
+
+# Override default OS repository (optional) - set YUM_MIRROR variable to desired repo location
+export YUM_MIRROR=${BOS_MIRROR}
+# Define chroot location
+export CHROOT=/opt/ohpc/admin/images/centos7.5
+# Build initial chroot image
+wwmkchroot centos-7 $CHROOT
+
+# Install compute node base meta-package
+yum -y --installroot=$CHROOT install ohpc-base-compute
+
+# Add Network Time Protocol (NTP) support
+yum -y --installroot=$CHROOT install ntp
+# Add kernel drivers
+yum -y --installroot=$CHROOT install kernel
+# Include modules user environment
+yum -y --installroot=$CHROOT install lmod-ohpc
+
+
+ # Initialize warewulf database and ssh_keys
+ wwinit database
+wwinit ssh_keys
+# Add NFS client mounts of /home and /opt/ohpc/pub to base image
+ echo "${sms_ip}:/home /home nfs nfsvers=3,nodev,nosuid,noatime 0 0" >> $CHROOT/etc/fstab
+echo "${sms_ip}:/opt/ohpc/pub /opt/ohpc/pub nfs nfsvers=3,nodev,noatime 0 0" >> $CHROOT/etc/fstab
+# Export /home and OpenHPC public packages from master server
+echo "/home *(rw,no_subtree_check,fsid=10,no_root_squash)" >> /etc/exports
+echo "/opt/ohpc/pub *(ro,no_subtree_check,fsid=11)" >> /etc/exports
+exportfs -a
+systemctl restart nfs-server
+systemctl enable nfs-server
+# Enable NTP time service on computes and identify master host as local NTP server
+chroot $CHROOT systemctl enable ntpd
+echo "server ${sms_ip}" >> $CHROOT/etc/ntp.conf
+

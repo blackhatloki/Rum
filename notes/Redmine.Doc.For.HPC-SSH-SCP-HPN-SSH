@@ -1,0 +1,12 @@
+#!/bin/bash
+USER=`whoami`
+timestamp=`date +%F`
+mkdir /home/$USER/hpn-ssh 
+cd  /home/$USER/hpn-ssh
+git clone https://github.com/rapier1/openssh-portable
+autoheader && autoconf
+./configure --with-pam  # Any options that you need with ssh. Do ./configure --help to check 
+make 
+sudo cp /usr/bin/ssh  /usr/bin/ssh.orig.$TIMESTMAP
+sudo cp /usr/bin/scp  /usr/bin/scp.orig.$TIMESTMAP 
+

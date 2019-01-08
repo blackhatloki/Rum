@@ -1,0 +1,10 @@
+grep '^menuentry' /boot/grub2/grub.cfg
+edit  /etc/default/grub with a text editor, and set GRUB_DEFAULT to the numeric
+entry value for the kernel you chose as the default. In this example, I choose
+the kernel 3.10.0-327 as the default kernel.
+
+GRUB_DEFAULT=2
+Finally, re-generate GRUB configuration.
+
+$ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+

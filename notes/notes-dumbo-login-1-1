@@ -1,0 +1,4 @@
+rocks set host interface iface compute-0-0 iface=eth1 mac=00:0e:0c:a7:5d:ff
+ssh compute-0-0 "shutdown -r now"
+rocks set host boot compute-0-0 action=install
+10.0.255.253

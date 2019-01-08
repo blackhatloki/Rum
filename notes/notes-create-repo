@@ -1,43 +1,77 @@
-To use yum to install or update packages from an ISO file, a repository will need to be created:
+How to Setup Local HTTP Yum Repository on CentOS 7
 
-Create the directory that will hold the repository:
+# yum install epel-release
+# yum install nginx 
 
-Raw
-# mkdir -p /var/www/html/repo    
-There are two ways to create a repository:
+# systemctl start nginx
+# systemctl enable nginx
+# systemctl status nginx
 
-Move the rpms for the repository into the directory, then run createrepo against that:
+# firewall-cmd --zone=public --permanent --add-service=http
+# firewall-cmd --zone=public --permanent --add-service=https
+# firewall-cmd --reload
 
-Raw
-# cp *.rpm /var/www/html/repo
-# createrepo /var/www/html/repo
-Or, reposync against an existing repository:
 
-Raw
-# reposync -p /var/www/html/repo -r <REPOID> -l
-# createrepo /var/www/html/repo    
-Start apache, and confirm access to the repodata files:
+http://SERVER_DOMAIN_NAME_OR_IP 
 
-Raw
-# wget http://localhost/repo/repomd.xml
-# wget http://myfqdn.com/repo/repomd.xml    
-If both of the above commands were successful, configure a httpd based yum repository, which can be used by this server and another server.
-If packages need to be added to the repo at a later date, add the new RPMs to the directory and run this command:
 
-Raw
-# createrepo --update  /var/www/html/repo  
-Before seeing the updates on yum clients you may need to:
+Step 2: Create Yum Local Repository
 
-Raw
-# rm -rf /var/cache/yum/*
-# yum clean all
-NOTE:
+# yum install createrepo  yum-utils
 
-When synchronizing repositories from Red Hat Satellite or Red Hat Subscription Management itself, only repositories that the server is subscribed to can be synchronized. The following command shows repositories accessible through a chosen plugin. YUMPLUGIN variable can be replaced with a plugin name:
 
-Raw
-# YUMPLUGIN=rhnplugin; cd /etc/yum/pluginconf.d/ && echo *.conf|sed "s/$YUMPLUGIN.conf//"|sed 's/\([0-9a-zA-Z\-]*\).conf/--disableplugin=\1/g'|xargs yum repolist && cd - >/dev/null
-In order to have the commands createrepo and repo-sync available, install the packages createrepo and yum-utils respectively, which are not available in the default RHEL setup:
+# mkdir -p /var/www/html/repos/{base,centosplus,extras,updates}
 
-Raw
-# yum install -y createrepo yum-utils
+# reposync -g -l -d -m --repoid=base --newest-only --download-metadata --download_path=/var/www/html/repos/
+# reposync -g -l -d -m --repoid=centosplus --newest-only --download-metadata--download_path=/var/www/html/repos/
+# reposync -g -l -d -m --repoid=extras --newest-only --download-metadata# --download_path=/var/www/html/repos/
+# reposync -g -l -d -m --repoid=updates --newest-only --download-metadata --download_path=/var/www/html/repos/
+
+-g – enables removing of packages that fail GPG signature checking after
+downloading.
+-l – enables yum plugin support.
+-d – enables deleting of local packages no longer present in repository.
+-m – enables downloading of comps.xml files.
+--repoid – specifies the repository ID.
+--newest-only – tell reposync to only pull the latest version of each package
+in the repos.
+--download-metadata – enables downloading all the non-default metadata.
+--download_path – specifies the path to download packages.
+8. Next, check the contents of your local directories to ensure that all the
+packages have been synchronized locally.
+
+
+# ls -l /var/www/html/repos/base/
+# ls -l /var/www/html/repos/base/Packages/
+# ls -l /var/www/html/repos/centosplus/
+# ls -l /var/www/html/repos/centosplus/Packages/
+# ls -l /var/www/html/repos/extras/
+# ls -l /var/www/html/repos/extras/Packages/
+# ls -l /var/www/html/repos/updates/
+# ls -l /var/www/html/repos/updates/Packages/
+
+# createrepo -g comps.xml /var/www/html/repos/base/  
+# createrepo -g comps.xml /var/www/html/repos/centosplus/   
+# createrepo -g comps.xml /var/www/html/repos/extras/  
+# createrepo -g comps.xml /var/www/html/repos/updates/
+
+# vim /etc/nginx/conf.d/repos.conf 
+
+Add the following configuration ot file repos.conf.
+
+server {
+        listen   80;
+                server_name  repos.test.lab;    #change  test.lab to your real
+                domain 
+                        root   /var/www/html/repos;
+                                location / {
+                                                index  index.php index.html
+                                                index.htm;
+                                                                autoindex on;
+                                                                #enable listing
+                                                                of directory
+                                                                index
+                                                                        }
+                                                                        }
+                                                                        :wq
+
