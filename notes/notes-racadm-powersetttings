@@ -1,0 +1,19 @@
+Re: Processor Power settings in BIOS and racadm
+Looks like the following racadm command in the BIOS.SysProfileSettings group is
+the right one
+
+BIOS.SysProfileSettings.ProcPwrPerf
+
+the options are:
+
+• MaxPerf
+
+• MinPwr
+
+• SysDbpm
+
+• OsDbpm
+
+Is there anybody at Dell that can confirm that a reboot is required or if there
+is another racadm command that can force the above setting change to become
+active?

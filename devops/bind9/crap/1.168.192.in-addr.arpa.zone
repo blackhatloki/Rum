@@ -1,0 +1,48 @@
+$ORIGIN 1.168.192.in-addr.arpa.
+$TTL 86400              ; 1 day
+@       IN      SOA     prince-master0.hpc.nyu.edu. root.hpc.nyu.edu. (
+                  1     ; Serial
+               7200     ; refresh (2 hous)
+               7200     ; retry (2 hours)
+            2419200     ; expire (5 weeks 6 days 16 hours)
+              86400 )   ; minimum (1 day)
+
+1.168.192.in-addr.arpa. IN NS prince-master0.hpc.nyu.edu.
+1.168.192.in-addr.arpa. IN NS prince-master1.hpc.nyu.edu.
+1.168.192.in-addr.arpa. IN NS hpcadmin.hpc.nyu.edu.
+
+
+0       IN    PTR   c30-10-ipmi.hpcint.hpc.nyu.edu
+1       IN    PTR   c30-11-ipmi.hpcint.hpc.nyu.edu
+2       IN    PTR   c30-12-ipmi.hpcint.hpc.nyu.edu
+3       IN    PTR   c30-13-ipmi.hpcint.hpc.nyu.edu
+4       IN    PTR   c30-14-ipmi.hpcint.hpc.nyu.edu
+5       IN    PTR   c30-15-ipmi.hpcint.hpc.nyu.edu
+6       IN    PTR   c30-16-ipmi.hpcint.hpc.nyu.edu
+7       IN    PTR   c31-cmc.hpcint.hpc.nyu.edu
+8       IN    PTR   c31-01-ipmi.hpcint.hpc.nyu.edu
+9       IN    PTR   c31-02-ipmi.hpcint.hpc.nyu.edu
+10       IN    PTR   c31-03-ipmi.hpcint.hpc.nyu.edu
+11       IN    PTR   c31-04-ipmi.hpcint.hpc.nyu.edu
+12       IN    PTR   c31-05-ipmi.hpcint.hpc.nyu.edu
+13       IN    PTR   c31-06-ipmi.hpcint.hpc.nyu.edu
+14       IN    PTR   c31-07-ipmi.hpcint.hpc.nyu.edu
+15       IN    PTR   c31-08-ipmi.hpcint.hpc.nyu.edu
+16       IN    PTR   c31-09-ipmi.hpcint.hpc.nyu.edu
+17       IN    PTR   c31-10-ipmi.hpcint.hpc.nyu.edu
+18       IN    PTR   c31-11-ipmi.hpcint.hpc.nyu.edu
+19       IN    PTR   c31-12-ipmi.hpcint.hpc.nyu.edu
+20       IN    PTR   c31-13-ipmi.hpcint.hpc.nyu.edu
+21       IN    PTR   c31-14-ipmi.hpcint.hpc.nyu.edu
+22       IN    PTR   c31-15-ipmi.hpcint.hpc.nyu.edu
+23       IN    PTR   c31-16-ipmi.hpcint.hpc.nyu.edu
+41       IN    PTR   beegfs-1-eno3.hpcint.hpc.nyu.edu
+42       IN    PTR   beegfs-1-ipmi.hpcint.hpc.nyu.edu
+44       IN    PTR   beegfs-2-eno3.hpcint.hpc.nyu.edu
+45       IN    PTR   beegfs-2-ipmi.hpcint.hpc.nyu.edu
+47       IN    PTR   beegfs-3-eno3.hpcint.hpc.nyu.edu
+48       IN    PTR   beegfs-3-ipmi.hpcint.hpc.nyu.edu
+50       IN    PTR   beegfs-4-eno3.hpcint.hpc.nyu.edu
+51       IN    PTR   beegfs-4-ipmi.hpcint.hpc.nyu.edu
+53       IN    PTR   phi-01-02-ipmi.hpcint.hpc.nyu.edu
+54       IN    PTR   phi-01-04-ipmi.hpcint.hpc.nyu.edu

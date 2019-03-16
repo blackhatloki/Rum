@@ -1,0 +1,19 @@
+; Remember to update the serial by 1 each time you edit this file!
+$TTL 300                ; 5 minutes 
+@       IN      SOA     prince-master0.hpc.nyu.edu.  admin.prince-master0.hpc.nyu.edu. (
+                  1     ; Serial
+               3600     ; Refresh
+                300     ; Retry
+            1814400     ; Expire
+                300 )   ; Negative Cache TTL
+
+; name servers - NS records
+    IN      NS      prince-master0.hpc.nyu.edu.
+    IN      NS      prince-master1.hpc.nyu.edu.
+    IN      NS      hpcadmin.hpc.nyu.edu.
+
+; name servers - A records
+prince-master0.hpcint.hpc.nyu.edu.     IN     A     192.168.0.1
+prince-master1.hpcint.hpc.nyu.edu.     IN     A     192.168.0.17
+
+

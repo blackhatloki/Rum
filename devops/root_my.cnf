@@ -1,0 +1,7 @@
+[mysqladmin]
+user = root
+password = !Hapy123$QL
+
+[client]
+user = root
+password = !Hapy123$QL

@@ -1,20 +1,20 @@
 #!/bin/bash 
-grep 192.168.0  /etc/hosts  | sed -e 's/192.168.0.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 192.168.0.include.mgmt
-grep 192.168.1  /etc/hosts  | sed -e 's/192.168.1.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 192.168.1.include.mgmt
-grep 192.168.2  /etc/hosts  | sed -e 's/192.168.2.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 192.168.2.include.mgmt
-grep 192.168.3  /etc/hosts  | sed -e 's/192.168.3.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 192.168.3.include.mgmt
-grep 172.16.0   /etc/hosts  | sed -e 's/172.16.0.//g'  | awk -F" " ' { printf "%1s        IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4> 172.16.0.include.intcorp
-grep 172.16.1  /etc/hosts  | sed -e 's/172.16.1.//g'  | awk -F" " ' { printf "%1s         IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4> 172.16.1.include.intcorp
-grep 172.16.2  /etc/hosts  | sed -e 's/172.16.2.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } '  | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4> 172.16.2.include.intcorp
-grep 172.16.3  /etc/hosts  | sed -e 's/172.16.3.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 172.16.3.include.intcorp
-grep 10.0.0   /etc/hosts  | sed -e 's/10.0.0.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 10.0.0.include.intIB
-grep 10.0.1   /etc/hosts  | sed -e 's/10.0.1.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 10.0.1.include.intIB
-grep 10.0.2   /etc/hosts  | sed -e 's/10.0.2.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 10.0.2.include.intIB
-grep 10.0.3   /etc/hosts  | sed -e 's/10.0.3.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 10.0.3.include.intIB
-grep 10.0.4   /etc/hosts  | sed -e 's/10.0.4.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 10.0.4.include.intIB
-grep 10.0.5   /etc/hosts  | sed -e 's/10.0.5.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 10.0.5.include.intIB
-grep 10.0.6   /etc/hosts  | sed -e 's/10.0.6.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 10.0.6.include.intIB
-grep 10.0.7   /etc/hosts  | sed -e 's/10.0.7.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 10.0.7.include.intIB
+grep 192.168.0  /etc/hosts  | sed -e 's/192.168.0.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 192.168.mgmt
+grep 192.168.1  /etc/hosts  | sed -e 's/192.168.1.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 192.168.mgmt
+grep 192.168.2  /etc/hosts  | sed -e 's/192.168.2.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 192.168.mgmt
+grep 192.168.3  /etc/hosts  | sed -e 's/192.168.3.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 192.168.mgmt
+grep 172.16.0   /etc/hosts  | sed -e 's/172.16.0.//g'  | awk -F" " ' { printf "%1s        IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 172.16.intcorp
+grep 172.16.1  /etc/hosts  | sed -e 's/172.16.1.//g'  | awk -F" " ' { printf "%1s         IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 172.16.intcorp
+grep 172.16.2  /etc/hosts  | sed -e 's/172.16.2.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } '  | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 172.16.intcorp
+grep 172.16.3  /etc/hosts  | sed -e 's/172.16.3.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 172.16.intcorp
+grep 10.0.0   /etc/hosts  | sed -e 's/10.0.0.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 > 10.0.intIB
+grep 10.0.1   /etc/hosts  | sed -e 's/10.0.1.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 10.0.intIB
+grep 10.0.2   /etc/hosts  | sed -e 's/10.0.2.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 10.0.intIB
+grep 10.0.3   /etc/hosts  | sed -e 's/10.0.3.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 10.0.intIB
+grep 10.0.4   /etc/hosts  | sed -e 's/10.0.4.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 10.0.intIB
+grep 10.0.5   /etc/hosts  | sed -e 's/10.0.5.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 10.0.intIB
+grep 10.0.6   /etc/hosts  | sed -e 's/10.0.6.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 10.0.intIB
+grep 10.0.7   /etc/hosts  | sed -e 's/10.0.7.//g'  | awk -F" " ' { printf "%1s       IN    PTR   %s.hpcint.hpc.nyu.edu\n",$1,$2 } ' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4 >> 10.0.intIB
 egrep "^172.|^192.|^10." /etc/hosts | awk -F" " ' { printf "%1s          IN     A       %1s.hpcint.hpc.nyu.edu. \n",$1,$2 } ' | sed -e 's/^ //g' | sort -n -t . -k 1,1 -k 2,2 -k 3,3 -k 4,4  > hpcint.db
 # egrep "^192" /etc/hosts | awk -F" " ' { printf "%1s          IN     A       %1s.hpcint.hpc.nyu.edu. \n",$1,$2 } ' | sed -e 's/^ //g' >> hpcint.db
 # egrep "^10" /etc/hosts | awk -F" " '  { printf "%1s          IN     A       %1s.hpcint.hpc.nyu.edu. \n",$1,$2 } ' | sed -e 's/^ //g'>> hpcint.db

@@ -1,0 +1,1 @@
+ansible-playbook -i inventory/inventory slurm-lua.yml --check --limit=log-0

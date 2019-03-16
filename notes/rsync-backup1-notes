@@ -1,0 +1,30 @@
+Backup Your Entire Linux System Using Rsync
+First, insert your backup medium (USB thumb drive or External hard disk). Then
+find the drive letter using ‘fdisk -l’ command. In my case, my Pen drive id is
+/dev/sdb1. Mount your drive to any location of your choice. I am going to mount
+it under /mnt.
+
+$ sudo mount /dev/sdb1 /mnt
+To backup the entire system, all you have to do is open your Terminal and run
+the following command as root user:
+
+$ sudo rsync -aAXv /
+--exclude={"/dev/*","/proc/*","/sys/*","/tmp/*","/run/*","/mnt/*","/media/*","/lost+found"}
+/mnt
+This command will backup the entire root ( / ) directory, excluding /dev,
+/proc, /sys, /tmp, /run, /mnt, /media, /lost+found directories, and save the
+data in /mnt folder.
+
+Let us break down the above command and see what each argument does.
+
+rsync – A fast, versatile, local and remote file-copying utility
+-aAXv – The files are transferred in “archive” mode, which ensures that
+symbolic links, devices, permissions, ownerships, modification times, ACLs, and
+extended attributes are preserved.
+/ – Source directory
+–exclude – Excludes the given directories from backup.
+/mnt – It is the backup destination folder.
+Please be mindful that you must exclude the destination directory, if it exists
+in the local system. It will avoid the an infinite loop.
+
+

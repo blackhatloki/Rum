@@ -1,0 +1,10 @@
+wwsh -y node new $i --ipaddr=  --hwaddr= -D eth0 --groups=compute
+wwsh -y provision set $i --bootstrap=3.10.0-514.10.2.el7.x86_64
+wwsh -y provision set $i --vnfs=2018-09-24
+wwsh -y provision set $i --files=dynamic_hosts,group,ifcfg-ib0,ifcfg-ib0_0,network,passwd,shadow
+wwsh -y provision set $i --bootloader=sda
+wwsh -y provision set $i --filesystem=bios  
+wwsh -y provision set $i --bootlocal=undef
+wwsh -y node set $i -D ib0 -I 10.0.2.200 -M  255.255.252.0
+wwsh -y node set $i -D ib7 -I 10.0.6.200 -M 255.255.252.0
+wwsh -y object modify -s IPMI_IPADDR=192.168.2.200 $i

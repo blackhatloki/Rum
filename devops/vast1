@@ -1,0 +1,1 @@
+mount -t nfs -o tcp,rw,vers=3 10.0.3.174:/share/apps /vast/share/apps

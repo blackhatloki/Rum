@@ -1,0 +1,30 @@
+$ORIGIN 1.16.172.in-addr.arpa.
+$TTL 86400              ; 1 day
+@       IN      SOA     prince-master0.hpc.nyu.edu. root.hpc.nyu.edu. (
+                  1     ; Serial
+               7200     ; refresh (2 hous)
+               7200     ; retry (2 hours)
+            2419200     ; expire (5 weeks 6 days 16 hours)
+              86400 )   ; minimum (1 day)
+
+1.16.172.in-addr.arpa. IN NS prince-master0.hpc.nyu.edu.
+1.16.172.in-addr.arpa. IN NS prince-master1.hpc.nyu.edu.
+1.16.172.in-addr.arpa. IN NS hpcadmin.hpc.nyu.edu.
+
+
+
+40         IN    PTR   beegfs-mgt-eno1.int.hpc.nyu.edu.
+41         IN    PTR   beegfs-1.int.hpc.nyu.edu.
+42         IN    PTR   beegfs-1-eno1-meta.int.hpc.nyu.edu.
+43         IN    PTR   beegfs-1-eno1-stor.int.hpc.nyu.edu.
+44         IN    PTR   beegfs-2.int.hpc.nyu.edu.
+45         IN    PTR   beegfs-2-eno1-meta.int.hpc.nyu.edu.
+46         IN    PTR   beegfs-2-eno1-stor.int.hpc.nyu.edu.
+47         IN    PTR   beegfs-3.int.hpc.nyu.edu.
+48         IN    PTR   beegfs-3-eno1-meta.int.hpc.nyu.edu.
+49         IN    PTR   beegfs-3-eno1-stor.int.hpc.nyu.edu.
+50         IN    PTR   beegfs-4.int.hpc.nyu.edu.
+51         IN    PTR   beegfs-4-eno1-meta.int.hpc.nyu.edu.
+52         IN    PTR   beegfs-4-eno1-stor.int.hpc.nyu.edu.
+53         IN    PTR   phi-01-02.int.hpc.nyu.edu.
+54         IN    PTR   phi-01-04.int.hpc.nyu.edu.
