@@ -1,0 +1,176 @@
+--------------
+
+Dump config:
+
+    racadm get -f config.txt
+
+Restore config from file:
+
+    racadm set -f config.txt
+
+Restore factory defaults:
+
+    racadm racresetcfg
+
+Get Serial Number:
+
+    racadm getsvctag
+
+Get System information:
+
+    racadm getsysinfo
+
+Misc Options
+--------------
+
+Disable Hyperthreading (Damn you Intel!):
+
+    racadm set BIOS.ProcSettings.LogicalProc Disabled
+
+Set SNMP public community string:
+
+    racadm set iDRAC.SNMP.AgentCommunity NEW STRING
+
+IDRAC root Account
+-------------------
+
+Set Password:
+
+    racadm set iDRAC.Users.2.Password MYNEWPASSWORD
+
+List SSH keys:
+
+    racadm sshpkauth -i 2 -v -k all
+
+Add key:
+
+    racadm sshpkauth -i 2 -k 1 "public key string"
+
+Remove key:
+
+(get the id for k from the list of keys)
+
+    racadm sshpkauth -i 2 -d -k 1
+
+Network Config
+----------------
+
+Get IP config:
+
+    racadm getniccfg
+    racadm get iDRAC.NIC
+
+Set IP Config:
+
+    racadm set iDRAC.Nic.Enable 1
+    racadm set iDRAC.IPv4.Address x.x.x.x
+    racadm set iDRAC.IPv4.Netmask x.x.x.x
+    racadm set iDRAC.IPv4.Gateway x.x.x.x
+    racadm set iDRAC.IPv4.DHCPEnable 0
+    racadm set iDRAC.IPv4.DNSFromDHCP 0
+    racadm set iDRAC.IPv4.DNS1 y.y.y.y
+    racadm set iDRAC.IPv4.DNS2 y.y.y.y
+
+Set DNS name:
+
+    racadm set iDRAC.NIC.DNSRacName myiDrac
+
+Set Domain name:
+
+    racadm set iDRAC.NIC.DNSDomainName example.com
+
+Set DNS Servers:
+
+    racadm config -g cfgLanNetworking -o cfgDNSServer1 x.x.x.x
+    racadm config -g cfgLanNetworking -o cfgDNSServer2 y.y.y.y
+
+Disable Serial on LAN:
+
+    racadm config -g cfgIpmiSol -o cfgIpmiSolEnable 0
+
+LCD
+----
+
+(Where present)
+
+Set to display iDrac's hostname
+
+    racadm set System.LCD.Configuration 16
+
+Display custom text
+
+    racadm set system.lcd.lCDUserString "I AM HERE"
+
+Get current custom text
+
+    racadm get system.lcd.lCDUserString
+
+Power
+------
+
+Soft reset:
+
+    racadm racreset soft
+
+Hard reset:
+
+    racadm racreset hard
+
+Cold reset:
+
+    racadm racreset cold
+
+Enable AC POower recovery:
+
+    racadm set BIOS.SysSecurity.AcPwdRcvry Last
+    racadm set BIOS.SysSecurity.AcPwdRcvryDelay Immediate
+
+Server Boot Options
+--------------------
+
+Configure one-off PXE boot:
+
+    racadm set BIOS.OneTimeBoot.OneTimeBootMode OneTimeBootSeq
+    racadm set BIOS.OneTimeBoot.OneTimeBootSeqDev NIC.Integrated.1-1-1
+
+Set default boot device to Hard Drive:
+
+    racadm config -g cfgServerInfo -o cfgServerBootOnce 0
+    racadm config -g cfgServerInfo -i cfgServerFirstBootDevice HDD
+
+List current boot order:
+
+    racadm get BIOS.BiosBootSettings.bootseq
+
+Serial Redirection
+--------------------
+
+(To allow use of the virtual serial port via SSH)
+
+    racadm config -g cfgSerial -o cfgSerialConsoleEnable 1
+    racadm config -g cfgSerial -o cfgSerialBaudRate 115200
+    racadm config -g cfgSerial -o cfgSerialCom2RedirEnable 1
+    racadm config -g cfgSerial -o cfgSerialTelnetEnable 0
+    racadm config -g cfgSerial -o cfgSerialSshEnable 1
+
+Should now be able to SSH to iDrac and access the vsp via "console com2"
+
+RAID
+-----
+
+Get Physical disk info:
+
+    racadm raid get pdisks
+
+Get all info about disks:
+
+    racadm raid get pdisks -o
+
+Get just state and size (or pass other fields):
+
+    racadm raid get pdisks -o -p state,size
+
+Get Virtual Disks (or Logical Drives in HP Parlance)
+
+    racadm raid get vdisks
+

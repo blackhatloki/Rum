@@ -1,0 +1,20 @@
+Re: Virtual Disk commands using RACADM
+I'm reasonably certain that I tried this multiple times and using various
+command sequences without success. But inspired by Daniel's comments, I tried
+again and this time it worked. The following commands seem to work properly
+using iDRAC8 on R230s and iDRAC7 on R520s; I presume they will also work on
+other systems with those iDRAC models.
+
+racadm remoteimage -c -u xxx -p xxx -l xx.xx.xx.xx:/path/to/xxx.iso
+racadm set iDRAC.VirtualMedia.BootOnce 1
+racadm set iDRAC.ServerBoot.FirstBootDevice VCD-DVD
+racadm serveraction powercycle
+
+Of course, I need to leave the image connected during the boot, which is after
+my script terminates. That means I need to find a reliable, and preferably
+automatic, way to disconnect the image after I'm done using it. I'm still
+working that issue.
+
+Note that the remoteimage command applied to an NFS share as shown above still
+requires the -u and -p options, though the server ignores them. Why does racadm
+require them?

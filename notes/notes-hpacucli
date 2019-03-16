@@ -1,0 +1,104 @@
+Controller commands
+--------------------
+
+Display:
+
+    ctrl all show config
+    ctrl all show config detail
+
+Status:
+
+    ctrl all show status
+
+Cache:
+
+    ctrl slot=0 modify dwc=disable
+    ctrl slot=0 modify dwc=enable
+
+Device Rescan:
+
+    rescan
+
+Physical Drives
+----------------
+
+Display:
+
+    ctrl slot=0 pd all show
+    ctrl slot=0 pd 1:2 show detail
+
+Status:
+
+    ctrl slot=0 pd all show status
+    ctrl slot=0 pd 1:2 show status
+
+Erase:
+
+    ctrl slot=0 pd 1:2 modify erase
+
+Enable LED:
+
+    ctrl slot=0 pd 1:2 modify led=on
+    ctrl slot=0 pd 1:2 modify led=off
+
+Logical Drives
+---------------
+
+Display:
+
+    ctrl slot=0 ld all show 
+    ctrl slot=0 ld 2 show
+    ctrl slot=0 ld all show detail 
+    ctrl slot=0 ld 2 show detail
+
+Status:
+
+    ctrl slot=0 ld all show status 
+    ctrl slot=0 ld 3 show status
+
+Enable LEDs:
+
+    ctrl slot=0 ld 3 modify led=on
+    ctrl slot=0 ld 3 modify led=off
+
+Re-enable failed locial drive:
+
+    ctrl slot=0 ld 3 modify reenable forced
+
+Create a LD:
+
+    # one disk 
+    ctrl slot=0 create type=ld drives=1:10 raid=0 
+
+    # mirrored 
+    ctrl slot=0 create type=ld drives=1:10,1:11 size=300 raid=1
+
+    # raid 5 
+    ctrl slot=0 create type=ld drives=1:10,1:11,1:12,1:13,1:14 raid=5
+
+Remove a LD:
+
+    ctrl slot=0 ld 3 delete
+
+Expand/Add a drive:
+
+    ctrl slot=0 ld 3 add drives=2:5
+
+Extend/Increase size:
+
+    ctrl slot=0 ld 3 modify size=1000 forced
+
+Add Spares:
+
+    ctrl slot=0 array all add spares=1:3,1:4
+
+Usage Example
+# List controllers
+hpacucli ctrl all show status
+
+# List the state of all physical disks
+hpacucli ctrl slot=0 pd all show
+
+# Make the LED on one drive blink so the technician can find it
+while true; do hpacucli ctrl slot=0 pd 1:2 modify led=on; sleep 1; hpacucli ctrl slot=0 pd 1:2 modify led=off; done
+
